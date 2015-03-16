@@ -1,0 +1,89 @@
+"use strict"
+// st_data.js
+
+// Stores all game related data. Dynamically created and loaded with information only after a successful logon, game data must come from the server. 
+// Will be accessed by st_graphics for displaying systems in hexes, and by st_hud for system and civ data. Any module can call the update() method to 
+// force the data object to retrieve the most recent data from the database. 
+
+
+var st_data = st_data || (function(){
+	var mapData = {},
+		status = "uninitialized";
+		
+	return {
+		DEBUG: st_DEBUG,
+		initialize: function(){
+			status = "initialized"; 
+			if( this.DEBUG ){
+				this.update();
+			}
+		}
+		,update: function(){
+			if( this.DEBUG ){
+				console.log( "loading debug map" );
+				setTimeout( function(){
+					st_data.test_update();			
+					if( mapData ){//if load success:
+						status = "loaded";
+						st_graphics.camera.centerOnHex( mapData.homeworld.x, mapData.homeworld.y );
+					} else{
+						status = "error";
+					}
+				}, 300);
+			} else{
+				//ajax request to server for absolutely everything. 
+			}
+
+		}
+		,test_update: function(){
+			mapData = {
+				homeworld: { x: 22, y: 15 }
+				,hexes: [
+					 { x: 22, y: 15, owner: 13, system: 1234 }
+					,{ x: 22, y: 16, owner: 13, system: false }
+					,{ x: 22, y: 17, owner: 13, system: false }
+					,{ x: 23, y: 16, owner: 13, system: false }
+					,{ x: 24, y: 15, owner: 0, system: false } 
+					,{ x: 24, y: 16, owner: 0, system: 3456 } 
+					,{ x: 25, y: 16, owner: 13, system: false } 
+					,{ x: 25, y: 17, owner: 3, system: false } 
+					,{ x: 23, y: 15, owner: 0, system: 2 } 
+					,{ x: 27, y: 16, owner: 0, system: false }
+				]
+				,systems: {
+					"1234": {magnitude:5, MKclass:"V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1}
+					,"3456": {magnitude:-15, MKclass:"I", MKspectrum: "L", offset:Math.floor(Math.random()*7)+1}	
+					,"2": {magnitude:15, MKclass:"V", MKspectrum: "B", offset:Math.floor(Math.random()*7)+1}
+				}
+				,owners: {
+					"13": { r:0, g:129, b:65, name: "Alternia"}
+					,"3": { r:0, g:0, b:86, name: "Sontar"}
+				}
+				/*CREATE TABLE GA_Space.planets(
+	id				INT				NOT NULL PRIMARY KEY
+,	system_id		INT				NOT NULL FOREIGN KEY REFERENCES GA_Space.systems(id)
+,	orbit			INT				NOT NULL
+,	population		INT		
+,	name			VARCHAR(32)
+,	worldtype		VARCHAR(32)
+,	utilization		VARCHAR(32)
+,	spare_fluff		VARCHAR(256)
+);
+*/
+			};
+			console.log("Loaded test data");
+		}
+		,getRevealedHexes: function(){ return mapData.hexes; }
+		,getMap: function(){ if( this.DEBUG ){ return mapData; } }
+		,getStatus: function(){ return status; }
+		,getOwnerById: function( id ){ return mapData.owners[id]; }
+		,getSystemById: function( id ){ return mapData.systems[id]; }
+		,loaded: function(){ return status === "loaded"; }
+		,map_w: function(){ return map_width; }
+		,map_h: function(){ return map_height; }
+		,map_left: function(){ return map_leftEdge; }
+		,map_top: function(){ return map_topEdge; }
+	};
+	
+})();
+
