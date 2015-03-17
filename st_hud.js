@@ -6,6 +6,19 @@
 // DOM elements for forms. 
 
 var st_hud = st_hud || function(){
-	return {};
+	return {
+		
+		
+		starSystemPopupAtGrid: function( grid_x, grid_y ){}
+		,starSystemPopupAtCanvas: function( canvas_x, canvas_y ){}
+	};
+
 	
 }();
+
+// note for later
+//never to be used for cryptography. I'm just using it to obfuscate coordinates. 
+// var hashids = new Hashids("this is my salt", 4, "0123456789ABCDEF");
+// for(var i=0; i<300; i++){
+  // console.log(hashids.encode(i));
+// }

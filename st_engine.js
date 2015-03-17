@@ -2,10 +2,7 @@
 //st_engine.js
 //the core UI engine, mostly calling on attached modules. 
 
-// var hashids = new Hashids("this is my salt", 4, "0123456789ABCDEF");
-// for(var i=0; i<300; i++){
-  // console.log(hashids.encode(i));
-// }
+
 //namespace st_engine
 var st_engine = st_engine || function(){
 	var authentication = { username:"", hashword:"" };
