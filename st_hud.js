@@ -8,9 +8,10 @@
 var st_hud = st_hud || function(){
 	return {
 		
-		
-		starSystemPopupAtGrid: function( grid_x, grid_y ){}
+		initialize: function(){}
+		,starSystemPopupAtGrid: function( grid_x, grid_y ){}
 		,starSystemPopupAtCanvas: function( canvas_x, canvas_y ){}
+		,selectHex: function( coords ){}
 	};
 
 	
