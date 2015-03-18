@@ -21,11 +21,11 @@ var st_engine = st_engine || function(){
 		var hexX = Math.floor( ( x - ( hexY % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect_w() );
 		st_graphics.drag_prev_x = event.pageX;
 		st_graphics.drag_prev_y = event.pageY;
-		if( st_graphics.DEBUG ){ 
+		if( DEBUG ){ 
 			console.log( "click: virtual canvas("+x+","+y+");  grid("+hexX+","+hexY+");  literal canvas("+( event.pageX - rect.left )+","+( event.pageY - rect.top )+")" );
 		}
 		if( st_graphics.click_prev_hex.x == hexX && st_graphics.click_prev_hex.y == hexY && st_graphics.doubleclick ) {
-			if( st_graphics.DEBUG ){console.log( "SELECTED:("+hexX+","+hexY+")");}
+			if( DEBUG ){console.log( "SELECTED:("+hexX+","+hexY+")");}
 			st_graphics.selectHex({x:hexX, y:hexY});
 			st_hud.selectHex({x:hexX, y:hexY});
 		} 
@@ -79,7 +79,7 @@ var st_engine = st_engine || function(){
 				st_graphics.camera.move( st_graphics.initialCameraX, st_graphics.initialCameraY );
 				break;
 		}
-		if( st_graphics.DEBUG ){
+		if( DEBUG ){
 			console.log( "Camera:("+st_graphics.camera.x()+","+st_graphics.camera.y()+")" );
 		}
 	}; // handleKeyDown()

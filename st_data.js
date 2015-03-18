@@ -43,12 +43,12 @@ var st_data = st_data || (function(){
 					,{ x: 22, y: 16, owner: 13, system: false }
 					,{ x: 22, y: 17, owner: 13, system: false }
 					,{ x: 23, y: 16, owner: 13, system: false }
-					,{ x: 24, y: 15, owner: 0, system: false } 
-					,{ x: 24, y: 16, owner: 0, system: 3456 } 
+					,{ x: 24, y: 15, owner: 0, system: 1234 } 
+					,{ x: 24, y: 16, owner: 13, system: 3456 } 
 					,{ x: 25, y: 16, owner: 13, system: false } 
-					,{ x: 25, y: 17, owner: 3, system: false } 
-					,{ x: 23, y: 15, owner: 0, system: 2 } 
-					,{ x: 27, y: 16, owner: 0, system: false }
+					,{ x: 25, y: 17, owner: 3, system: 2 } 
+					,{ x: 23, y: 15, owner: 0, system: false } 
+					,{ x: 24, y: 17, owner: 3, system: false }
 				]
 				,systems: {
 					"1234": {magnitude:5, MKclass:"V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1}
@@ -56,8 +56,16 @@ var st_data = st_data || (function(){
 					,"2": {magnitude:15, MKclass:"V", MKspectrum: "B", offset:Math.floor(Math.random()*7)+1}
 				}
 				,owners: {
-					"13": { r:0, g:129, b:65, name: "Alternia"}
-					,"3": { r:0, g:0, b:86, name: "Sontar"}
+					"13": { r:153, g:23, b:77, name: "Alternian Empire", adjective: "Alternian"}
+					,"3": { r:0, g:0, b:86, name: "Sontaran Empire", adjective: "Sontaran"}
+					,"6": { r:0, g:0, b:86, name: "Centauri Republic", adjective: "Centauri"}
+				}
+				,getHexByGrid: function( coords ){
+					this.hexes.forEach( function( element ){
+						if( element.x === coords.x && element.y === coords.y ){
+							return element;
+						}
+					});
 				}
 				/*CREATE TABLE GA_Space.planets(
 	id				INT				NOT NULL PRIMARY KEY

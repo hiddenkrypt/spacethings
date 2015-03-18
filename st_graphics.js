@@ -166,15 +166,15 @@ var st_graphics = st_graphics || function(){
 					ctx.strokeRect( x, y + ( hex_h / 2 ), hex_rect_w, hex_rect_w - ( hex_h / 2 )); 
 				}
 			}
-			,drawAtGrid: function(ctx, x, y, stroke, fill, alpha){
-				var canvas_x = ( x * hex_rect_w + ( ( y % 2 ) * hex_rad ) ) - st_graphics.camera.x();
-				var canvas_y = ( y * ( hex_side_length + hex_h ) ) - st_graphics.camera.y();
+			,drawAtGrid: function(ctx, coords, stroke, fill, alpha){
+				var canvas_x = ( coords.x * hex_rect_w + ( ( coords.y % 2 ) * hex_rad ) ) - st_graphics.camera.x();
+				var canvas_y = ( coords.y * ( hex_side_length + hex_h ) ) - st_graphics.camera.y();
 				this.draw(ctx, canvas_x, canvas_y, stroke, fill, alpha);
 			}
-			,drawScaledAtGrid:    function( scale, ctx, x, y, stroke, fill, alpha){
+			,drawScaledAtGrid:    function( scale, ctx, coords, stroke, fill, alpha){
 
-				var canvas_x = ( x * hex_rect_w + ( ( y % 2 ) * hex_rad ) ) - st_graphics.camera.x();
-				var canvas_y = ( y * ( hex_side_length + hex_h ) ) - st_graphics.camera.y();
+				var canvas_x = ( coords.x * hex_rect_w + ( ( coords.y % 2 ) * hex_rad ) ) - st_graphics.camera.x();
+				var canvas_y = ( coords.y * ( hex_side_length + hex_h ) ) - st_graphics.camera.y();
 				
 				var normal_size = hex_side_length;
 				var normal_hex_width = hex_rect_w;
@@ -192,9 +192,9 @@ var st_graphics = st_graphics || function(){
 					&& y < st_graphics.canvas_h 
 					&& y > -( hex_rect_w * 2 + hex_side_length );
 			}
-			,visibleAtGrid: function( x, y ){
-				var hex_x = ( x * st_graphics.hex.rect_w() + ( ( y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();
-				var hex_y = ( y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y();
+			,visibleAtGrid: function( coords ){
+				var hex_x = ( coords.x * st_graphics.hex.rect_w() + ( ( coords.y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();
+				var hex_y = ( coords.y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y();
 				return this.visible( hex_x, hex_y );
 			}
 		};
@@ -220,7 +220,7 @@ var st_graphics = st_graphics || function(){
 			for( var j = 0; j < st_graphics.h; j++){
 				// var hex_x = ( i * st_graphics.hex.rect_w() + ( ( j % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();
 				// var hex_y = ( j * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y();
-				if( st_graphics.hex.visibleAtGrid( i, j ) ){
+				if( st_graphics.hex.visibleAtGrid( {x:i, y:j} ) ){
 					st_graphics.hex.drawAtGrid(st_graphics.ctx, i, j);
 				}
 			}
@@ -230,31 +230,32 @@ var st_graphics = st_graphics || function(){
 	var drawLoadedHexField = function( ctx ){
 		var map = st_data.getRevealedHexes();
 		for( var i = 0; i < map.length; i++ ){
-			if( st_graphics.hex.visibleAtGrid( map[i].x, map[i].y ) ){
+			if( st_graphics.hex.visibleAtGrid( map[i] ) ){
 				var owner = st_data.getOwnerById( map[i].owner );
 				var system = st_data.getSystemById( map[i].system );
 				var ownerColor = owner? "rgb(" + owner.r + ", " + owner.g + ", "+owner.b + ")"	: false;
 				if( system ){ //there is a system there
 				
-					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i].x, map[i].y, false, false,  0 ); 
-					st_graphics.hex.drawScaledAtGrid(.9, st_graphics.ctx, map[i].x, map[i].y, ownerColor, ownerColor,  .5 );
+					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i], false, ownerColor,  .1 ); 
+					st_graphics.hex.drawScaledAtGrid(.9, st_graphics.ctx, map[i], ownerColor, false,  .5 );
 					drawStarAtGrid( st_graphics.ctx, map[i].x, map[i].y, system );
 				} else {
-					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i].x, map[i].y, false, ownerColor,  .5 ); 
+					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i], false, ownerColor,  .5 ); 
 				}
 			}
 		}		
 	}; // private drawLoadedHexField()
 	
 	var drawMouseCursor = function( ctx ){
-		st_graphics.hex.draw(
-			ctx, 
-			st_graphics.select.x*st_graphics.hex.rect_w() + (( st_graphics.select.y % 2 ) * st_graphics.hex.rad() ) - st_graphics.camera.x(),
-			st_graphics.select.y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) - st_graphics.camera.y(), 
-			"#ffff00", //border in yellow
-			false, // no fill
-			0 // 0% alpha (no fill)
-		);
+		// st_graphics.hex.draw(
+			// ctx, 
+			// st_graphics.select.x*st_graphics.hex.rect_w() + (( st_graphics.select.y % 2 ) * st_graphics.hex.rad() ) - st_graphics.camera.x(),
+			// st_graphics.select.y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) - st_graphics.camera.y(), 
+			// "#ffff00", //border in yellow
+			// false, // no fill
+			// 0 // 0% alpha (no fill)
+		// );
+		st_graphics.hex.drawAtGrid( ctx, {x:st_graphics.select.x, y:st_graphics.select.y}, "#ffff00", false, 0 );
 	}; // private drawMouseCursor()
 	var drawStarAtGrid = function( ctx, grid_x, grid_y, star ){
 		var hex_x = ( grid_x * st_graphics.hex.rect_w() + ( ( grid_y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();

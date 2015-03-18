@@ -18,7 +18,7 @@ var st_hud = st_hud || function(){
 }();
 
 // note for later
-//never to be used for cryptography. I'm just using it to obfuscate coordinates. 
+//never to be used for cryptography. I'm just using it to obfuscate coordinates and
 // var hashids = new Hashids("this is my salt", 4, "0123456789ABCDEF");
 // for(var i=0; i<300; i++){
   // console.log(hashids.encode(i));
