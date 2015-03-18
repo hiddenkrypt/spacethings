@@ -1,4 +1,4 @@
-"use strict"
+
 // st_data.js
 
 // Stores all game related data. Dynamically created and loaded with information only after a successful logon, game data must come from the server. 
@@ -7,6 +7,7 @@
 
 
 var st_data = st_data || (function(){
+	"use strict";
 	var mapData = {},
 		playerThingData = {},
 		status = "uninitialized";
@@ -81,10 +82,6 @@ var st_data = st_data || (function(){
 		,getOwnerById: function( id ){ return mapData.owners[id]; }
 		,getSystemById: function( id ){ return mapData.systems[id]; }
 		,loaded: function(){ return status === "loaded"; }
-		,map_w: function(){ return map_width; }
-		,map_h: function(){ return map_height; }
-		,map_left: function(){ return map_leftEdge; }
-		,map_top: function(){ return map_topEdge; }
 		,GetMapHexByGrid: function( coords ){
 			this.hexes.forEach( function( element ){
 				if( element.x === coords.x && element.y === coords.y ){

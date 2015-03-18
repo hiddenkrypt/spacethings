@@ -1,8 +1,9 @@
-"use strict";
+
 //st_graphics.js
 
 
 var st_graphics = st_graphics || function(){	
+	"use strict";
 	var graphicsModule = {
 		DEBUG:				false//st_DEBUG
 		,ctx:  				{}
@@ -71,7 +72,7 @@ var st_graphics = st_graphics || function(){
 	}; // public render()
 	graphicsModule.getNewHex = function(){
 		return createHexagon();
-	}
+	};
 	var createCamera = function(){
 		var camera_speed = 2/3
 			,pos_x = 100
@@ -85,8 +86,8 @@ var st_graphics = st_graphics || function(){
 				pos_y = new_y;
 			}
 			,moveDelta: function(dx, dy){
-				typeof dx === 'number' ? pos_x += dx : null;
-				typeof dy === 'number' ? pos_y += dy : null;
+				if( typeof dx === 'number' ){ pos_x += dx; }
+				if( typeof dy === 'number' ){ pos_y += dy; }
 			}
 			,dx: function( dx ){ pos_x += dx; }
 			,dy: function( dy ){ pos_y += dy; }
@@ -203,7 +204,6 @@ var st_graphics = st_graphics || function(){
 	var drawBackground = function( ctx ){
 		var bg_x = -st_graphics.camera.x() * st_graphics.parallax_d;
 		var bg_y = -st_graphics.camera.y() * st_graphics.parallax_d;
-		var scale = undefined;
 		ctx.drawImage(st_graphics.background, bg_x - st_graphics.background.width, bg_y + st_graphics.background.height);
 		ctx.drawImage(st_graphics.background, bg_x - st_graphics.background.width, bg_y);
 		ctx.drawImage(st_graphics.background, bg_x - st_graphics.background.width, bg_y - st_graphics.background.height);
@@ -236,11 +236,11 @@ var st_graphics = st_graphics || function(){
 				var ownerColor = owner? "rgb(" + owner.r + ", " + owner.g + ", "+owner.b + ")"	: false;
 				if( system ){ //there is a system there
 				
-					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i], false, ownerColor,  .1 ); 
-					st_graphics.hex.drawScaledAtGrid(.9, st_graphics.ctx, map[i], ownerColor, false,  .5 );
+					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i], false, ownerColor,  0.1 ); 
+					st_graphics.hex.drawScaledAtGrid(0.9, st_graphics.ctx, map[i], ownerColor, false,  0.5 );
 					drawStarAtGrid( st_graphics.ctx, map[i].x, map[i].y, system );
 				} else {
-					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i], false, ownerColor,  .5 ); 
+					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i], false, ownerColor,  0.5 ); 
 				}
 			}
 		}		
@@ -263,34 +263,34 @@ var st_graphics = st_graphics || function(){
 		drawStar( ctx, hex_x, hex_y, star );		
 	};
 	var drawStar = function( ctx, canv_x, canv_y, star ){
-		var color = "255,255,255"
+		var color = "255,255,255";
 		switch(star.MKspectrum){
 			case "O":
-				color = "130,130,255"
+				color = "130,130,255";
 				break;
 			case "B":
-				color = "130,130,202"
+				color = "130,130,202";
 				break;
 			case "A":
-				color = "162,162,210"
+				color = "162,162,210";
 				break;
 			case "F":
-				color = "210,210,226"
+				color = "210,210,226";
 				break;
 			case "G":
-				color = "239,239,239"
+				color = "239,239,239";
 				break;
 			case "K":
-				color = "226,210,210"
+				color = "226,210,210";
 				break;
 			case "M":
-				color = "210,162,162"
+				color = "210,162,162";
 				break;
 			case "L":
-				color = "202,130,130"
+				color = "202,130,130";
 				break;
 			case "T":
-				color = "255,130,130"
+				color = "255,130,130";
 				break;
 		}
 		

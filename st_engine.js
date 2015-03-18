@@ -1,10 +1,12 @@
-"use strict"
+
 //st_engine.js
 //the core UI engine, mostly calling on attached modules. 
 
 
+/*jshint laxcomma: true*/
 //namespace st_engine
 var st_engine = st_engine || function(){
+	"use strict";
 	var authentication = { username:"", hashword:"" };
 	var DEBUG = st_DEBUG;
 		
@@ -42,6 +44,7 @@ var st_engine = st_engine || function(){
 
 	var handleKeyDown = function( event ){
 		var keyCode = event.keyCode;
+		var retval = {change:false};
 		switch (keyCode){
 			case key.NP_8:	
 			case key.UP:
@@ -61,17 +64,17 @@ var st_engine = st_engine || function(){
 				break;
 			case key.NP_9:
 			case key.PAGE_UP:
-				var retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() + st_graphics.hex.side_length() / 8 ); 
+				retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() + st_graphics.hex.side_length() / 8 ); 
 				if (retval.change){ st_graphics.camera.centerOnHex( retval.x, retval.y ); }
 				break;
 			case key.NP_3:
 			case key.PAGE_DOWN:
-				var retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() / ( 9/8 ) );
+				retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() / ( 9/8 ) );
 				if (retval.change){ st_graphics.camera.centerOnHex( retval.x, retval.y ); }
 				break;
 			case key.NP_7:
 			case key.HOME:
-				var retval = st_graphics.hex.setSideLength( st_graphics.initialHexSize );
+				retval = st_graphics.hex.setSideLength( st_graphics.initialHexSize );
 				if (retval.change){ st_graphics.camera.centerOnHex( retval.x, retval.y ); }
 				break;
 			case key.NP_1:
@@ -95,7 +98,7 @@ var st_engine = st_engine || function(){
 			st_graphics.drag_prev_x = event.pageX;
 			st_graphics.drag_prev_y = event.pageY;
 		}
-	} // handeMouseMove()
+	}; // handeMouseMove()
 
 	var handleScroll = function( event ) {
 		var delta = Math.max( -1, Math.min( 1, ( event.wheelDelta || -event.detail ) ) );

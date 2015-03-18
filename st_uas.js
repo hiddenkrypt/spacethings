@@ -1,4 +1,4 @@
-"use strict"
+
 //uas.js
 // User account service: This module handles DOM elements that are initially hidden. It selectively reveals parts of the login, account creation, 
 // and privacy statement pages. It also handles calls to the server through st_ajax.js. This module provides the login interface for the user. 
@@ -7,6 +7,7 @@
 
 //namespace uas
 var st_uas = st_uas || function(){
+	"use strict";
 	return	{
 		credentials: null
 		,DEBUG: st_DEBUG
@@ -74,10 +75,10 @@ var st_uas = st_uas || function(){
 		}
 		,create: function(){
 			st_uas.dom.create_error.style.display='none';
-			if(st_uas.dom.create_password.value.length == 0
-				|| st_uas.dom.create_passwordConfirm.value.length == 0
-				|| st_uas.dom.create_username.value.length == 0
-				|| st_uas.dom.create_inviteCode.value.length == 0
+			if(st_uas.dom.create_password.value.length === 0
+				|| st_uas.dom.create_passwordConfirm.value.length === 0
+				|| st_uas.dom.create_username.value.length === 0
+				|| st_uas.dom.create_inviteCode.value.length === 0
 				){
 				st_uas.dom.create_error.innerHTML = "Empty field detected. All fields are mandatory.";
 				st_uas.dom.create_error.style.display='inline';
