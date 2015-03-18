@@ -47,22 +47,3 @@ worlds:
 		Ice 
 		Gas Giant 
 		Other
-		
-		
-		
-		
-	var seed = 1;
-seed = 80085;
-function random() {
-    var x = Math.sin(seed++) * 1000;
-    return x - Math.floor(x);
-}
-	
-	
-	2cos(30)S = s+ 2sin(30)S = s (1+2sin(30))
-	
-	2cos(30) = 1+2sin(30)
-	
-	2 sqrt(3)x = 2x
-	
-	333-0008041-2014 (The property one I sent you) and 333-0008164-2014 (The subro one you modified) are both in there
