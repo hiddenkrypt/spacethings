@@ -25,9 +25,9 @@ var st_engine = st_engine || function(){
 			console.log( "click: virtual canvas("+x+","+y+");  grid("+hexX+","+hexY+");  literal canvas("+( event.pageX - rect.left )+","+( event.pageY - rect.top )+")" );
 		}
 		if( st_graphics.click_prev_hex.x == hexX && st_graphics.click_prev_hex.y == hexY && st_graphics.doubleclick ) {
-			if( DEBUG ){console.log( "SELECTED:("+hexX+","+hexY+")");}
-			st_graphics.selectHex({x:hexX, y:hexY});
-			st_hud.selectHex({x:hexX, y:hexY});
+			if( DEBUG ){ console.log( "SELECTED:("+hexX+","+hexY+")" ); }
+			st_graphics.selectHex( {x:hexX, y:hexY} );
+			st_hud.selectHex( st_data.GetMapHexByGrid( {x:hexX, y:hexY} ) );
 		} 
 		st_graphics.click_prev_hex.x = hexX;
 		st_graphics.click_prev_hex.y = hexY;

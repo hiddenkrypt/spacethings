@@ -8,6 +8,7 @@
 
 var st_data = st_data || (function(){
 	var mapData = {},
+		playerThingData = {},
 		status = "uninitialized";
 		
 	return {
@@ -32,6 +33,7 @@ var st_data = st_data || (function(){
 				}, 300);
 			} else{
 				//ajax request to server for absolutely everything. 
+				//get mapData, get playerThingData
 			}
 
 		}
@@ -59,25 +61,17 @@ var st_data = st_data || (function(){
 					"13": { r:153, g:23, b:77, name: "Alternian Empire", adjective: "Alternian"}
 					,"3": { r:0, g:0, b:86, name: "Sontaran Empire", adjective: "Sontaran"}
 					,"6": { r:0, g:0, b:86, name: "Centauri Republic", adjective: "Centauri"}
+					,"7": { r:0, g:205, b:0, name: "Waaagh 'elmit'ead", adjective: "Ork"}
 				}
-				,getHexByGrid: function( coords ){
-					this.hexes.forEach( function( element ){
-						if( element.x === coords.x && element.y === coords.y ){
-							return element;
-						}
-					});
-				}
-				/*CREATE TABLE GA_Space.planets(
-	id				INT				NOT NULL PRIMARY KEY
-,	system_id		INT				NOT NULL FOREIGN KEY REFERENCES GA_Space.systems(id)
-,	orbit			INT				NOT NULL
-,	population		INT		
-,	name			VARCHAR(32)
-,	worldtype		VARCHAR(32)
-,	utilization		VARCHAR(32)
-,	spare_fluff		VARCHAR(256)
-);
-*/
+			};
+			playerThingData = {
+				id: 7
+				,name: "Waaagh 'elmit'ead"
+				,race: "Da Orks"
+				,military_power: 15
+				,population: 23
+				,resources: 24
+				,homeworld: 66
 			};
 			console.log("Loaded test data");
 		}
@@ -91,6 +85,13 @@ var st_data = st_data || (function(){
 		,map_h: function(){ return map_height; }
 		,map_left: function(){ return map_leftEdge; }
 		,map_top: function(){ return map_topEdge; }
+		,GetMapHexByGrid: function( coords ){
+			this.hexes.forEach( function( element ){
+				if( element.x === coords.x && element.y === coords.y ){
+					return element;
+				}
+			});
+		}
 	};
 	
 })();
