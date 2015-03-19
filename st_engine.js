@@ -125,11 +125,6 @@ var st_engine = st_engine || function(){
 		}
 		,render: function(){
 			st_graphics.render();
-			
-			if( DEBUG ){
-				st_graphics.ctx.strokeStyle = "#00ff00";
-				st_graphics.ctx.strokeRect( st_graphics.canvas_w/2, st_graphics.canvas_h/2, 2, 2); 
-			}
 			requestAnimationFrame( this.render.bind(this) );
 		}
 		,setAuthentication: function( auth ){
