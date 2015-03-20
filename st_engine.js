@@ -135,11 +135,6 @@ var st_engine = st_engine || function(){
 			
 			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
 			st_graphics.render( Context );
-			
-			if( DEBUG ){
-				Context.strokeStyle = "#00ff00";
-				Context.strokeRect( Canvas.width/2, Canvas.height/2, 2, 2); 
-			}
 			requestAnimationFrame( this.render.bind(this) );
 		}
 		,setAuthentication: function( auth ){

@@ -62,6 +62,10 @@ var st_graphics = st_graphics || function(){
 			drawLoadedHexField( ctx );
 		}
 		drawMouseCursor( ctx );
+		if( st_graphics.DEBUG ){
+			st_graphics.ctx.strokeStyle = "#00ff00";
+			st_graphics.ctx.strokeRect( st_graphics.canvas_w/2, st_graphics.canvas_h/2, 2, 2); 
+		}
 	}; // public render()
 
 	var createCamera = function(){
