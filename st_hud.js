@@ -6,16 +6,23 @@
 // DOM elements for forms. 
 
 var st_hud = st_hud || function(){
-	return {
-		
+
+	var Hud = {
 		initialize: function(){}
 		,starSystemPopupAtGrid: function( grid_x, grid_y ){}
 		,starSystemPopupAtCanvas: function( canvas_x, canvas_y ){}
 		,selectHex: function( coords ){}
 	};
 
-	
-}();
+	var drawPopup = function( ctx ){
+		ctx.strokeStyle = "#efefef";
+		ctx.lineWidth = 3;
+	}
+	return Hud;
+}(); // IIFE to create st_hud
+
+
+
 
 // note for later
 //never to be used for cryptography. I'm just using it to obfuscate coordinates and
