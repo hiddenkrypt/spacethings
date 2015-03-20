@@ -9,6 +9,8 @@ var st_engine = st_engine || function(){
 	"use strict";
 	var authentication = { username:"", hashword:"" };
 	var DEBUG = st_DEBUG;
+	var Canvas = {};
+	var Context = {};
 		
 	var handleMouseMenu = function( event ){
 			event.preventDefault();
@@ -16,7 +18,7 @@ var st_engine = st_engine || function(){
 	
 	var handleMouseDown = function( event ){  
 		st_graphics.dragging = true;
-		var rect = st_graphics.canvas.getBoundingClientRect();
+		var rect = Canvas.getBoundingClientRect();
 		var x = event.pageX - rect.left + st_graphics.camera.x();
 		var y = event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
 		var hexY = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.side_length() ) );
@@ -88,7 +90,7 @@ var st_engine = st_engine || function(){
 	}; // handleKeyDown()
 
 	var handleMouseMove = function( event ){
-		var rect = st_graphics.canvas.getBoundingClientRect();
+		var rect = Canvas.getBoundingClientRect();
 		var x=event.pageX - rect.left + st_graphics.camera.x();
 		var y=event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
 		st_graphics.select.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.side_length() ) );
@@ -109,26 +111,34 @@ var st_engine = st_engine || function(){
 	
 	return {
 		init: function(){
+			
+			Canvas = document.getElementById( "c" );
+			Context = Canvas.getContext( "2d" );
+			
 			st_graphics.initialize(); // start graphics module
 			st_uas.initialize(); // start user account service module
 			st_data.initialize();
 			
 			window.addEventListener  ( "mouseup", handleMouseUp, false);
 			document.body.addEventListener( "keydown", handleKeyDown, false ); 
-			st_graphics.canvas.setAttribute("tabindex", 0);
-			st_graphics.canvas.addEventListener( "contextmenu", handleMouseMenu, false ); 
-			st_graphics.canvas.addEventListener( "mousedown", handleMouseDown, false );
-			st_graphics.canvas.addEventListener( "mousemove", handleMouseMove, false );
-			st_graphics.canvas.addEventListener( "mousewheel", handleScroll, false );
-			st_graphics.canvas.addEventListener( "DOMMouseScroll", handleScroll, false );  //firefox
+			Canvas.setAttribute("tabindex", 0);
+			Canvas.addEventListener( "contextmenu", handleMouseMenu, false ); 
+			Canvas.addEventListener( "mousedown", handleMouseDown, false );
+			Canvas.addEventListener( "mousemove", handleMouseMove, false );
+			Canvas.addEventListener( "mousewheel", handleScroll, false );
+			Canvas.addEventListener( "DOMMouseScroll", handleScroll, false );  //firefox
 			this.render();
 		}
-		,render: function(){
-			st_graphics.render();
+		,render: function(){		
+			Canvas.style.width = Canvas.width = window.innerWidth -25;
+			Canvas.style.height = Canvas.height = window.innerHeight -25;
+			
+			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
+			st_graphics.render( Context );
 			
 			if( DEBUG ){
-				st_graphics.ctx.strokeStyle = "#00ff00";
-				st_graphics.ctx.strokeRect( st_graphics.canvas_w/2, st_graphics.canvas_h/2, 2, 2); 
+				Context.strokeStyle = "#00ff00";
+				Context.strokeRect( Canvas.width/2, Canvas.height/2, 2, 2); 
 			}
 			requestAnimationFrame( this.render.bind(this) );
 		}
@@ -142,6 +152,12 @@ var st_engine = st_engine || function(){
 		}
 		,getAuthentication: function(){
 			return this.authentication;
+		}
+		,canvas: function(){
+			return Canvas;
+		}
+		,ctx: function(){
+			return ctx;
 		}
 	};
 			

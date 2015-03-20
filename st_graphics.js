@@ -1,7 +1,6 @@
 
 //st_graphics.js
 
-
 var st_graphics = st_graphics || function(){	
 	"use strict";
 	var graphicsModule = {
@@ -40,39 +39,31 @@ var st_graphics = st_graphics || function(){
 
 	graphicsModule.initialize = function(){
 		st_graphics.hex = createHexagon( st_graphics.initialHexSize );
-		st_graphics.camera = createCamera( 100,100 );
-		st_graphics.camera.move(100,100);
+		st_graphics.camera = createCamera();
+		st_graphics.camera.move( 100, 100 );
 		st_graphics.background.src = st_graphics.bg_filename;
 		st_graphics.background.onload = function(){ 
 			st_graphics.imageLoaded = true; 
 			if(st_graphics.DEBUG){
+				console.log("st_graphics initialized.");
 				console.log("image:("+st_graphics.background.width+","+st_graphics.background.height+")"); 
 				console.log("canvas:("+st_graphics.canvas_w+","+st_graphics.canvas_h+")");
 			}
 		};
-		st_graphics.canvas = document.getElementById( "c" );
-		st_graphics.ctx = st_graphics.canvas.getContext( "2d" );
 	}; // public initialize()
 	
-	graphicsModule.render = function(){
-		st_graphics.canvas_w = window.innerWidth -25;
-		st_graphics.canvas_h = window.innerHeight -25;
-		st_graphics.canvas.style.width = st_graphics.canvas.width = st_graphics.canvas_w;
-		st_graphics.canvas.style.height = st_graphics.canvas.height = st_graphics.canvas_h;
-		st_graphics.ctx.clearRect( 0, 0, st_graphics.canvas_w, st_graphics.canvas_h ) ;
+	graphicsModule.render = function( ctx ){
 		if( st_graphics.imageLoaded ){
-			drawBackground( st_graphics.ctx );
+			drawBackground( ctx );
 		}
 		if( !st_data.loaded() ){
-			drawDefaultHexField( st_graphics.ctx );
+			drawDefaultHexField( ctx );
 		} else {
-			drawLoadedHexField( st_graphics.ctx );
+			drawLoadedHexField( ctx );
 		}
-		drawMouseCursor( st_graphics.ctx );
+		drawMouseCursor( ctx );
 	}; // public render()
-	graphicsModule.getNewHex = function(){
-		return createHexagon();
-	};
+
 	var createCamera = function(){
 		var camera_speed = 2/3
 			,pos_x = 100
@@ -221,7 +212,7 @@ var st_graphics = st_graphics || function(){
 				// var hex_x = ( i * st_graphics.hex.rect_w() + ( ( j % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();
 				// var hex_y = ( j * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y();
 				if( st_graphics.hex.visibleAtGrid( {x:i, y:j} ) ){
-					st_graphics.hex.drawAtGrid(st_graphics.ctx, i, j);
+					st_graphics.hex.drawAtGrid(ctx, i, j);
 				}
 			}
 		}
@@ -236,11 +227,11 @@ var st_graphics = st_graphics || function(){
 				var ownerColor = owner? "rgb(" + owner.r + ", " + owner.g + ", "+owner.b + ")"	: false;
 				if( system ){ //there is a system there
 				
-					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i], false, ownerColor,  0.1 ); 
-					st_graphics.hex.drawScaledAtGrid(0.9, st_graphics.ctx, map[i], ownerColor, false,  0.5 );
-					drawStarAtGrid( st_graphics.ctx, map[i].x, map[i].y, system );
+					st_graphics.hex.drawAtGrid( ctx, map[i], false, ownerColor,  0.1 ); 
+					st_graphics.hex.drawScaledAtGrid(0.9, ctx, map[i], ownerColor, false,  0.5 );
+					drawStarAtGrid( ctx, map[i].x, map[i].y, system );
 				} else {
-					st_graphics.hex.drawAtGrid( st_graphics.ctx, map[i], false, ownerColor,  0.5 ); 
+					st_graphics.hex.drawAtGrid( ctx, map[i], false, ownerColor,  0.5 ); 
 				}
 			}
 		}		
@@ -257,11 +248,13 @@ var st_graphics = st_graphics || function(){
 		// );
 		st_graphics.hex.drawAtGrid( ctx, {x:st_graphics.select.x, y:st_graphics.select.y}, "#ffff00", false, 0 );
 	}; // private drawMouseCursor()
+
 	var drawStarAtGrid = function( ctx, grid_x, grid_y, star ){
 		var hex_x = ( grid_x * st_graphics.hex.rect_w() + ( ( grid_y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();
 		var hex_y = ( grid_y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y();
 		drawStar( ctx, hex_x, hex_y, star );		
 	};
+	
 	var drawStar = function( ctx, canv_x, canv_y, star ){
 		var color = "255,255,255";
 		switch(star.MKspectrum){
@@ -309,8 +302,6 @@ var st_graphics = st_graphics || function(){
 				ctx.fill();
 		ctx.restore();
 	}; // private drawStar()
-	
-	
 	
 	graphicsModule.selectHex = function( coords ){
 		st_graphics.camera.centerOnHex(coords.x, coords.y);
