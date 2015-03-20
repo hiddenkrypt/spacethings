@@ -82,8 +82,8 @@ var st_data = st_data || (function(){
 		,getOwnerById: function( id ){ return mapData.owners[id]; }
 		,getSystemById: function( id ){ return mapData.systems[id]; }
 		,loaded: function(){ return status === "loaded"; }
-		,GetMapHexByGrid: function( coords ){
-			this.hexes.forEach( function( element ){
+		,getMapHexByGrid: function( coords ){
+			mapData.hexes.forEach( function( element ){
 				if( element.x === coords.x && element.y === coords.y ){
 					return element;
 				}
