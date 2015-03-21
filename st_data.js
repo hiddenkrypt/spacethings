@@ -8,20 +8,19 @@
 
 var st_data = st_data || (function(){
 	"use strict";
-	var mapData = {},
-		playerThingData = {},
-		status = "uninitialized";
-		
+	var mapData = {};
+	var playerThingData = {};
+	var status = "uninitialized";
+	var DEBUG = st_DEBUG;
 	return {
-		DEBUG: st_DEBUG,
 		initialize: function(){
 			status = "initialized"; 
-			if( this.DEBUG ){
+			if( DEBUG ){
 				this.update();
 			}
 		}
 		,update: function(){
-			if( this.DEBUG ){
+			if( DEBUG ){
 				console.log( "loading debug map" );
 				setTimeout( function(){
 					st_data.test_update();			
@@ -77,7 +76,7 @@ var st_data = st_data || (function(){
 			console.log("Loaded test data");
 		}
 		,getRevealedHexes: function(){ return mapData.hexes; }
-		,getMap: function(){ if( this.DEBUG ){ return mapData; } }
+		,getMap: function(){ if( DEBUG ){ return mapData; } }
 		,getStatus: function(){ return status; }
 		,getOwnerById: function( id ){ return mapData.owners[id]; }
 		,getSystemById: function( id ){ return mapData.systems[id]; }
