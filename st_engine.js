@@ -11,7 +11,56 @@ var st_engine = st_engine || function(){
 	var DEBUG = st_DEBUG;
 	var Canvas = {};
 	var Context = {};
-		
+	
+	var engine = {
+		init: function(){
+			
+			Canvas = document.getElementById( "c" );
+			Context = Canvas.getContext( "2d" );
+			
+			st_graphics.initialize(); // start graphics module
+			st_uas.initialize(); // start user account service module
+			st_data.initialize();
+			
+			window.addEventListener  ( "mouseup", handleMouseUp, false);
+			document.body.addEventListener( "keydown", handleKeyDown, false ); 
+			Canvas.setAttribute("tabindex", 0);
+			Canvas.addEventListener( "contextmenu", handleMouseMenu, false ); 
+			Canvas.addEventListener( "mousedown", handleMouseDown, false );
+			Canvas.addEventListener( "mousemove", handleMouseMove, false );
+			Canvas.addEventListener( "mousewheel", handleScroll, false );
+			Canvas.addEventListener( "DOMMouseScroll", handleScroll, false );  //firefox
+			this.render();
+		}
+		,render: function(){		
+			Canvas.style.width = Canvas.width = window.innerWidth -25;
+			Canvas.style.height = Canvas.height = window.innerHeight -25;
+			
+			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
+			st_graphics.render( Context );
+			st_hud.render( Context );
+			requestAnimationFrame( this.render.bind(this) );
+		}
+		,setAuthentication: function( auth ){
+			if(typeof auth.username === "string" && typeof auth.hashword === "string"){
+				this.authentication.username = auth.username;
+				this.authentication.hashword = auth.hashword;
+			} else{
+				throw "st_engine:: Invalid Authentication";
+			}
+		}
+		,getAuthentication: function(){
+			return this.authentication;
+		}
+		,canvas: function(){
+			return Canvas;
+		}
+		,ctx: function(){
+			return Context;
+		}
+	};
+	
+	
 	var handleMouseMenu = function( event ){
 			event.preventDefault();
 	}; //handleMouseMenu()
@@ -31,7 +80,7 @@ var st_engine = st_engine || function(){
 		if( st_graphics.click_prev_hex.x == hexX && st_graphics.click_prev_hex.y == hexY && st_graphics.doubleclick ) {
 			if( DEBUG ){ console.log( "SELECTED:("+hexX+","+hexY+")" ); }
 			st_graphics.selectHex( {x:hexX, y:hexY} );
-			st_hud.selectHex( st_data.GetMapHexByGrid( {x:hexX, y:hexY} ) );
+			st_hud.selectHexAtGrid( {x:hexX, y:hexY} );
 		} 
 		st_graphics.click_prev_hex.x = hexX;
 		st_graphics.click_prev_hex.y = hexY;
@@ -109,53 +158,9 @@ var st_engine = st_engine || function(){
 	}; // handleScroll()
 	
 	
-	return {
-		init: function(){
-			
-			Canvas = document.getElementById( "c" );
-			Context = Canvas.getContext( "2d" );
-			
-			st_graphics.initialize(); // start graphics module
-			st_uas.initialize(); // start user account service module
-			st_data.initialize();
-			
-			window.addEventListener  ( "mouseup", handleMouseUp, false);
-			document.body.addEventListener( "keydown", handleKeyDown, false ); 
-			Canvas.setAttribute("tabindex", 0);
-			Canvas.addEventListener( "contextmenu", handleMouseMenu, false ); 
-			Canvas.addEventListener( "mousedown", handleMouseDown, false );
-			Canvas.addEventListener( "mousemove", handleMouseMove, false );
-			Canvas.addEventListener( "mousewheel", handleScroll, false );
-			Canvas.addEventListener( "DOMMouseScroll", handleScroll, false );  //firefox
-			this.render();
-		}
-		,render: function(){		
-			Canvas.style.width = Canvas.width = window.innerWidth -25;
-			Canvas.style.height = Canvas.height = window.innerHeight -25;
-			
-			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
-			st_graphics.render( Context );
-			requestAnimationFrame( this.render.bind(this) );
-		}
-		,setAuthentication: function( auth ){
-			if(typeof auth.username === "string" && typeof auth.hashword === "string"){
-				this.authentication.username = auth.username;
-				this.authentication.hashword = auth.hashword;
-			} else{
-				throw "st_engine:: Invalid Authentication";
-			}
-		}
-		,getAuthentication: function(){
-			return this.authentication;
-		}
-		,canvas: function(){
-			return Canvas;
-		}
-		,ctx: function(){
-			return ctx;
-		}
-	};
-			
+
+	
+	return engine;
 
 }();
 
