@@ -6,18 +6,53 @@
 // DOM elements for forms. 
 
 var st_hud = st_hud || function(){
-
-	var Hud = {
-		initialize: function(){}
-		,starSystemPopupAtGrid: function( grid_x, grid_y ){}
-		,starSystemPopupAtCanvas: function( canvas_x, canvas_y ){}
-		,selectHex: function( coords ){}
+	var popup = {
+		w: 300
+		,h: 400
+		,x: 100
+		,y: 100
+		,border: {
+			spacing: 10
+			,width: 3
+		}
+		,active: false
 	};
-
-	var drawPopup = function( ctx ){
-		ctx.strokeStyle = "#efefef";
-		ctx.lineWidth = 3;
+	var DEBUG = st_DEBUG;
+	
+	var Hud = {
+		initialize: function(){
+			if( DEBUG ){
+				popup.active = true;
+			}
+		}
+		,render: function( ctx ){
+			if( popup.active ){
+				drawPopupBackground( ctx );
+				drawPopupData( ctx );
+			}
+		}
+		,selectHexAtGrid: function( coords ){
+			if( DEBUG ){ console.log("st_hud: selecting hex"); }
+			loadPopupData( st_data.getMapHexByGrid( coords ) );
+			popup.active = true;
+		}
+	};
+	
+	var drawPopupBackground = function( ctx ){
+		ctx.fillStyle = "rgba(230,230,230,.8)";
+		ctx.fillRect( popup.x, popup.y, popup.w, popup.h );
+		ctx.strokeStyle = "#101010";
+		ctx.lineWidth = popup.border.width;
+		ctx.strokeRect( 
+			popup.x + popup.border.spacing - popup.border.width/2,	
+			popup.y + popup.border.spacing - popup.border.width/2, 
+			popup.w - popup.border.width*2 - popup.border.spacing, 
+			popup.h-popup.border.spacing-popup.border.width*2 
+		);
 	}
+	
+	var	loadPopupData = function ( hexData ){};
+	var drawPopupData = function ( ctx ){};
 	return Hud;
 }(); // IIFE to create st_hud
 
