@@ -6,7 +6,7 @@ var st_engine = st_engine || function(){
 	"use strict";
 	
 	var authentication = { username:"", hashword:"" };
-	var DEBUG = st_DEBUG;
+	var DEBUG = st_DEBUG.engine;
 	var Canvas = {};
 	var Context = {};
 	

@@ -11,7 +11,7 @@ var st_data = st_data || (function(){
 	var mapData = {};
 	var playerThingData = {};
 	var status = "uninitialized";
-	var DEBUG = st_DEBUG;
+	var DEBUG = st_DEBUG.data;
 	return {
 		initialize: function(){
 			status = "initialized"; 

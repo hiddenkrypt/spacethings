@@ -3,9 +3,11 @@
 
 var st_graphics = st_graphics || function(){	
 	"use strict";
+
+	var DEBUG = st_DEBUG.graphics
+
 	var graphicsModule = {
-		DEBUG:				false//st_DEBUG
-		,camera:			{}
+		camera:				{}
 		,hex:				{}
 		,line_w:			1
 		,max_zoom:			100
@@ -36,7 +38,7 @@ var st_graphics = st_graphics || function(){
 		st_graphics.background.src = st_graphics.bg_filename;
 		st_graphics.background.onload = function(){ 
 			st_graphics.imageLoaded = true; 
-			if(st_graphics.DEBUG){
+			if( DEBUG ){
 				console.log("st_graphics initialized.");
 				console.log("image:("+st_graphics.background.width+","+st_graphics.background.height+")"); 
 			}
@@ -53,7 +55,7 @@ var st_graphics = st_graphics || function(){
 			drawLoadedHexField( ctx );
 		}
 		drawMouseCursor( ctx );
-		if( st_graphics.DEBUG ){
+		if( DEBUG ){
 			st_graphics.ctx.strokeStyle = "#00ff00";
 			st_graphics.ctx.strokeRect( st_engine.canvas().width()/2, st_engine.canvas().height/2, 2, 2); 
 		}
@@ -147,7 +149,7 @@ var st_graphics = st_graphics || function(){
 				ctx.lineWidth = 2;
 				ctx.strokeStyle = stroke;
 				ctx.stroke();
-				if( st_graphics.DEBUG ){
+				if( DEBUG ){
 					ctx.lineWidth = line_width;
 					ctx.strokeStyle = "#ff0000";
 					ctx.strokeRect( x, y + ( hex_h / 2 ), hex_rect_w, hex_rect_w - ( hex_h / 2 )); 

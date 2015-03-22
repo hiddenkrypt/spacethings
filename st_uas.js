@@ -10,7 +10,7 @@ var st_uas = st_uas || function(){
 	"use strict";
 	return	{
 		credentials: null
-		,DEBUG: st_DEBUG
+		,DEBUG: st_DEBUG.uas
 		,initialize: function(){
 			st_uas.loadDom();
 			st_uas.dom.login_createSwitch.addEventListener  ( "mousedown", st_uas.switchToCreate );

@@ -6,6 +6,8 @@
 // DOM elements for forms. 
 
 var st_hud = st_hud || function(){
+
+	var DEBUG = st_DEBUG.hud;
 	var popup = {
 		w: 300
 		,h: 400
@@ -17,7 +19,6 @@ var st_hud = st_hud || function(){
 		}
 		,active: false
 	};
-	var DEBUG = st_DEBUG;
 	
 	var Hud = {
 		initialize: function(){
