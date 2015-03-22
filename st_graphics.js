@@ -5,14 +5,8 @@ var st_graphics = st_graphics || function(){
 	"use strict";
 	var graphicsModule = {
 		DEBUG:				false//st_DEBUG
-		,ctx:  				{}
-		,canvas: 			{}
 		,camera:			{}
-		,canvas_w:			window.innerWidth
-		,canvas_h:			window.innerHeight
 		,hex:				{}
-		,h:					10
-		,w:					10
 		,line_w:			1
 		,max_zoom:			100
 		,min_zoom:			10
@@ -29,8 +23,6 @@ var st_graphics = st_graphics || function(){
 		,dClickWindow:		300
 		,dClickTimeout: 	{}
 		,initialHexSize:	90
-		,initialCameraX:	100
-		,initialCameraY:	100
 		,initialize:		function(){}
 		,render:			function(){}
 		,getNewHex:			function(){}
@@ -47,7 +39,6 @@ var st_graphics = st_graphics || function(){
 			if(st_graphics.DEBUG){
 				console.log("st_graphics initialized.");
 				console.log("image:("+st_graphics.background.width+","+st_graphics.background.height+")"); 
-				console.log("canvas:("+st_graphics.canvas_w+","+st_graphics.canvas_h+")");
 			}
 		};
 	}; // public initialize()
@@ -64,7 +55,7 @@ var st_graphics = st_graphics || function(){
 		drawMouseCursor( ctx );
 		if( st_graphics.DEBUG ){
 			st_graphics.ctx.strokeStyle = "#00ff00";
-			st_graphics.ctx.strokeRect( st_graphics.canvas_w/2, st_graphics.canvas_h/2, 2, 2); 
+			st_graphics.ctx.strokeRect( st_engine.canvas().width()/2, st_engine.canvas().height/2, 2, 2); 
 		}
 	}; // public render()
 
@@ -87,8 +78,8 @@ var st_graphics = st_graphics || function(){
 			,dx: function( dx ){ pos_x += dx; }
 			,dy: function( dy ){ pos_y += dy; }
 			,centerOnHex: function( hex_x, hex_y ){  
-				pos_y = ( hex_y * ( st_graphics.hex.rect_w() - ( st_graphics.hex.h() / 2 ) +(0.015*st_graphics.hex.side_length()) ) ) - ( st_graphics.canvas_h/2 ) + ( st_graphics.hex.h() + st_graphics.hex.side_length()/2 );
-				pos_x = ( hex_x *  st_graphics.hex.rect_w() ) - ( st_graphics.canvas_w/2 ) + st_graphics.hex.rect_w()/(hex_y%2?1:2);
+				pos_y = ( hex_y * ( st_graphics.hex.rect_w() - ( st_graphics.hex.h() / 2 ) +(0.015*st_graphics.hex.side_length()) ) ) - ( st_engine.canvas().height/2 ) + ( st_graphics.hex.h() + st_graphics.hex.side_length()/2 );
+				pos_x = ( hex_x *  st_graphics.hex.rect_w() ) - ( st_engine.canvas().width/2 ) + st_graphics.hex.rect_w()/(hex_y%2?1:2);
 			}
 		};
 	}; //private createCamera() camera constructor
@@ -116,8 +107,8 @@ var st_graphics = st_graphics || function(){
 				if( hex_side_length === newLength ){
 					changed = false;
 				}
-				var centerX = st_graphics.canvas_w/2 + st_graphics.camera.x();
-				var centerY = st_graphics.canvas_h/2 + st_graphics.camera.y();
+				var centerX = st_engine.canvas().width/2 + st_graphics.camera.x();
+				var centerY = st_engine.canvas().height/2 + st_graphics.camera.y();
 				var targetY = Math.floor( centerY / ( hex_h + hex_side_length ) );
 				var targetX = Math.floor( ( centerX - ( targetY % 2 ) * hex_rad ) / hex_rect_w );
 				
@@ -183,9 +174,9 @@ var st_graphics = st_graphics || function(){
 				this.setSideLength( normal_size );
 			}
 			,visible: function( x, y ){
-				return x < st_graphics.canvas_w 
+				return x < st_engine.canvas().width
 					&& x > -hex_rect_w
-					&& y < st_graphics.canvas_h 
+					&& y < st_engine.canvas().height
 					&& y > -( hex_rect_w * 2 + hex_side_length );
 			}
 			,visibleAtGrid: function( coords ){
@@ -211,10 +202,8 @@ var st_graphics = st_graphics || function(){
 	}; // private drawBackground()
 	
 	var drawDefaultHexField = function( ctx ){
-		for( var i = 0; i < st_graphics.w; i++){
-			for( var j = 0; j < st_graphics.h; j++){
-				// var hex_x = ( i * st_graphics.hex.rect_w() + ( ( j % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();
-				// var hex_y = ( j * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y();
+		for( var i = 0; i < 10; i++){
+			for( var j = 0; j < 10; j++){
 				if( st_graphics.hex.visibleAtGrid( {x:i, y:j} ) ){
 					st_graphics.hex.drawAtGrid(ctx, i, j);
 				}
