@@ -9,13 +9,9 @@ var st_graphics = st_graphics || function(){
 	var graphicsModule = {
 		camera:				{}
 		,hex:				{}
-		,line_w:			1
-		,max_zoom:			100
+		,max_zoom:			150
 		,min_zoom:			10
 		,select:			{x:-1, y:-1}
-		,dragging:			false
-		,drag_prev_x:		0
-		,drag_prev_y:		0
 		,click_prev_hex:	{ x:-1, y:-1 }
 		,bg_filename:		'images/stars.jpg'
 		,imageLoaded: 		false
@@ -32,9 +28,9 @@ var st_graphics = st_graphics || function(){
 	};
 
 	graphicsModule.initialize = function(){
-		st_graphics.hex = createHexagon( st_graphics.initialHexSize );
+		st_graphics.hex = createHexagon( 75 );
 		st_graphics.camera = createCamera();
-		st_graphics.camera.move( 100, 100 );
+		st_graphics.camera.centerOnHex( 50, 50 );
 		st_graphics.background.src = st_graphics.bg_filename;
 		st_graphics.background.onload = function(){ 
 			st_graphics.imageLoaded = true; 
@@ -49,22 +45,22 @@ var st_graphics = st_graphics || function(){
 		if( st_graphics.imageLoaded ){
 			drawBackground( ctx );
 		}
-		if( !st_data.loaded() ){
-			drawDefaultHexField( ctx );
-		} else {
+		if( st_data.loaded() ){
 			drawLoadedHexField( ctx );
+		} else {
+			drawDefaultHexField( ctx );
 		}
 		drawMouseCursor( ctx );
 		if( DEBUG ){
-			st_graphics.ctx.strokeStyle = "#00ff00";
-			st_graphics.ctx.strokeRect( st_engine.canvas().width()/2, st_engine.canvas().height/2, 2, 2); 
+			ctx.strokeStyle = "#00ff00";
+			ctx.strokeRect( st_engine.canvas().width()/2, st_engine.canvas().height/2, 2, 2); 
 		}
 	}; // public render()
 
 	var createCamera = function(){
 		var camera_speed = 2/3
-			,pos_x = 100
-			,pos_y = 100;
+			,pos_x = -10000
+			,pos_y = -10000;
 		return {
 			x: function(){ return pos_x; }
 			,y: function(){ return pos_y; }
@@ -204,10 +200,10 @@ var st_graphics = st_graphics || function(){
 	}; // private drawBackground()
 	
 	var drawDefaultHexField = function( ctx ){
-		for( var i = 0; i < 10; i++){
-			for( var j = 0; j < 10; j++){
+		for( var i = 0; i < 100; i++){
+			for( var j = 0; j < 100; j++){
 				if( st_graphics.hex.visibleAtGrid( {x:i, y:j} ) ){
-					st_graphics.hex.drawAtGrid(ctx, i, j);
+					st_graphics.hex.drawAtGrid(ctx, {x:i, y:j} );
 				}
 			}
 		}
