@@ -2,11 +2,9 @@
 //st_engine.js
 //the core UI engine, mostly calling on attached modules. 
 
-
-/*jshint laxcomma: true*/
-//namespace st_engine
 var st_engine = st_engine || function(){
 	"use strict";
+	
 	var authentication = { username:"", hashword:"" };
 	var DEBUG = st_DEBUG;
 	var Canvas = {};
@@ -20,7 +18,8 @@ var st_engine = st_engine || function(){
 			
 			st_graphics.initialize(); // start graphics module
 			st_uas.initialize(); // start user account service module
-			st_data.initialize();
+			st_data.initialize(); // start game data module
+			st_hud.initialize(); // start heads up display module
 			
 			window.addEventListener  ( "mouseup", handleMouseUp, false);
 			document.body.addEventListener( "keydown", handleKeyDown, false ); 
@@ -33,31 +32,24 @@ var st_engine = st_engine || function(){
 			this.render();
 		}
 		,render: function(){		
+			
 			Canvas.style.width = Canvas.width = window.innerWidth -25;
 			Canvas.style.height = Canvas.height = window.innerHeight -25;
 			
 			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
+			
 			st_graphics.render( Context );
 			st_hud.render( Context );
+			
 			requestAnimationFrame( this.render.bind(this) );
 		}
 		,setAuthentication: function( auth ){
-			if(typeof auth.username === "string" && typeof auth.hashword === "string"){
-				this.authentication.username = auth.username;
-				this.authentication.hashword = auth.hashword;
-			} else{
-				throw "st_engine:: Invalid Authentication";
-			}
+			authentication.username = auth.username;
+			authentication.hashword = auth.hashword;
 		}
-		,getAuthentication: function(){
-			return this.authentication;
-		}
-		,canvas: function(){
-			return Canvas;
-		}
-		,ctx: function(){
-			return Context;
-		}
+		,getAuthentication: function(){ return authentication; }
+		,canvas: function(){ return Canvas; }
+		,ctx: function(){ return Context; }
 	};
 	
 	
