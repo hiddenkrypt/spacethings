@@ -12,9 +12,12 @@ var st_engine = st_engine || function(){
 	
 	var engine = {
 		init: function(){
-			
 			Canvas = document.getElementById( "c" );
 			Context = Canvas.getContext( "2d" );
+			
+			
+			Canvas.style.width = Canvas.width = window.innerWidth -25;
+			Canvas.style.height = Canvas.height = window.innerHeight -25;
 			
 			st_graphics.initialize(); // start graphics module
 			st_uas.initialize(); // start user account service module
@@ -122,7 +125,11 @@ var st_engine = st_engine || function(){
 				break;
 			case key.NP_1:
 			case key.END:
-				st_graphics.camera.move( st_graphics.initialCameraX, st_graphics.initialCameraY );
+				if( st_data.loaded() ){
+					st_graphics.camera.centerOnHex( st_data.getMap().homeworld.x, st_data.getMap().homeworld.y );
+				} else{
+					st_graphics.camera.centerOnHex( 4, 4 );
+				}
 				break;
 		}
 		if( DEBUG ){
