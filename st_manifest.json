@@ -1,0 +1,9 @@
+//manifest.json
+
+{
+	"name": 		"SpaceTHINGS"
+	,"icons": 		[]
+	,"start_url":	"index.html"
+	,"display": 	"standalone"
+	,"orientation": "any"
+}
