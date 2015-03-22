@@ -34,8 +34,10 @@ var st_hud = st_hud || function(){
 		}
 		,selectHexAtGrid: function( coords ){
 			if( DEBUG ){ console.log("st_hud: selecting hex"); }
-			loadPopupData( st_data.getMapHexByGrid( coords ) );
-			popup.active = true;
+			if( st_data.loaded() ){
+				loadPopupData( st_data.getMapHexByGrid( coords ) );
+				popup.active = true;
+			}
 		}
 	};
 	
