@@ -3,7 +3,7 @@
 {
 	"name": 		"SpaceTHINGS"
 	,"icons": 		[]
-	,"start_url":	"index.html"
+	,"start_url":	"index.htm"
 	,"display": 	"standalone"
 	,"orientation": "any"
 }
