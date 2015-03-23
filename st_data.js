@@ -41,40 +41,41 @@ var st_data = st_data || (function(){
 		,test_update: function(){
 			mapData = {
 				hexes: [
-					 { x: 22, y: 15, owner: 13, system: false }
-					,{ x: 22, y: 16, owner: 13, system: false }
-					,{ x: 22, y: 17, owner: 13, system: false }
-					,{ x: 23, y: 16, owner: 13, system: false }
-					,{ x: 24, y: 15, owner: false, system: 1234 } 
-					,{ x: 24, y: 16, owner: 13, system: 3456 } 
-					,{ x: 25, y: 16, owner: 13, system: false } 
-					,{ x: 25, y: 17, owner: 3, system: 2 } 
-					,{ x: 23, y: 15, owner: false, system: false } 
-					,{ x: 24, y: 17, owner: 3, system: false }
-					,{ x: 21, y: 15, owner: 7, system: 5}
-					,{ x: 21, y: 16, owner: false, system: false } 
-					,{ x: 20, y: 15, owner: false, system: false } 
-					,{ x: 21, y: 14, owner: false, system: false } 
-					,{ x: 22, y: 14, owner: false, system: false } 
+					 { x: 22, y: 15, owner: 13, 	system: false }
+					,{ x: 22, y: 16, owner: 13, 	system: false }
+					,{ x: 22, y: 17, owner: 13, 	system: false }
+					,{ x: 23, y: 16, owner: 13, 	system: false }
+					,{ x: 24, y: 15, owner: 13, 	system: 1234 } 
+					,{ x: 24, y: 16, owner: 13, 	system: 3456 } 
+					,{ x: 25, y: 16, owner: 13, 	system: false } 
+					,{ x: 25, y: 17, owner: 3, 		system: 2 } 
+					,{ x: 23, y: 15, owner: false, 	system: false } 
+					,{ x: 24, y: 17, owner: 3, 		system: false }
+					,{ x: 21, y: 15, owner: 7, 		system: 5}
+					,{ x: 21, y: 16, owner: false,	system: false } 
+					,{ x: 20, y: 15, owner: false,	system: false } 
+					,{ x: 21, y: 14, owner: false, 	system: 56 } 
+					,{ x: 22, y: 14, owner: false, 	system: false } 
 				]
 				,systems: {
-					"1234": {magnitude:5, MKclass:"V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
-					,"3456": {magnitude:-15, MKclass:"I", MKspectrum: "L", offset:Math.floor(Math.random()*7)+1, planets:2 }	
-					,"2": {magnitude:15, MKclass:"V", MKspectrum: "B", offset:Math.floor(Math.random()*7)+1, planets:5 }
-					,"5": {magnitude: 0, MKClass: "V", MKSpecturm: "A", offset:Math.floor(Math.random()*7)+1, planets:1 }
+					"1234": { name:"Alternia",magnitude:5, MKclass: "V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
+					,"3456": { name:"Bob",  magnitude:-15, MKclass: "I", MKspectrum: "L", offset:Math.floor(Math.random()*7)+1, planets:2 }	
+					,"2": { name: "Sontar",  magnitude:15, MKclass: "V", MKspectrum: "B", offset:Math.floor(Math.random()*7)+1, planets:5 }
+					,"5": { name: "Orkus",   magnitude: 0, MKClass: "V", MKSpecturm: "A", offset:Math.floor(Math.random()*7)+1, planets:1 }
+					,"56": { name: false,    magnitude: 0, MKClass: "V", MKSpecturm: "A", offset:Math.floor(Math.random()*7)+1, planets:0 }
 				}
 				,planets: {
-					"612": { system: 1234, orbit: 0}
+					"612": 	{ system: 1234, orbit: 0}
 					,"413": { system: 1234, orbit: 1}
-					,"1111": { system: 1234, orbit: 2}
-					,"82": { system: 3456, orbit: 0}
-					,"72": { system: 3456, orbit: 1}
-					,"8": { system: 2, orbit: 0}
-					,"9": { system: 2, orbit: 1}
-					,"10": { system: 2, orbit: 2}
-					,"11": { system: 2, orbit: 3}
-					,"12": { system: 2, orbit: 4}
-					,"13": { system: 5, orbit: 0}
+					,"1111":{ system: 1234, orbit: 2}
+					,"82": 	{ system: 3456, orbit: 0}
+					,"72": 	{ system: 3456, orbit: 1}
+					,"8": 	{ system: 2, orbit: 0}
+					,"9":	{ system: 2, orbit: 1}
+					,"10": 	{ system: 2, orbit: 2}
+					,"11": 	{ system: 2, orbit: 3}
+					,"12": 	{ system: 2, orbit: 4}
+					,"13": 	{ system: 5, orbit: 0}
 				}
 				,owners: {
 					"13": { r:153, g:23, b:77, name: "Alternian Empire", adjective: "Alternian"}
@@ -109,15 +110,22 @@ var st_data = st_data || (function(){
 			}
 			return false;
 		}
-		,getHomeworld: function(){ 
+		,getHomeworld: function(){ 			
 			return this.getMapHexByGrid( playerData.homeworld ); 
 		}
-		,getHexDataByGrid: function( coords ){
-			var hex = this.getMapHexDataByGrid();
+		,getHexDataByGrid: function( coordinates ){
+			var hex = this.getMapHexByGrid( coordinates );
+			if(!hex){
+				return {
+					explored: false,
+					coords:coordinates
+				};
+			}
 			var hexData = {
-				coords: {
+				explored: true
+				,coords: {
 					x: hex.x
-					,y: hex.y
+					,y:hex.y
 				}
 				,system: false
 				,owner: false
