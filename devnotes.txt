@@ -1,3 +1,20 @@
+
+	var greek = [
+		'α',
+		'β',
+		'γ',
+		'δ',
+		'ɛ'
+	];
+	
+	
+never to be used for cryptography. I'm just using it to obfuscate coordinates and
+var hashids = new Hashids("this is my salt", 4, "0123456789ABCDEF");
+for(var i=0; i<300; i++){
+  console.log(hashids.encode(i));
+}
+
+
 Color
 	Color input in hex, colors may be changed for distinctness with first come first serve bias
 Race
