@@ -22,6 +22,7 @@ CREATE TABLE GA_Space.civs(
 ,	minor_flaw		VARCHAR(128)
 );
 
+--gross?
 CREATE TABLE GA_Space.coords(
 	id				INT				NOT NULL PRIMARY KEY
 ,	x				INT				NOT NULL
@@ -34,7 +35,7 @@ CREATE TABLE GA_Space.territory(
 ,	coordinates		INT				NOT NULL FOREIGN KEY REFERENCES GA_Space.coords(id)
 );
 
---gross
+--gross.
 CREATE TABLE GA_Space.exploration(
 	id				INT				NOT NULL PRIMARY KEY
 ,	civ_id			INT				NOT NULL FOREIGN KEY REFERENCES GA_Space.civs(id)
