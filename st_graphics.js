@@ -11,8 +11,6 @@ var st_graphics = st_graphics || function(){
 		,hex:				{}
 		,max_zoom:			150
 		,min_zoom:			10
-		,select:			{x:-1, y:-1}
-		,click_prev_hex:	{ x:-1, y:-1 }
 		,bg_filename:		'images/stars.jpg'
 		,imageLoaded: 		false
 		,background: 		new Image()
@@ -229,15 +227,7 @@ var st_graphics = st_graphics || function(){
 	}; // private drawLoadedHexField()
 	
 	var drawMouseCursor = function( ctx ){
-		// st_graphics.hex.draw(
-			// ctx, 
-			// st_graphics.select.x*st_graphics.hex.rect_w() + (( st_graphics.select.y % 2 ) * st_graphics.hex.rad() ) - st_graphics.camera.x(),
-			// st_graphics.select.y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) - st_graphics.camera.y(), 
-			// "#ffff00", //border in yellow
-			// false, // no fill
-			// 0 // 0% alpha (no fill)
-		// );
-		st_graphics.hex.drawAtGrid( ctx, {x:st_graphics.select.x, y:st_graphics.select.y}, "#ffff00", false, 0 );
+		st_graphics.hex.drawAtGrid( ctx, st_engine.getHighlightedHex(), "#ffff00", false, 0 );
 	}; // private drawMouseCursor()
 
 	var drawStarAtGrid = function( ctx, grid_x, grid_y, star ){

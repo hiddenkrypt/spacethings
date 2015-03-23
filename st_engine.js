@@ -9,6 +9,8 @@ var st_engine = st_engine || function(){
 	var DEBUG = st_DEBUG.engine;
 	var Canvas = {};
 	var Context = {};
+	var hexHighlight = { x:-1, y:-1 };
+	var lastClickedHex = { x:-1, y:-1 };
 	
 	var engine = {
 		init: function(){
@@ -42,6 +44,7 @@ var st_engine = st_engine || function(){
 			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
 			
 			st_graphics.render( Context );
+			
 			st_hud.render( Context );
 			
 			requestAnimationFrame( this.render.bind(this) );
@@ -51,6 +54,7 @@ var st_engine = st_engine || function(){
 			authentication.hashword = auth.hashword;
 		}
 		,getAuthentication: function(){ return authentication; }
+		,getHighlightedHex: function(){ return hexHighlight; }
 		,canvas: function(){ return Canvas; }
 		,ctx: function(){ return Context; }
 	};
@@ -72,13 +76,13 @@ var st_engine = st_engine || function(){
 		if( DEBUG ){ 
 			console.log( "click: virtual canvas("+x+","+y+");  grid("+hexX+","+hexY+");  literal canvas("+( event.pageX - rect.left )+","+( event.pageY - rect.top )+")" );
 		}
-		if( st_graphics.click_prev_hex.x == hexX && st_graphics.click_prev_hex.y == hexY && st_graphics.doubleclick ) {
-			if( DEBUG ){ console.log( "SELECTED:("+hexX+","+hexY+")" ); }
+		if( lastClickedHex.x == hexX && lastClickedHex.y == hexY && st_graphics.doubleclick ) {
+			if( DEBUG ){ console.log( "SELECTED: (" + hexX + "," + hexY + ")" ); }
 			st_graphics.selectHex( {x:hexX, y:hexY} );
 			st_hud.selectHexAtGrid( {x:hexX, y:hexY} );
 		} 
-		st_graphics.click_prev_hex.x = hexX;
-		st_graphics.click_prev_hex.y = hexY;
+		lastClickedHex.x = hexX;
+		lastClickedHex.y = hexY;
 		st_graphics.doubleclick = true;
 		clearTimeout(st_graphics.dClickTimeout);
 		st_graphics.dClickTimeout = setTimeout( function(){ st_graphics.doubleclick = false; }, st_graphics.dClickWindow ); 
@@ -141,8 +145,8 @@ var st_engine = st_engine || function(){
 		var rect = Canvas.getBoundingClientRect();
 		var x=event.pageX - rect.left + st_graphics.camera.x();
 		var y=event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
-		st_graphics.select.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.side_length() ) );
-		st_graphics.select.x = Math.floor( ( x - ( st_graphics.select.y % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect_w() );
+		hexHighlight.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.side_length() ) );
+		hexHighlight.x = Math.floor( ( x - ( hexHighlight.y % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect_w() );
 		if( st_graphics.dragging ){
 			st_hud.disablePopup();
 			st_graphics.camera.moveDelta( st_graphics.drag_prev_x - event.pageX, st_graphics.drag_prev_y - event.pageY );
