@@ -22,7 +22,7 @@ var st_hud = st_hud || function(){
 		,selectHexAtGrid: function( coords ){
 			if( DEBUG ){ console.log("st_hud: selecting hex"); }
 			if( st_data.loaded() ){
-				loadPopupData( st_data.getMapHexByGrid( coords ) );
+				loadPopupData( st_data.getHexDataByGrid( coords ) );
 				popup.active = true;
 			}
 		}
@@ -56,37 +56,39 @@ var st_hud = st_hud || function(){
 		);
 	}
 	var	loadPopupData = function ( hexData ){
-		
 		var hashID = new Hashids("spaceTHINGS", 4, "0123456789ABCDEF");
-		if( DEBUG ){ console.log( hashID.encode( "test" ) ); }
 		var homeworld = st_data.getHomeworld();
+	
 		popup.data = {
 			localCoordinates:{ 
-				x: -(st_data.getHomeworld().x - hexData.x)
-				,y: st_data.getHomeworld().y - hexData.y
+				x: -(homeworld.x - hexData.coords.x)
+				,y: homeworld.y - hexData.coords.y
 			}
 			,universalCoordinates:{
-				x: hashID.encode( hexData.x )
-				,y: hashID.encode( hexData.y )	
+				x: hashID.encode( hexData.coords.x + 100 )
+				,y: hashID.encode( hexData.coords.y + 100 )	
 			}
 			,territoryOwner: hexData.owner
 			,system: hexData.system
+			,name: "Unclaimed Space"
+		}		
+		if( popup.data.system && popup.data.system.name ){
+			popup.data.name = popup.data.system.name;
+		} else if( popup.data.system ){
+			popup.data.name = "Unclaimed System";
+		} else if( popup.data.territoryOwner ){
+			popup.data.name =  popup.data.territoryOwner.adjective + " Space";
 		}
+		
 	};
 	var drawPopupData = function ( ctx ){
 		var x = popup.x + popup.border.margin + popup.border.width/2 + popup.border.padding;
 		var y = popup.y + popup.border.margin + popup.border.width/2 + popup.border.padding + popup.lineSpacing;
 		
 		ctx.fillStyle = "#000";
-		
-		var name = "Unclaimed Space";
-		if( popup.data.system ){
-			name = popup.data.system.name;
-		} else if( popup.data.territoryOwner ){
-			name =  popup.data.territoryOwner.adjective + " Space";
-		}
+
 		ctx.font = "20px Courier";
-		ctx.fillText( name, x, y );
+		ctx.fillText( popup.data.name, x, y );
 		ctx.font = "11px Courier";
 		ctx.fillText( "Universal Coordinates: [" + popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]", x, y + 20 + popup.lineSpacing ); 
 		ctx.fillText( "Local Coordinates: [" + popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]", x, y + 20 + 11 + popup.lineSpacing ); 
