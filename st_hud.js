@@ -8,23 +8,10 @@
 var st_hud = st_hud || function(){
 
 	var DEBUG = st_DEBUG.hud;
-	var popup = {
-		w: 300
-		,h: 400
-		,x: 100
-		,y: 100
-		,border: {
-			spacing: 10
-			,width: 3
-		}
-		,active: false
-	};
-	
+
 	var Hud = {
 		initialize: function(){
-			if( DEBUG ){
-				popup.active = true;
-			}
+
 		}
 		,render: function( ctx ){
 			if( popup.active ){
@@ -39,32 +26,74 @@ var st_hud = st_hud || function(){
 				popup.active = true;
 			}
 		}
+		,disablePopup: function(){ popup.active = false; }
 	};
-	
+	var popup = {
+		w: 	300
+		,h: 400
+		,x: 100
+		,y: 100
+		,lineSpacing: 5
+		,border: {
+			margin: 10
+			,width: 3
+			,padding: 10
+		}
+		,active: false
+		,data:	false
+	};
+
 	var drawPopupBackground = function( ctx ){
 		ctx.fillStyle = "rgba(230,230,230,.8)";
 		ctx.fillRect( popup.x, popup.y, popup.w, popup.h );
 		ctx.strokeStyle = "#101010";
 		ctx.lineWidth = popup.border.width;
 		ctx.strokeRect( 
-			popup.x + popup.border.spacing - popup.border.width/2,	
-			popup.y + popup.border.spacing - popup.border.width/2, 
-			popup.w - popup.border.width*2 - popup.border.spacing, 
-			popup.h-popup.border.spacing-popup.border.width*2 
+			popup.x + popup.border.margin - popup.border.width/2,	
+			popup.y + popup.border.margin - popup.border.width/2, 
+			popup.w - popup.border.width*2 - popup.border.margin, 
+			popup.h-popup.border.margin-popup.border.width*2 
 		);
 	}
+	var	loadPopupData = function ( hexData ){
+		
+		var hashID = new Hashids("spaceTHINGS", 4, "0123456789ABCDEF");
+		if( DEBUG ){ console.log( hashID.encode( "test" ) ); }
+		var homeworld = st_data.getHomeworld();
+		popup.data = {
+			localCoordinates:{ 
+				x: -(st_data.getHomeworld().x - hexData.x)
+				,y: st_data.getHomeworld().y - hexData.y
+			}
+			,universalCoordinates:{
+				x: hashID.encode( hexData.x )
+				,y: hashID.encode( hexData.y )	
+			}
+			,territoryOwner: hexData.owner
+			,system: hexData.system
+		}
+	};
+	var drawPopupData = function ( ctx ){
+		var x = popup.x + popup.border.margin + popup.border.width/2 + popup.border.padding;
+		var y = popup.y + popup.border.margin + popup.border.width/2 + popup.border.padding + popup.lineSpacing;
+		
+		ctx.fillStyle = "#000";
+		
+		var name = "Unclaimed Space";
+		if( popup.data.system ){
+			name = popup.data.system.name;
+		} else if( popup.data.territoryOwner ){
+			name =  popup.data.territoryOwner.adjective + " Space";
+		}
+		ctx.font = "20px Courier";
+		ctx.fillText( name, x, y );
+		ctx.font = "11px Courier";
+		ctx.fillText( "Universal Coordinates: [" + popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]", x, y + 20 + popup.lineSpacing ); 
+		ctx.fillText( "Local Coordinates: [" + popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]", x, y + 20 + 11 + popup.lineSpacing ); 
+	}
 	
-	var	loadPopupData = function ( hexData ){};
-	var drawPopupData = function ( ctx ){};
 	return Hud;
 }(); // IIFE to create st_hud
 
 
 
-
-// note for later
-//never to be used for cryptography. I'm just using it to obfuscate coordinates and
-// var hashids = new Hashids("this is my salt", 4, "0123456789ABCDEF");
-// for(var i=0; i<300; i++){
-  // console.log(hashids.encode(i));
-// }

@@ -144,6 +144,7 @@ var st_engine = st_engine || function(){
 		st_graphics.select.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.side_length() ) );
 		st_graphics.select.x = Math.floor( ( x - ( st_graphics.select.y % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect_w() );
 		if( st_graphics.dragging ){
+			st_hud.disablePopup();
 			st_graphics.camera.moveDelta( st_graphics.drag_prev_x - event.pageX, st_graphics.drag_prev_y - event.pageY );
 			st_graphics.drag_prev_x = event.pageX;
 			st_graphics.drag_prev_y = event.pageY;
