@@ -115,17 +115,23 @@ var st_engine = st_engine || function(){
 			case key.NP_9:
 			case key.PAGE_UP:
 				retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() + st_graphics.hex.side_length() / 8 ); 
-				if (retval.change){ st_graphics.camera.centerOnHex( retval.x, retval.y ); }
+				if (retval.change){ 
+					st_graphics.camera.centerOnHex( retval.x, retval.y ); 
+				}
 				break;
 			case key.NP_3:
 			case key.PAGE_DOWN:
 				retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() / ( 9/8 ) );
-				if (retval.change){ st_graphics.camera.centerOnHex( retval.x, retval.y ); }
+				if (retval.change){ 
+					st_graphics.camera.centerOnHex( retval.x, retval.y );
+				}
 				break;
 			case key.NP_7:
 			case key.HOME:
 				retval = st_graphics.hex.setSideLength( st_graphics.initialHexSize );
-				if (retval.change){ st_graphics.camera.centerOnHex( retval.x, retval.y ); }
+				if (retval.change){ 
+					st_graphics.camera.centerOnHex( retval.x, retval.y ); 
+				}
 				break;
 			case key.NP_1:
 			case key.END:
@@ -136,6 +142,7 @@ var st_engine = st_engine || function(){
 				}
 				break;
 		}
+		st_hud.disablePopup();
 		if( DEBUG ){
 			console.log( "Camera:("+st_graphics.camera.x()+","+st_graphics.camera.y()+")" );
 		}
@@ -148,7 +155,6 @@ var st_engine = st_engine || function(){
 		hexHighlight.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.side_length() ) );
 		hexHighlight.x = Math.floor( ( x - ( hexHighlight.y % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect_w() );
 		if( st_graphics.dragging ){
-			st_hud.disablePopup();
 			st_graphics.camera.moveDelta( st_graphics.drag_prev_x - event.pageX, st_graphics.drag_prev_y - event.pageY );
 			st_graphics.drag_prev_x = event.pageX;
 			st_graphics.drag_prev_y = event.pageY;
@@ -158,7 +164,10 @@ var st_engine = st_engine || function(){
 	var handleScroll = function( event ) {
 		var delta = Math.max( -1, Math.min( 1, ( event.wheelDelta || -event.detail ) ) );
 		var retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() + ( st_graphics.hex.side_length()*delta)/8 );
-		if (retval.change){ st_graphics.camera.centerOnHex( retval.x, retval.y ); }
+		if (retval.change){ 
+			st_graphics.camera.centerOnHex( retval.x, retval.y ); 
+			st_hud.disablePopup();
+		}
 	}; // handleScroll()
 	
 	

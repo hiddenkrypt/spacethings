@@ -30,21 +30,21 @@ var st_hud = st_hud || function(){
 	};
 	var popup = {
 		w: 	300
-		,h: 400
+		,h: 100
 		,x: 100
 		,y: 100
-		,lineSpacing: 5
+		,lineSpacing: 13
 		,border: {
 			margin: 10
 			,width: 3
-			,padding: 10
+			,padding: 15
 		}
 		,active: false
 		,data:	false
 	};
 
 	var drawPopupBackground = function( ctx ){
-		ctx.fillStyle = "rgba(230,230,230,.8)";
+		ctx.fillStyle = "rgba(230,230,230,.9)";
 		ctx.fillRect( popup.x, popup.y, popup.w, popup.h );
 		ctx.strokeStyle = "#101010";
 		ctx.lineWidth = popup.border.width;
@@ -70,28 +70,44 @@ var st_hud = st_hud || function(){
 			}
 			,territoryOwner: hexData.owner
 			,system: hexData.system
-			,name: "Unclaimed Space"
+			,systemName: "Unclaimed Space"
 		}		
 		if( popup.data.system && popup.data.system.name ){
-			popup.data.name = popup.data.system.name;
+			popup.data.systemName = popup.data.system.name;
 		} else if( popup.data.system ){
-			popup.data.name = "Unclaimed System";
+			popup.data.systemName = "Unclaimed System";
 		} else if( popup.data.territoryOwner ){
-			popup.data.name =  popup.data.territoryOwner.adjective + " Space";
+			popup.data.systemName =  popup.data.territoryOwner.adjective + " Space";
 		}
 		
 	};
 	var drawPopupData = function ( ctx ){
 		var x = popup.x + popup.border.margin + popup.border.width/2 + popup.border.padding;
 		var y = popup.y + popup.border.margin + popup.border.width/2 + popup.border.padding + popup.lineSpacing;
+		var lines  = [
+			{ size: "20", style:"#000", title: "", text:  popup.data.systemName },
+			{ size: "11", bg: "rgba(0,0,0,.7)", style:"rgb("+popup.data.territoryOwner.r+","+popup.data.territoryOwner.g+","+popup.data.territoryOwner.b+")", title: "", text: popup.data.territoryOwner.name? popup.data.territoryOwner.name : "" },										
+			{ size: "11", style:"#000", title: "Universal Coordinates: ", text: "[" + popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]" },
+			{ size: "11", style:"#000", title: "Local Coordinates : ", text: "[" + popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]" },
+		];
+		for(var i = 0; i < lines.length; i++){
+			ctx.font = lines[i].size+"px Courier";
+			var position = y + popup.lineSpacing * i;
+			if(i>0){
+				position += lines[i-1].size;
+			}
+			ctx.fillStyle = lines[i].style;
+			ctx.fillText( lines[i].title + lines[i].text, x, position);
+		}		
 		
-		ctx.fillStyle = "#000";
+		
+		// ctx.fillStyle = "#000";
 
-		ctx.font = "20px Courier";
-		ctx.fillText( popup.data.name, x, y );
-		ctx.font = "11px Courier";
-		ctx.fillText( "Universal Coordinates: [" + popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]", x, y + 20 + popup.lineSpacing ); 
-		ctx.fillText( "Local Coordinates: [" + popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]", x, y + 20 + 11 + popup.lineSpacing ); 
+		// ctx.font = "20px Courier";
+		// ctx.fillText( popup.data.systemName, x, y );
+		// ctx.font = "11px Courier";
+		// ctx.fillText( "Universal Coordinates: [" + popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]", x, y + 20 + popup.lineSpacing ); 
+		// ctx.fillText( "Local Coordinates: [" + popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]", x, y + 20 + 11 + popup.lineSpacing ); 
 	}
 	
 	return Hud;
