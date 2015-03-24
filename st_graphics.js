@@ -33,10 +33,11 @@ var st_graphics = st_graphics || function(){
 		st_graphics.background.onload = function(){ 
 			st_graphics.imageLoaded = true; 
 			if( DEBUG ){
-				console.log("st_graphics initialized.");
-				console.log("image:("+st_graphics.background.width+","+st_graphics.background.height+")"); 
+				console.log( "st_graphics initialized." );
+				console.log( "image: (" + st_graphics.background.width + "," + st_graphics.background.height + ")" ); 
 			}
 		};
+		if( DEBUG ) { console.log( "st_graphics initialized." ); }
 	}; // public initialize()
 	
 	graphicsModule.render = function( ctx ){
@@ -150,22 +151,20 @@ var st_graphics = st_graphics || function(){
 				}
 			}
 			,drawAtGrid: function(ctx, coords, stroke, fill, alpha){
-				var canvas_x = ( coords.x * hex_rect_w + ( ( coords.y % 2 ) * hex_rad ) ) - st_graphics.camera.x();
-				var canvas_y = ( coords.y * ( hex_side_length + hex_h ) ) - st_graphics.camera.y();
-				this.draw(ctx, canvas_x, canvas_y, stroke, fill, alpha);
+				var canvasCoords = gridCoordinatesToCanvas( coords );
+				this.draw(ctx, canvasCoords.x, canvasCoords.y, stroke, fill, alpha);
 			}
 			,drawScaledAtGrid:    function( scale, ctx, coords, stroke, fill, alpha){
 
-				var canvas_x = ( coords.x * hex_rect_w + ( ( coords.y % 2 ) * hex_rad ) ) - st_graphics.camera.x();
-				var canvas_y = ( coords.y * ( hex_side_length + hex_h ) ) - st_graphics.camera.y();
+				var canvasCoords = gridCoordinatesToCanvas( coords );
 				
 				var normal_size = hex_side_length;
 				var normal_hex_width = hex_rect_w;
 				var normal_hex_h = hex_h;
 				
 				this.setSideLength( normal_size*scale );	
-					var adj_x =  canvas_x + ( ( normal_hex_width - hex_rect_w ) / 2 * ( ( scale > 1 ) ? -1 : 1) );
-					var adj_y = canvas_y + ( ( ( normal_size + ( normal_hex_h * 2 ) )  - ( hex_side_length + ( hex_h * 2 ) ) ) / 2  * ( ( scale > 1 ) ? -1 : 1) );
+					var adj_x =  canvasCoords.x + ( ( normal_hex_width - hex_rect_w ) / 2 * ( ( scale > 1 ) ? -1 : 1) );
+					var adj_y = canvasCoords.y + ( ( ( normal_size + ( normal_hex_h * 2 ) )  - ( hex_side_length + ( hex_h * 2 ) ) ) / 2  * ( ( scale > 1 ) ? -1 : 1) );
 					this.draw(ctx, adj_x, adj_y, stroke, fill, alpha);
 				this.setSideLength( normal_size );
 			}
@@ -176,9 +175,8 @@ var st_graphics = st_graphics || function(){
 					&& y > -( hex_rect_w * 2 + hex_side_length );
 			}
 			,visibleAtGrid: function( coords ){
-				var hex_x = ( coords.x * st_graphics.hex.rect_w() + ( ( coords.y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();
-				var hex_y = ( coords.y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y();
-				return this.visible( hex_x, hex_y );
+				var canvasCoords = gridCoordinatesToCanvas( coords );
+				return this.visible( canvasCoords.x, canvasCoords.y );
 			}
 		};
 	}; //private createHexagon() hex constructor
@@ -218,7 +216,7 @@ var st_graphics = st_graphics || function(){
 				
 					st_graphics.hex.drawAtGrid( ctx, map[i], false, ownerColor,  0.1 ); 
 					st_graphics.hex.drawScaledAtGrid(0.9, ctx, map[i], ownerColor, false,  0.5 );
-					drawStarAtGrid( ctx, map[i].x, map[i].y, system );
+					drawStarAtGrid( ctx, map[i], system );
 				} else {
 					st_graphics.hex.drawAtGrid( ctx, map[i], false, ownerColor,  0.5 ); 
 				}
@@ -230,11 +228,10 @@ var st_graphics = st_graphics || function(){
 		st_graphics.hex.drawAtGrid( ctx, st_engine.getHighlightedHex(), "#ffff00", false, 0 );
 	}; // private drawMouseCursor()
 
-	var drawStarAtGrid = function( ctx, grid_x, grid_y, star ){
-		var hex_x = ( grid_x * st_graphics.hex.rect_w() + ( ( grid_y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x();
-		var hex_y = ( grid_y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y();
-		drawStar( ctx, hex_x, hex_y, star );		
-	};
+	var drawStarAtGrid = function( ctx, coords, star ){
+		var canvasCoords = gridCoordinatesToCanvas( coords );
+		drawStar( ctx, canvasCoords.x, canvasCoords.y, star );		
+	}; // private drawStarAtGrid()
 	
 	var drawStar = function( ctx, canv_x, canv_y, star ){
 		var color = "255,255,255";
@@ -288,6 +285,11 @@ var st_graphics = st_graphics || function(){
 		st_graphics.camera.centerOnHex(coords.x, coords.y);
 	}; // selectHex()
 	
-	
+	var gridCoordinatesToCanvas = function( coords ){
+		return {
+			x: ( coords.x * st_graphics.hex.rect_w() + ( ( coords.y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x()
+			,y: ( coords.y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y()
+		}
+	}
 	return graphicsModule;
 }(); // IIFE creating st_graphics
