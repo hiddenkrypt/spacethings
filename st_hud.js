@@ -44,7 +44,7 @@ var st_hud = st_hud || function(){
 	};
 
 	var drawPopupBackground = function( ctx ){
-		ctx.fillStyle = "rgba(230,230,230,.9)";
+		ctx.fillStyle = "rgba(255,255,255,.95)";
 		ctx.fillRect( popup.x, popup.y, popup.w, popup.h );
 		ctx.strokeStyle = "#101010";
 		ctx.lineWidth = popup.border.width;
@@ -68,7 +68,7 @@ var st_hud = st_hud || function(){
 				x: hashID.encode( hexData.coords.x + 100 )
 				,y: hashID.encode( hexData.coords.y + 100 )	
 			}
-			,territoryOwner: hexData.owner
+			,territoryOwner: {r:0, g:0, b:0}
 			,system: hexData.system
 			,systemName: "Unclaimed Space"
 		}		
@@ -76,10 +76,12 @@ var st_hud = st_hud || function(){
 			popup.data.systemName = popup.data.system.name;
 		} else if( popup.data.system ){
 			popup.data.systemName = "Unclaimed System";
-		} else if( popup.data.territoryOwner ){
-			popup.data.systemName =  popup.data.territoryOwner.adjective + " Space";
+		} else if( hexData.owner ){
+			popup.data.systemName = hexData.owner.adjective + " Space";
+		} 
+		if( hexData.owner ){
+			popup.data.territoryOwner = hexData.owner;
 		}
-		
 	};
 	var drawPopupData = function ( ctx ){
 		var x = popup.x + popup.border.margin + popup.border.width/2 + popup.border.padding;
