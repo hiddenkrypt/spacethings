@@ -54,15 +54,15 @@ var st_data = st_data || (function(){
 					,{ x: 21, y: 15, owner: 7, 		system: 5}
 					,{ x: 21, y: 16, owner: false,	system: false } 
 					,{ x: 20, y: 15, owner: false,	system: false } 
-					,{ x: 21, y: 14, owner: false, 	system: 56 } 
-					,{ x: 22, y: 14, owner: false, 	system: false } 
+					,{ x: 21, y: 14, owner: 8, 	system: 56 } 
+					,{ x: 22, y: 14, owner: 8, 	system: false } 
 				]
 				,systems: {
 					"1234": { name:"Alternia",magnitude:5, MKclass: "V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
 					,"3456": { name:"Earth",  magnitude:-15, MKclass: "I", MKspectrum: "L", offset:Math.floor(Math.random()*7)+1, planets:2 }	
 					,"2": { name: "Sontar",  magnitude:15, MKclass: "V", MKspectrum: "B", offset:Math.floor(Math.random()*7)+1, planets:5 }
 					,"5": { name: "Orkus",   magnitude: 0, MKClass: "V", MKSpecturm: "A", offset:Math.floor(Math.random()*7)+1, planets:1 }
-					,"56": { name: false,    magnitude: 0, MKClass: "V", MKSpecturm: "A", offset:Math.floor(Math.random()*7)+1, planets:0 }
+					,"56": { name: "Conquered Gaul",    magnitude: 0, MKClass: "V", MKSpecturm: "A", offset:Math.floor(Math.random()*7)+1, planets:0 }
 				}
 				,planets: {
 					"612": 	{ system: 1234, orbit: 0}
@@ -81,7 +81,8 @@ var st_data = st_data || (function(){
 					"13": { r:153, g:23, b:77, name: "Alternian Empire", adjective: "Alternian"}
 					,"3": { r:0, g:0, b:86, name: "Sontaran Empire", adjective: "Sontaran"}
 					,"6": { r:0, g:0, b:86, name: "Centauri Republic", adjective: "Centauri"}
-					,"7": { r:0, g:205, b:0, name: "Waaagh 'elmit'ead", adjective: "Ork"}
+					,"7": { r:30, g:230, b:0, name: "Waaagh 'elmit'ead", adjective: "Ork"}
+					,"8": { r:0, g: 127, b:50, name: "Roman Empire", adjective: "Roman"}
 				}
 			};
 			playerData = {
