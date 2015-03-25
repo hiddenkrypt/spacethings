@@ -29,11 +29,11 @@ var st_hud = st_hud || function(){
 		,disablePopup: function(){ popup.active = false; }
 	};
 	var popup = {
-		w: 	300
+		w: 	500
 		,h: 100
 		,x: 100
 		,y: 100
-		,lineSpacing: 13
+		,lineSpacing: 15
 		,border: {
 			margin: 10
 			,width: 3
@@ -87,10 +87,10 @@ var st_hud = st_hud || function(){
 		var x = popup.x + popup.border.margin + popup.border.width/2 + popup.border.padding;
 		var y = popup.y + popup.border.margin + popup.border.width/2 + popup.border.padding + popup.lineSpacing;
 		var lines  = [
-			{ size: "20", style:"#000", title: "", text:  popup.data.systemName },
-			{ size: "11", bg: "rgba(0,0,0,.7)", style:"rgb("+popup.data.territoryOwner.r+","+popup.data.territoryOwner.g+","+popup.data.territoryOwner.b+")", title: "", text: popup.data.territoryOwner.name? popup.data.territoryOwner.name : "" },										
-			{ size: "11", style:"#000", title: "Universal Coordinates: ", text: "[" + popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]" },
-			{ size: "11", style:"#000", title: "Local Coordinates : ", text: "[" + popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]" },
+			{ size: "26", style:"#000", title: "", text:  popup.data.systemName },
+			{ size: "16", bg: "rgba(0,0,0,.7)", style:"rgb("+popup.data.territoryOwner.r+","+popup.data.territoryOwner.g+","+popup.data.territoryOwner.b+")", title: "", text: popup.data.territoryOwner.name? popup.data.territoryOwner.name : "" },										
+			{ size: "16", style:"#000", title: "Universal Coordinates: ", text: "[" + popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]" },
+			{ size: "16", style:"#000", title: "Local Coordinates : ", text: "[" + popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]" },
 		];
 		for(var i = 0; i < lines.length; i++){
 			ctx.font = lines[i].size+"px Courier";
