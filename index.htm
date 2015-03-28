@@ -9,12 +9,14 @@
 		<link rel="manifest" href="st_manifest.json">
 		<link rel="stylesheet" type="text/css" href="st.css">
 		<script>
+			var DEBUG_ALL = false;
+			var DEBUG_NONE = true;
 			var st_DEBUG = {
-				engine:		true
-				,graphics:	false
-				,hud:		true
-				,uas:		false
-				,data:		true
+				engine:		DEBUG_ALL? true : DEBUG_NONE? false : true
+				,graphics:	DEBUG_ALL? true : DEBUG_NONE? false : false
+				,hud:		DEBUG_ALL? true : DEBUG_NONE? false : true
+				,uas:		DEBUG_ALL? true : DEBUG_NONE? false : false
+				,data:		DEBUG_ALL? true : DEBUG_NONE? false : true
 			};
 		</script>
 		<script src="lib/sha-1.js"></script>
