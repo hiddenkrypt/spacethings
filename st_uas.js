@@ -8,40 +8,18 @@
 //namespace uas
 var st_uas = st_uas || function(){
 	"use strict";
-	var dom = {
-		overlay:  {}
-		,accountContainer: {}
-		,loginSection: {}
-		,login: {
-			username: {}
-		}
-	};
+	var DEBUG = st_DEBUG.uas;
+	
 	var uas = {
-		credentials: null
-		,DEBUG: st_DEBUG.uas
-		,initialize: function(){
+		initialize: function(){
 			loadDom();
-			dom.login_createSwitch.addEventListener  ( "mousedown", st_uas.switchToCreate );
-			dom.login_privacySwitch.addEventListener ( "mousedown", st_uas.switchToPrivacy );
-			dom.login_submit.addEventListener  		 ( "mousedown", st_uas.login );
-			dom.create_submit.addEventListener  	 ( "mousedown", st_uas.create );
-			dom.create_loginSwitch.addEventListener  ( "mousedown", st_uas.switchToLogin );
-			dom.create_privacySwitch.addEventListener( "mousedown", st_uas.switchToPrivacy );
-			dom.privacy_loginSwitch.addEventListener ( "mousedown", st_uas.switchToLogin );
-			dom.privacy_createSwitch.addEventListener( "mousedown", st_uas.switchToCreate );
-			if( st_uas.DEBUG ){  
+			if( DEBUG ){  
 				dom.overlay.style.display = "none";
 			} else {
-				st_uas.switchToLogin();
+				switchToLogin();
 			}
 		}
-		,switchToLogin: function(){
-			dom.accountContainer.style.width = '40%';
-			dom.accountContainer.style.marginTop = '4em';
-			dom.privacy_section.style.display = 'none';
-			dom.create_section.style.display = 'none';
-			dom.login_section.style.display = 'inline';
-		}
+		,dom: function(){ return dom; }
 		,switchToCreate: function(){
 			dom.accountContainer.style.width = '40%';
 			dom.accountContainer.style.marginTop = '4em';
@@ -105,53 +83,117 @@ var st_uas = st_uas || function(){
 			}
 		}
 	};
+	var dom = {
+		overlay:  {}
+		,uasContainer: 	{}
+		,title:			{}
+		,inputFields: 	{
+			username: 		{}
+			,password:		{}
+			,passwordVerify:{}
+			,inviteCode:	{}
+		}
+		,inputLabels:	{
+			username: 		{}
+			,password:		{}
+			,passwordVerify:{}
+			,inviteCode:	{}
+		}
+		,modeSwitch: {		
+			privacy:		{}
+			,create:		{}
+			,login:			{}
+		}
+		,error:			{}
+		,submit:		{}
+		,privacyStatment:{
+			container:		{}
+			,title:			{}
+			,paragraphs:	[]
+		}
+	};
 	
 	var loadDom = function(){
+		console.log( "loading dynamic uas dom" );
 		dom.overlay = document.getElementById( "overlay" );
-		dom.accountContainer = document.getElementById( "account_container" );
+		dom.uasContainer = document.getElementById( "uas_container" );
 		
-		dom. = document.createElement( 'div' );
-		dom.loginSection.setAttribute( "id", "login_section" );
-		doom.accountContainer.appendChild( dom.loginSection );
+		dom.title = document.createElement( 'img' );
+		dom.title.setAttribute( "src", "images/title.png");
 		
-		dom.account.username = document.createElement( 'input' );
-		dom.account.username.setAttribue( "id",  "login_username" );
-		dom.account.username.setAttribue( "type",  "text" );
+		dom.inputFields.username = document.createElement( 'input' );
+		dom.inputFields.username.setAttribute( "id",  "username" );
+		dom.inputFields.username.setAttribute( "type",  "text" );
+		dom.inputLabels.username = document.createElement( 'img' );
+		dom.inputLabels.username.setAttribute( "id",  "username_label" );
+		dom.inputLabels.username.setAttribute( "src", "images/username.png" );
 		
-		dom.account.password = document.createElement( 'input' );
-		dom.account.password.setAttribue( "id", "login_password" );
-		dom.account.password.setAttribue( "type", "password" );
+		dom.inputFields.password = document.createElement( 'input' );
+		dom.inputFields.password.setAttribute( "id", "password" );
+		dom.inputFields.password.setAttribute( "type", "password" );
+		dom.inputLabels.password = document.createElement( 'img' );
+		dom.inputLabels.password.setAttribute( "id", "password_label" );
+		dom.inputLabels.password.setAttribute( "src", "images/password.png" );
 		
-		dom.account.submit = document.createElement('
-		dom.account.submit.setAttribue( "id", "login_submit" );
+		dom.inputFields.verifyPassword = document.createElement( 'input' );
+		dom.inputFields.verifyPassword.setAttribute( "id", "verify_password" );
+		dom.inputFields.verifyPassword.setAttribute( "type", "password" );
+		dom.inputLabels.verifyPassword = document.createElement( 'img' );
+		dom.inputLabels.verifyPassword.setAttribute( "id", "verify_password_label" );
+		dom.inputLabels.verifyPassword.setAttribute( "src", "images/verifypassword.png" );
 		
-		dom.account.error = document.createElement('
-		dom.account.error.setAttribue( "id", "login_error" );
+		dom.inputFields.inviteCode = document.createElement( 'input' );
+		dom.inputFields.inviteCode.setAttribute( "id", "invite_code" );
+		dom.inputFields.inviteCode.setAttribute( "type", "password" );
+		dom.inputLabels.inviteCode = document.createElement( 'img' );
+		dom.inputLabels.inviteCode.setAttribute( "id", "invite_code_label" );
+		dom.inputLabels.inviteCode.setAttribute( "src", "images/invitecode.png" );
+				
+		dom.submit = document.createElement( 'input' );
+		dom.submit.setAttribute( "id", "submit" );
+		dom.submit.setAttribute( "type", "button" );
 		
-		dom.login.privacySwitch = document.createElement('
-		dom.login.privacySwitch.setAttribue( "id", "login_privacySwitch" );
-		
-		dom.login.createSwitch = document.createElement('
-		dom.login.createSwitch.setAttribue( "id", "login_createSwitch" );
-		
-		
-		dom.create_section = document.getElementById("createSection");
-		dom.create_username = document.getElementById("create_username");
-		dom.create_password = document.getElementById("create_password");
-		dom.create_passwordConfirm = document.getElementById("create_passwordConfirm");
-		dom.create_inviteCode = document.getElementById("create_inviteCode");
-		dom.create_submit = document.getElementById("create_submit");
-		dom.create_error = document.getElementById("create_error");
-		dom.create_loginSwitch = document.getElementById("create_loginSwitch");
-		dom.create_privacySwitch = document.getElementById("create_privacySwitch");
+		dom.error = document.createElement( 'div' );
+		dom.error.setAttribute( "id", "uas_error" );
 
-		dom.privacy_section = document.getElementById("privacySection");
-		dom.privacy_loginSwitch = document.getElementById("privacy_loginSwitch");
-		dom.privacy_createSwitch = document.getElementById("privacy_createSwitch");
-			
+		dom.modeSwitch.privacy = document.createElement( 'img' );
+		dom.modeSwitch.privacy.setAttribute( "src", "images/switchprivacy.png" );
+		dom.modeSwitch.privacy.setAttribute( "id", "privacySwitch" );
+		
+		dom.modeSwitch.create = document.createElement( 'img' );
+		dom.modeSwitch.create.setAttribute( "src", "images/switchcreate.png" )
+		dom.modeSwitch.create.setAttribute( "id", "createSwitch" );
+		
+		dom.modeSwitch.login = document.createElement( 'img' );
+		dom.modeSwitch.login.setAttribute( "src", "images/switchlogin.png" );
+		dom.modeSwitch.login.setAttribute( "id", "createSwitch" );
+		
+		dom.privacyStatement = document.createElement( 'div' );
+		
 	};
+	
+	
+	var switchToLogin = function(){
+	
+		console.log( "switching to login" );
+		dom.uasContainer = scrubElement( dom.uasContainer );
+		dom.uasContainer.style.width = '40%';
+		dom.uasContainer.style.marginTop = '4em';
+		dom.uasContainer.appendChild( dom.title );
+		dom.uasContainer.style.display = "block";
+	};
+	
+	var scrubElement = function( element ) {
+		element.style.display = 'none';
+		while( element.fistChild){
+			element.removeChild( element.firstChild );
+		}
+		return element;
+	}
+	
 	
 	return uas;
 }();
+
 
 

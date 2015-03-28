@@ -31,9 +31,14 @@
 		<canvas id="c" style="border:1px solid #000000; background-color:#000000">
 		</canvas><br>
 		<div id="overlay">
-			<div id="account_container">
-				<img src="images/title.png" id="title"><br>
+			<div id="uas_container">
+			</div>
+		</div>
+			
+			<!--	<img src="images/title.png" id="title"><br>
+				
 				<div id="loginSection">
+				
 					<img src="images/login.png" id="login_title_image">
 					<div id="login_block">
 						<img src="images/username.png">
@@ -58,64 +63,8 @@
 					<br>Invitation Passcode:
 					<br><input type="text" id="create_inviteCode">
 					<br><input type="button" value="Submit" id="create_submit">
-					<br><div id = "create_error"></div>
-					<br><div class="uas_switch" id="create_loginSwitch">Log in with existing account</div>
-					<br><div class="uas_switch" id="create_privacySwitch">Privacy Statement</div>
-				</div>
-				<div id="privacySection">
-					<span class="account_title">Your Privacy Matters</span>
-					<p id="privacyText">
-						<u>Passwords:</u>
-						<br> Your password is not stored on the server. Passwords are encrypted with SHA-1 hashing
-						in your browser before being sent to the server. 
-						This means your password is changed into a code through a one-way process. It is designed to be
-						very difficult to turn the code back into the original password (estimates suggest years of 
-						computing time). SHA-1 is a moderately secure hashing function.  This code is salted and hashed 
-						again on the server side (currently using the more secure bcrypt 
-						algorithm) before being stored in the database. This process is extremely reliable for keeping your
-						password secret from everyone but you. I cannot see your password, nor can I determine it from 
-						the codes that get sent from your computer. All this is to help prevent someone (including 
-						myself) from taking your password and trying it on other sites to see if you reused it. 
-						A man-in-the-middle attacker can easily hijack your account with a replay attack. I'm okay with 
-						that, as this is just a silly web game. A successful attack can access your account, but these
-						protections mean they will <i>not</i> see your password. 
-						<br>I recommend strongly that you do <i>not</i> reuse passwords on multiple sites. However, 
-						recommendations don't stop people, so I've taken every reasonable precaution to limit harm.
-						<br><i>There is no automated password reset system.</i> If you can't remember your password, 
-						you'll have to contact me directly so I can manually fix the problem. 
-					</p>
-					<p id="privacyText">
-						<u>Game Message System:</u>
-						<br> 
-						All in game communications are plain text and stored as such. This means anybody with access to 
-						the server may read them. 'In-game' they can be considered as private as your counterespionage  
-						efforts can make them, but in real life they aren't very private. Please never put account details, 
-						credit information, or other sensitive things into in game communications. 
-					</p>
-					<p id="privacyText">
-						<u>Contact Info:</u>
-						<br> Your contact info will be requested as a part of this game, but will not be on this server 
-						at all unless you put it there (i.e. putting your email address in an in-game message). I will 
-						request contact info of players, and if you wish to keep it secure, you may send your info to me 
-						via other services such as email, plurk, or steam chat. I will store contact info locally on my 
-						home machine.
-						<br><i>I will not give your contact info to anybody. Ever.</i> I won't use it for evil in any way.
-					</p>
-					<p id="privacyText">
-						<u>Server:</u>
-						<br>Euclid ( aka euclid.nmu.edu or cs.nmu.edu ) is the Northern Michigan Computer Science 
-						and Mathematics Department webserver. It is administrated by Dr. Randy Appleton, Professor of 
-						Computer Science. It is used by dozens of students for various projects. As such, security is...
-						interesting. All of those students can see the database info I put in there. Passwords
-						are secured by multiple levels of cryptographic hashing. As detailed above, your password is hashed and 
-						encoded before it ever leaves your computer, and encrypted again before being stored.. All other information is essentially public for
-						those with server access. Also, while Randy does a wonderful job keeping the server going, 
-						there are outages, usually caused by sophomore programmers accidentally the whole computer. 
-						That's all out of my hands.
-					</p>
-					<br><div class="uas_switch" id="privacy_loginSwitch">Log in with existing account</div>
-					<br><div class="uas_switch" id="privacy_createSwitch">Create new account</div>
-			</div>
-		</div>
+					<br><div id = "create_error"></div> 
+			-->
+
 	</body>
 </html>
