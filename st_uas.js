@@ -87,6 +87,8 @@ var st_uas = st_uas || function(){
 		overlay:  {}
 		,uasContainer: 	{}
 		,title:			{}
+		,error:			{}
+		,submit:		{}
 		,inputFields: 	{
 			username: 		{}
 			,password:		{}
@@ -104,8 +106,10 @@ var st_uas = st_uas || function(){
 			,create:		{}
 			,login:			{}
 		}
-		,error:			{}
-		,submit:		{}
+		,modeSubtitle: {
+			login:			{}
+			,create:		{}
+		}
 		,privacyStatment:{
 			container:		{}
 			,title:			{}
@@ -120,6 +124,7 @@ var st_uas = st_uas || function(){
 		
 		dom.title = document.createElement( 'img' );
 		dom.title.setAttribute( "src", "images/title.png");
+		dom.title.setAttribute( "id", "title");
 		
 		dom.inputFields.username = document.createElement( 'input' );
 		dom.inputFields.username.setAttribute( "id",  "username" );
@@ -152,10 +157,22 @@ var st_uas = st_uas || function(){
 		dom.submit = document.createElement( 'input' );
 		dom.submit.setAttribute( "id", "submit" );
 		dom.submit.setAttribute( "type", "button" );
+		dom.submit.setAttribute( "value", "Submit" );
 		
 		dom.error = document.createElement( 'div' );
 		dom.error.setAttribute( "id", "uas_error" );
 
+		
+		dom.modeSubtitle.create = document.createElement( 'img' );
+		dom.modeSubtitle.create.setAttribute( "src", "images/create.png" )
+		dom.modeSubtitle.create.setAttribute( "id", "createSubtitle" );
+		dom.modeSubtitle.create.className = "subtitle";
+		
+		dom.modeSubtitle.login = document.createElement( 'img' );
+		dom.modeSubtitle.login.setAttribute( "src", "images/login.png" );
+		dom.modeSubtitle.login.setAttribute( "id", "loginSubtitle" );
+		dom.modeSubtitle.login.className = "subtitle";
+		
 		dom.modeSwitch.privacy = document.createElement( 'img' );
 		dom.modeSwitch.privacy.setAttribute( "src", "images/switchprivacy.png" );
 		dom.modeSwitch.privacy.setAttribute( "id", "privacySwitch" );
@@ -166,7 +183,7 @@ var st_uas = st_uas || function(){
 		
 		dom.modeSwitch.login = document.createElement( 'img' );
 		dom.modeSwitch.login.setAttribute( "src", "images/switchlogin.png" );
-		dom.modeSwitch.login.setAttribute( "id", "createSwitch" );
+		dom.modeSwitch.login.setAttribute( "id", "loginSwitch" );
 		
 		dom.privacyStatement = document.createElement( 'div' );
 		
@@ -180,6 +197,19 @@ var st_uas = st_uas || function(){
 		dom.uasContainer.style.width = '40%';
 		dom.uasContainer.style.marginTop = '4em';
 		dom.uasContainer.appendChild( dom.title );
+		dom.uasContainer.appendChild( dom.modeSubtitle.login );
+		dom.uasContainer.appendChild( dom.inputLabels.username );
+		dom.uasContainer.appendChild( dom.inputFields.username );
+		dom.uasContainer.appendChild( document.createElement( 'br' ) );
+		dom.uasContainer.appendChild( dom.inputLabels.password );
+		dom.uasContainer.appendChild( dom.inputFields.password );
+		dom.uasContainer.appendChild( document.createElement( 'br' ) );
+		dom.uasContainer.appendChild( dom.submit );
+		dom.uasContainer.appendChild( document.createElement( 'br' ) );
+		dom.uasContainer.appendChild( dom.modeSwitch.create );
+		dom.uasContainer.appendChild( dom.modeSwitch.privacy );
+		
+
 		dom.uasContainer.style.display = "block";
 	};
 	

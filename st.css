@@ -14,9 +14,9 @@ body{
 	background-color:#030207;
 }
 #title{
-	/* -webkit-border-radius: 1em;
+/* 	-webkit-border-radius: 1em;
 	-moz-border-radius: 1em;
-	border-radius: 1em; */
+	border-radius: 1em;  */
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
@@ -60,4 +60,9 @@ overflow: hidden;
 #uas_error{
 	display:none;
 	color:#ff2323;
+}
+.subtitle{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
