@@ -31,10 +31,7 @@ body{
 	float:left;
 }
 #overlay{
-/* 
-	display:none;   */
-
-	background-color: rgba(0,256,256,.2);
+	background-color: rgba(0,255,255,.2);
 	position:absolute;
 	top:0;
 	left:0;
@@ -42,7 +39,7 @@ body{
 	height:100%;
 	z-index: 10;
 }
-#account_container{
+#uas_container{
 overflow: hidden;
 	background-color: rgba(0,0,0,.80);
 	color:#ffffff;
@@ -60,32 +57,7 @@ overflow: hidden;
 	font-weight:normal;
 	color:#ffffff;
 }
-.account_title{
-	color:#efefef;
-	font-size:1.5em;
-	font-weight:bold;
-	text-align:center;
-	margin-left:auto;
-	margin-right:auto;
-}
-.uas_switch{
-    text-decoration: underline;
-	color:#236969;
-	cursor: pointer;
-}
-/* #login_username, #login_password, #login_submit{
-	font-size:1em;
-} */
-#login_error, #create_error{
+#uas_error{
 	display:none;
 	color:#ff2323;
-}
-#loginSection{
-	display:none;
-}
-#createSection{
-	display:none;
-}
-#privacySection{
-	display:none;
 }
