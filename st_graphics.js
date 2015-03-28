@@ -52,7 +52,7 @@ var st_graphics = st_graphics || function(){
 		drawMouseCursor( ctx );
 		if( DEBUG ){
 			ctx.strokeStyle = "#00ff00";
-			ctx.strokeRect( st_engine.canvas().width()/2, st_engine.canvas().height/2, 2, 2); 
+			ctx.strokeRect( st_engine.canvas().width/2, st_engine.canvas().height/2, 2, 2); 
 		}
 	}; // public render()
 
