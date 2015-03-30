@@ -1,9 +1,6 @@
 
 //uas.js
-// User account service: This module handles DOM elements that are initially hidden. It selectively reveals parts of the login, account creation, 
-// and privacy statement pages. It also handles calls to the server through st_ajax.js. This module provides the login interface for the user. 
-// The st_uas object will also hold the account name and hashword for authenticating other ajax requests. All ajax calls must include a username
-// and hashword combination to authenticate the request.
+// User account service: dom elements for creating an account, logging in, etc. 
 
 //namespace uas
 var st_uas = st_uas || function(){
@@ -16,23 +13,8 @@ var st_uas = st_uas || function(){
 			if( DEBUG ){  
 				dom.overlay.style.display = "none";
 			} else {
-				switchToLogin();
+				switchToCreate();
 			}
-		}
-		,dom: function(){ return dom; }
-		,switchToCreate: function(){
-			dom.accountContainer.style.width = '40%';
-			dom.accountContainer.style.marginTop = '4em';
-			dom.privacy_section.style.display = 'none';
-			dom.create_section.style.display = 'inline';
-			dom.login_section.style.display = 'none';
-		}
-		,switchToPrivacy: function(){
-			dom.accountContainer.style.width = '90%';
-			dom.accountContainer.style.marginTop = '1em';
-			dom.privacy_section.style.display = 'inline';
-			dom.create_section.style.display = 'none';
-			dom.login_section.style.display = 'none';
 		}
 		,login: function(){
 			dom.create_error.style.display='none';
@@ -41,22 +23,7 @@ var st_uas = st_uas || function(){
 				,hashword:	Sha1.hash(dom.login_password.value)
 			};
 			ajax.send( 'src/login.php', sendQuery, function( response ){
-				console.log(response);
-				// if( response.serverCode === 401 ){
-					// dom.login_error.innerText = response.error;
-					// dom.login_error.style.display='inline';
-				// } else if( response.serverCode = 200 ){
-					// console.log( "login success" );
-					// st_uas.credentials = sendQuery;
-					// //hide entire overlay
-					// //display loading graphic
-					// //ajax gamedata
-					// //gtfo
-				// } else{
-					// dom.login_error.innerText = "Unknown Error. If this error persists contact administrator. {"+response.error+"}";
-					// dom.login_error.style.display='inline';
-				// }
-				
+				if( DEBUG ){ console.log( response ); }
 			});
 		}
 		,create: function(){
@@ -78,7 +45,7 @@ var st_uas = st_uas || function(){
 					,inviteCode: Sha1.hash(dom.create_inviteCode.value)
 				};
 				ajax.send( 'src/create_account.php', sendQuery, function( response ){
-					console.log( response );
+					if( DEBUG ){ console.log( response ); }
 				});
 			}
 		}
@@ -92,13 +59,13 @@ var st_uas = st_uas || function(){
 		,inputFields: 	{
 			username: 		{}
 			,password:		{}
-			,passwordVerify:{}
+			,verifyPassword:{}
 			,inviteCode:	{}
 		}
 		,inputLabels:	{
 			username: 		{}
 			,password:		{}
-			,passwordVerify:{}
+			,verifyPassword:{}
 			,inviteCode:	{}
 		}
 		,modeSwitch: {		
@@ -118,7 +85,6 @@ var st_uas = st_uas || function(){
 	};
 	
 	var loadDom = function(){
-		console.log( "loading dynamic uas dom" );
 		dom.overlay = document.getElementById( "overlay" );
 		dom.uasContainer = document.getElementById( "uas_container" );
 		
@@ -191,11 +157,8 @@ var st_uas = st_uas || function(){
 	
 	
 	var switchToLogin = function(){
-	
-		console.log( "switching to login" );
 		dom.uasContainer = scrubElement( dom.uasContainer );
 		dom.uasContainer.style.width = '40%';
-		dom.uasContainer.style.marginTop = '4em';
 		dom.uasContainer.appendChild( dom.title );
 		dom.uasContainer.appendChild( dom.modeSubtitle.login );
 		dom.uasContainer.appendChild( dom.inputLabels.username );
@@ -208,10 +171,34 @@ var st_uas = st_uas || function(){
 		dom.uasContainer.appendChild( document.createElement( 'br' ) );
 		dom.uasContainer.appendChild( dom.modeSwitch.create );
 		dom.uasContainer.appendChild( dom.modeSwitch.privacy );
-		
 
 		dom.uasContainer.style.display = "block";
 	};
+	var switchToCreate = function(){
+		dom.uasContainer = scrubElement( dom.uasContainer );
+		dom.uasContainer.style.width = '40%';
+		dom.uasContainer.appendChild( dom.title );
+		dom.uasContainer.appendChild( dom.modeSubtitle.create );
+		dom.uasContainer.appendChild( dom.inputLabels.username );
+		dom.uasContainer.appendChild( dom.inputFields.username );
+		dom.uasContainer.appendChild( document.createElement( 'br' ) );
+		dom.uasContainer.appendChild( dom.inputLabels.password );
+		dom.uasContainer.appendChild( dom.inputFields.password );
+		dom.uasContainer.appendChild( document.createElement( 'br' ) );
+		dom.uasContainer.appendChild( dom.inputLabels.verifyPassword );
+		dom.uasContainer.appendChild( dom.inputFields.verifyPassword );
+		dom.uasContainer.appendChild( document.createElement( 'br' ) );
+		dom.uasContainer.appendChild( dom.inputLabels.inviteCode );
+		dom.uasContainer.appendChild( dom.inputFields.inviteCode );
+		dom.uasContainer.appendChild( document.createElement( 'br' ) );
+		dom.uasContainer.appendChild( dom.submit );
+		dom.uasContainer.appendChild( document.createElement( 'br' ) );
+		dom.uasContainer.appendChild( dom.modeSwitch.create );
+		dom.uasContainer.appendChild( dom.modeSwitch.privacy );
+		dom.uasContainer.style.display = "block";
+		
+	}
+	
 	
 	var scrubElement = function( element ) {
 		element.style.display = 'none';

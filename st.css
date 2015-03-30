@@ -13,14 +13,6 @@ canvas, *{
 body{
 	background-color:#030207;
 }
-#title{
-/* 	-webkit-border-radius: 1em;
-	-moz-border-radius: 1em;
-	border-radius: 1em;  */
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
 #login_title_image{
 	/* -webkit-border-radius: 1em;
 	-moz-border-radius: 1em;
@@ -47,7 +39,7 @@ overflow: hidden;
 	visibility:visible;
 	margin-left:auto;
 	margin-right:auto;
-	margin-top: 4em;
+	margin-top: 1em;
 	padding:2em;
 	width:20em; 
 	font-size:1.5em;
@@ -60,6 +52,16 @@ overflow: hidden;
 #uas_error{
 	display:none;
 	color:#ff2323;
+}
+#title{
+/* 	-webkit-border-radius: 1em;
+	-moz-border-radius: 1em;
+	border-radius: 1em;  */
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1em;
+	
 }
 .subtitle{
 	display: block;
