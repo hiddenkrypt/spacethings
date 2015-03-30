@@ -12,11 +12,11 @@
 			var DEBUG_ALL = false;
 			var DEBUG_NONE = true;
 			var st_DEBUG = {
-				engine:		DEBUG_ALL? true : DEBUG_NONE? false : true
-				,graphics:	DEBUG_ALL? true : DEBUG_NONE? false : false
-				,hud:		DEBUG_ALL? true : DEBUG_NONE? false : true
+				engine:		DEBUG_ALL? true : DEBUG_NONE? false : false
+				,graphics:	DEBUG_ALL? true : DEBUG_NONE? false : true
+				,hud:		DEBUG_ALL? true : DEBUG_NONE? false : false
 				,uas:		DEBUG_ALL? true : DEBUG_NONE? false : false
-				,data:		DEBUG_ALL? true : DEBUG_NONE? false : true
+				,data:		DEBUG_ALL? true : DEBUG_NONE? false : false
 			};
 		</script>
 		<script src="lib/sha-1.js"></script>
@@ -36,37 +36,5 @@
 			<div id="uas_container">
 			</div>
 		</div>
-			
-			<!--	<img src="images/title.png" id="title"><br>
-				
-				<div id="loginSection">
-				
-					<img src="images/login.png" id="login_title_image">
-					<div id="login_block">
-						<img src="images/username.png">
-						<br><input type="text" id="login_username" value="fuck">
-						<br><br><img src="images/password.png">
-						<br><input type="password" id="login_password" value="butt">
-						<br><input type="button" value="Log In" id="login_submit">
-						<br><div id = "login_error"></div>
-						<div class="uas_switch" id="login_createSwitch">Create new account</div>
-						<div class="uas_switch" id="login_privacySwitch">Privacy Statement</div>
-					</div>
-					
-				</div>
-				<div id="createSection">
-					<span class="account_title">Create new account</span>
-					<br>New Username:
-					<br><input type="text" id="create_username">
-					<br>Password:
-					<br><input type="text" id="create_password">
-					<br>Confirm Password:
-					<br><input type="text" id="create_passwordConfirm">
-					<br>Invitation Passcode:
-					<br><input type="text" id="create_inviteCode">
-					<br><input type="button" value="Submit" id="create_submit">
-					<br><div id = "create_error"></div> 
-			-->
-
 	</body>
 </html>
