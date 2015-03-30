@@ -1,15 +1,13 @@
 "use strict"
 // st_hud.js
 
-// Provides a Heads Up Display. This is the game stat viewer. A sidebar for civ stats, and a selection of 
-// popup windows for displaying information on the map. Works closely with st_graphics, but also must provide
-// DOM elements for forms. 
+// Provides a Heads Up Display of game data
 
 var st_hud = st_hud || function(){
 
 	var DEBUG = st_DEBUG.hud;
 
-	var Hud = {
+	var hud = {
 		initialize: function(){
 
 		}
@@ -28,6 +26,7 @@ var st_hud = st_hud || function(){
 		}
 		,disablePopup: function(){ popup.active = false; }
 	};
+	
 	var popup = {
 		w: 	500
 		,h: 100
@@ -55,6 +54,7 @@ var st_hud = st_hud || function(){
 			popup.h-popup.border.margin-popup.border.width*2 
 		);
 	}
+	
 	var	loadPopupData = function ( hexData ){
 		var hashID = new Hashids("spaceTHINGS", 4, "0123456789ABCDEF");
 		var homeworld = st_data.getHomeworld();
@@ -83,6 +83,7 @@ var st_hud = st_hud || function(){
 			popup.data.territoryOwner = hexData.owner;
 		}
 	};
+	
 	var drawPopupData = function ( ctx ){
 		var x = popup.x + popup.border.margin + popup.border.width/2 + popup.border.padding;
 		var y = popup.y + popup.border.margin + popup.border.width/2 + popup.border.padding + popup.lineSpacing;
@@ -101,18 +102,9 @@ var st_hud = st_hud || function(){
 			ctx.fillStyle = lines[i].style;
 			ctx.fillText( lines[i].title + lines[i].text, x, position);
 		}		
-		
-		
-		// ctx.fillStyle = "#000";
-
-		// ctx.font = "20px Courier";
-		// ctx.fillText( popup.data.systemName, x, y );
-		// ctx.font = "11px Courier";
-		// ctx.fillText( "Universal Coordinates: [" + popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]", x, y + 20 + popup.lineSpacing ); 
-		// ctx.fillText( "Local Coordinates: [" + popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]", x, y + 20 + 11 + popup.lineSpacing ); 
 	}
 	
-	return Hud;
+	return hud;
 }(); // IIFE to create st_hud
 
 

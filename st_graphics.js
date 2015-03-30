@@ -19,42 +19,41 @@ var st_graphics = st_graphics || function(){
 		,dClickWindow:		300
 		,dClickTimeout: 	{}
 		,initialHexSize:	90
-		,initialize:		function(){}
-		,render:			function(){}
-		,getNewHex:			function(){}
-		,selectHex:			function(){}
+		,initialize: function(){
+			st_graphics.hex = createHexagon( 75 );
+			st_graphics.camera = createCamera();
+			st_graphics.camera.centerOnHex( 50, 50 );
+			st_graphics.background.src = st_graphics.bg_filename;
+			st_graphics.background.onload = function(){ 
+				st_graphics.imageLoaded = true; 
+				if( DEBUG ){
+					console.log( "st_graphics initialized." );
+					console.log( "image: (" + st_graphics.background.width + "," + st_graphics.background.height + ")" ); 
+				}
+			};
+			if( DEBUG ) { console.log( "st_graphics initialized." ); }
+		}
+		,render: function( ctx ){
+			if( st_graphics.imageLoaded ){
+				drawBackground( ctx );
+			}
+			if( st_data.loaded() ){
+				drawLoadedHexField( ctx );
+			} else {
+				drawDefaultHexField( ctx );
+			}
+			drawMouseCursor( ctx );
+			if( DEBUG ){
+				ctx.strokeStyle = "#00ff00";
+				ctx.strokeRect( st_engine.canvas().width/2, st_engine.canvas().height/2, 2, 2); 
+			}
+		}
+		,selectHex:	function( coords ){
+			st_graphics.camera.centerOnHex(coords.x, coords.y);
+		}
 	};
 
-	graphicsModule.initialize = function(){
-		st_graphics.hex = createHexagon( 75 );
-		st_graphics.camera = createCamera();
-		st_graphics.camera.centerOnHex( 50, 50 );
-		st_graphics.background.src = st_graphics.bg_filename;
-		st_graphics.background.onload = function(){ 
-			st_graphics.imageLoaded = true; 
-			if( DEBUG ){
-				console.log( "st_graphics initialized." );
-				console.log( "image: (" + st_graphics.background.width + "," + st_graphics.background.height + ")" ); 
-			}
-		};
-		if( DEBUG ) { console.log( "st_graphics initialized." ); }
-	}; // public initialize()
-	
-	graphicsModule.render = function( ctx ){
-		if( st_graphics.imageLoaded ){
-			drawBackground( ctx );
-		}
-		if( st_data.loaded() ){
-			drawLoadedHexField( ctx );
-		} else {
-			drawDefaultHexField( ctx );
-		}
-		drawMouseCursor( ctx );
-		if( DEBUG ){
-			ctx.strokeStyle = "#00ff00";
-			ctx.strokeRect( st_engine.canvas().width/2, st_engine.canvas().height/2, 2, 2); 
-		}
-	}; // public render()
+
 
 	var createCamera = function(){
 		var camera_speed = 2/3
@@ -234,7 +233,7 @@ var st_graphics = st_graphics || function(){
 	}; // private drawStarAtGrid()
 	
 	var drawStar = function( ctx, canv_x, canv_y, star ){
-		var color = "255,255,255";
+		var color = "0,0,0";
 		switch(star.MKspectrum){
 			case "O":
 				color = "130,130,255";
@@ -263,27 +262,24 @@ var st_graphics = st_graphics || function(){
 			case "T":
 				color = "255,130,130";
 				break;
+			default:
+				color = "255,255,255";
+				break;
 		}
 		
 		canv_x += st_graphics.hex.rect_w() / 2 + ((star.offset<3)?-st_graphics.hex.h()/2:(star.offset>4)?st_graphics.hex.h()/2:0);
 		canv_y += st_graphics.hex.side_length() / 2 + st_graphics.hex.h() + ((star.offset%2==1)?-st_graphics.hex.h()/2:st_graphics.hex.h()/2);
-		
-		
-		
+
 		ctx.save();
 			ctx.beginPath();
-				ctx.arc(canv_x, canv_y, (st_graphics.hex.h()*(( 30 - star.magnitude )/20))/4, 0, 2*Math.PI, false);
-				ctx.fillStyle = "rgba(" + color + ", 1)";
-				ctx.shadowColor = "rgba(" + color + ", 1)";
-				ctx.shadowBlur = 50;//st_graphics.hex.rect_w()*(30-star.magnitude)*50;
-				ctx.fill();
-				ctx.fill();
+			ctx.arc(canv_x, canv_y, (st_graphics.hex.h()*(( 30 - star.magnitude )/20))/4, 0, 2*Math.PI, false);
+			ctx.fillStyle = "rgba(" + color + ", 1)";
+			ctx.shadowColor = "rgba(" + color + ", 1)";
+			ctx.shadowBlur = 50;//st_graphics.hex.rect_w()*(30-star.magnitude)*50;
+			ctx.fill();
+			ctx.fill();
 		ctx.restore();
 	}; // private drawStar()
-	
-	graphicsModule.selectHex = function( coords ){
-		st_graphics.camera.centerOnHex(coords.x, coords.y);
-	}; // selectHex()
 	
 	var gridCoordinatesToCanvas = function( coords ){
 		return {
@@ -291,5 +287,6 @@ var st_graphics = st_graphics || function(){
 			,y: ( coords.y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y()
 		}
 	}
+	
 	return graphicsModule;
 }(); // IIFE creating st_graphics

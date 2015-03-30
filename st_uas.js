@@ -2,7 +2,6 @@
 //uas.js
 // User account service: dom elements for creating an account, logging in, etc. 
 
-//namespace uas
 var st_uas = st_uas || function(){
 	"use strict";
 	var DEBUG = st_DEBUG.uas;
