@@ -5,19 +5,20 @@
 var st_engine = st_engine || function(){
 	"use strict";
 	
-	var authentication = { username:"", hashword:"" };
 	var DEBUG = st_DEBUG.engine;
 	var Canvas = {};
 	var Context = {};
 	var hexHighlight = { x:-1, y:-1 };
 	var lastClickedHex = { x:-1, y:-1 };
+	var doubleclick = false;
+	var dClickWindow = 300;
+	var dClickTimeout = {};
+	
 	
 	var engine = {
 		init: function(){
 			Canvas = document.getElementById( "c" );
 			Context = Canvas.getContext( "2d" );
-			
-			
 			Canvas.style.width = Canvas.width = window.innerWidth -25;
 			Canvas.style.height = Canvas.height = window.innerHeight -25;
 			
@@ -34,26 +35,20 @@ var st_engine = st_engine || function(){
 			Canvas.addEventListener( "mousemove", handleMouseMove, false );
 			Canvas.addEventListener( "mousewheel", handleScroll, false );
 			Canvas.addEventListener( "DOMMouseScroll", handleScroll, false );  //firefox
+			
+			if( DEBUG ){ console.log( "Initialized Engine and all submodules. Kicking off renderer." ); }
 			this.render();
 		}
 		,render: function(){		
-			
 			Canvas.style.width = Canvas.width = window.innerWidth -25;
 			Canvas.style.height = Canvas.height = window.innerHeight -25;
-			
 			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
 			
 			st_graphics.render( Context );
-			
 			st_hud.render( Context );
 			
 			requestAnimationFrame( this.render.bind(this) );
 		}
-		,setAuthentication: function( auth ){
-			authentication.username = auth.username;
-			authentication.hashword = auth.hashword;
-		}
-		,getAuthentication: function(){ return authentication; }
 		,getHighlightedHex: function(){ return hexHighlight; }
 		,canvas: function(){ return Canvas; }
 		,ctx: function(){ return Context; }
@@ -76,16 +71,16 @@ var st_engine = st_engine || function(){
 		if( DEBUG ){ 
 			console.log( "click: virtual canvas("+x+","+y+");  grid("+hexX+","+hexY+");  literal canvas("+( event.pageX - rect.left )+","+( event.pageY - rect.top )+")" );
 		}
-		if( lastClickedHex.x == hexX && lastClickedHex.y == hexY && st_graphics.doubleclick ) {
+		if( lastClickedHex.x == hexX && lastClickedHex.y == hexY && doubleclick ) {
 			if( DEBUG ){ console.log( "SELECTED: (" + hexX + "," + hexY + ")" ); }
 			st_graphics.selectHex( {x:hexX, y:hexY} );
 			st_hud.selectHexAtGrid( {x:hexX, y:hexY} );
 		} 
 		lastClickedHex.x = hexX;
 		lastClickedHex.y = hexY;
-		st_graphics.doubleclick = true;
-		clearTimeout(st_graphics.dClickTimeout);
-		st_graphics.dClickTimeout = setTimeout( function(){ st_graphics.doubleclick = false; }, st_graphics.dClickWindow ); 
+		doubleclick = true;
+		clearTimeout( dClickTimeout );
+		dClickTimeout = setTimeout( function(){ doubleclick = false; }, dClickWindow ); 
 	}; //handleMousedown()
 
 	var handleMouseUp = function( event ){
@@ -116,27 +111,27 @@ var st_engine = st_engine || function(){
 			case key.PAGE_UP:
 				retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() + st_graphics.hex.side_length() / 8 ); 
 				if (retval.change){ 
-					st_graphics.camera.centerOnHex( retval.x, retval.y ); 
+					st_graphics.camera.centerOnHex( retval ); 
 				}
 				break;
 			case key.NP_3:
 			case key.PAGE_DOWN:
 				retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() / ( 9/8 ) );
 				if (retval.change){ 
-					st_graphics.camera.centerOnHex( retval.x, retval.y );
+					st_graphics.camera.centerOnHex( retval );
 				}
 				break;
 			case key.NP_7:
 			case key.HOME:
-				retval = st_graphics.hex.setSideLength( st_graphics.initialHexSize );
+				retval = st_graphics.hex.setSideLength( 75 );
 				if (retval.change){ 
-					st_graphics.camera.centerOnHex( retval.x, retval.y ); 
+					st_graphics.camera.centerOnHex( retval ); 
 				}
 				break;
 			case key.NP_1:
 			case key.END:
 				if( st_data.loaded() ){
-					st_graphics.camera.centerOnHex( st_data.getMap().homeworld.x, st_data.getMap().homeworld.y );
+					st_graphics.camera.centerOnHex( st_data.getHomeworld() );
 				} else{
 					st_graphics.camera.centerOnHex( 4, 4 );
 				}
@@ -165,7 +160,7 @@ var st_engine = st_engine || function(){
 		var delta = Math.max( -1, Math.min( 1, ( event.wheelDelta || -event.detail ) ) );
 		var retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() + ( st_graphics.hex.side_length()*delta)/8 );
 		if (retval.change){ 
-			st_graphics.camera.centerOnHex( retval.x, retval.y ); 
+			st_graphics.camera.centerOnHex( retval ); 
 			st_hud.disablePopup();
 		}
 	}; // handleScroll()
