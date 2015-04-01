@@ -6,9 +6,11 @@
 var st_hud = st_hud || function(){
 
 	var DEBUG = st_DEBUG.hud;
-
+	var ticker = {}; // dom element collection for ticker bar.
+	
 	var hud = {
 		initialize: function(){
+			loadTicker();
 
 		}
 		,render: function( ctx ){
@@ -102,6 +104,10 @@ var st_hud = st_hud || function(){
 			ctx.fillStyle = lines[i].style;
 			ctx.fillText( lines[i].title + lines[i].text, x, position);
 		}		
+	}
+	var loadTicker = function(){
+		ticker.container = document.getElementByID( 'ticker' );
+		//build and push dom elements
 	}
 	
 	return hud;
