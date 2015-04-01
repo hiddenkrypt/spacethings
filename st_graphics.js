@@ -13,16 +13,16 @@ var st_graphics = st_graphics || function(){
 	var bg_filename = 'images/stars.jpg';
 	var imageLoaded = false;
 	var background = new Image();
-	var initialZoom = 75;
 	
 	var graphics = {
 		camera:				{}
 		,hex:				{}
 		,parallax_d: 		0.1
 		,initialize: function(){
-			st_graphics.hex = createHexagon( initialZoom );
-			st_graphics.camera = createCamera();
-			st_graphics.camera.centerOnHex( {x:50, y:50} );
+			var cameraInitalPosition = {x:50, y:50, z:75};
+			st_graphics.camera = createCamera( cameraInitalPosition );
+			st_graphics.hex = createHexagon( cameraInitalPosition.z );
+			st_graphics.camera.centerOnHex( cameraInitalPosition );
 			background.src = bg_filename;
 			background.onload = function(){ 
 				imageLoaded = true; 
@@ -55,11 +55,12 @@ var st_graphics = st_graphics || function(){
 
 
 
-	var createCamera = function(){
+	var createCamera = function( initialPosition){
 		var camera_speed = 2/3
-			,pos_x = -10000
-			,pos_y = -10000
-			,pos_z = 75;
+			,pos_x = initialPosition.x
+			,pos_y = initialPosition.y
+			,pos_z = initialPosition.z
+			,initial_position = initialPosition;
 		return {
 			x: function(){ return pos_x; }
 			,y: function(){ return pos_y; }
@@ -78,6 +79,16 @@ var st_graphics = st_graphics || function(){
 			,centerOnHex: function( coords ){  
 				pos_y = ( coords.y  * ( st_graphics.hex.rect().w - ( st_graphics.hex.h() / 2 ) +(0.015*st_graphics.hex.sideLength()) ) ) - ( st_engine.canvas().height/2 ) + ( st_graphics.hex.h() + st_graphics.hex.sideLength()/2 );
 				pos_x = ( coords.x *  st_graphics.hex.rect().w ) - ( st_engine.canvas().width/2 ) + st_graphics.hex.rect().w/(coords.y%2?1:2);
+			}
+			,returnToInitialZoom: function(){
+				this.zoom( initial_position.z );
+			}
+			,returnToInitialPosition: function(){
+				if( st_data.loaded() ){
+					st_graphics.camera.centerOnHex( st_data.getHomeworld() );
+				} else{
+					this.centerOnHex( initial_position.x, initial_position.y  );
+				}
 			}
 			,dzoom: function( dz ){ 				
 				this.zoom( dz + pos_z );

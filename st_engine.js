@@ -19,8 +19,8 @@ var st_engine = st_engine || function(){
 		init: function(){
 			Canvas = document.getElementById( "c" );
 			Context = Canvas.getContext( "2d" );
-			Canvas.style.width = Canvas.width = window.innerWidth -25;
-			Canvas.style.height = Canvas.height = window.innerHeight -25;
+			Canvas.style.width = Canvas.width = window.innerWidth;
+			Canvas.style.height = Canvas.height = window.innerHeight;
 			
 			st_graphics.initialize(); // start graphics module
 			st_uas.initialize(); // start user account service module
@@ -40,8 +40,8 @@ var st_engine = st_engine || function(){
 			this.render();
 		}
 		,render: function(){		
-			Canvas.style.width = Canvas.width = window.innerWidth -25;
-			Canvas.style.height = Canvas.height = window.innerHeight -25;
+			Canvas.style.width = Canvas.width = window.innerWidth;
+			Canvas.style.height = Canvas.height = window.innerHeight;
 			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
 			
 			st_graphics.render( Context );
@@ -89,43 +89,46 @@ var st_engine = st_engine || function(){
 
 	var handleKeyDown = function( event ){
 		var keyCode = event.keyCode;
-		var retval = {change:false};
 		switch (keyCode){
-			case key.NP_8:	
+			case key.NP_7:
+				st_graphics.camera.dx( -st_graphics.camera.z() * st_graphics.camera.speed() ); //fall
+			case key.NP_8:	 //fall
 			case key.UP:
 				st_graphics.camera.dy( -st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
+			case key.NP_3:
+				st_graphics.camera.dx(  st_graphics.camera.z() *  st_graphics.camera.speed() );
 			case key.NP_2:	
 			case key.DOWN:
 				st_graphics.camera.dy(  st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
+			case key.NP_1:
+				st_graphics.camera.dy(  st_graphics.camera.z() * st_graphics.camera.speed() );
 			case key.NP_4:	
 			case key.LEFT:
 				st_graphics.camera.dx( -st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
-			case key.NP_6:
+			case key.NP_9:
+				st_graphics.camera.dy( -st_graphics.camera.z() * st_graphics.camera.speed() );//fall
+			case key.NP_6:	//fall
 			case key.RIGHT:
 				st_graphics.camera.dx(  st_graphics.camera.z() *  st_graphics.camera.speed() );
 				break;
-			case key.NP_9:
+			case key.NP_PLUS:
 			case key.PAGE_UP:
 				st_graphics.camera.dzoom( st_graphics.camera.z() / 8 ); 
 				break;
-			case key.NP_3:
+			case key.NP_MINUS:
 			case key.PAGE_DOWN:
 				st_graphics.camera.zoom( st_graphics.camera.z() / ( 9/8 ) );
 				break;
-			case key.NP_7:
 			case key.HOME:
-				st_graphics.camera.zoom( 75 );
+			case key.ENTER:
+				st_graphics.camera.returnToInitialZoom();
+				st_graphics.camera.returnToInitialPosition();
 				break;
-			case key.NP_1:
 			case key.END:
-				if( st_data.loaded() ){
-					st_graphics.camera.centerOnHex( st_data.getHomeworld() );
-				} else{
-					st_graphics.camera.centerOnHex( 50, 50 );
-				}
+				st_graphics.camera.returnToInitialZoom();
 				break;
 		}
 		st_hud.disablePopup();
