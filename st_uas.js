@@ -10,7 +10,7 @@ var st_uas = st_uas || function(){
 		initialize: function(){
 			loadDom();
 			if( DEBUG ){  
-				dom.overlay.style.display = "none";
+				dom.uasOverlay.style.display = "none";
 			} else {
 				switchToCreate();
 			}
@@ -50,7 +50,7 @@ var st_uas = st_uas || function(){
 		}
 	};
 	var dom = {
-		overlay:  {}
+		uasOverlay:  {}
 		,uasContainer: 	{}
 		,title:			{}
 		,error:			{}
@@ -84,7 +84,7 @@ var st_uas = st_uas || function(){
 	};
 	
 	var loadDom = function(){
-		dom.overlay = document.getElementById( "overlay" );
+		dom.uasOverlay = document.getElementById( "uas_overlay" );
 		dom.uasContainer = document.getElementById( "uas_container" );
 		
 		dom.title = document.createElement( 'img' );
