@@ -16,32 +16,32 @@ var st_uas = st_uas || function(){
 			}
 		}
 		,login: function(){
-			dom.create_error.style.display='none';
+			dom.error.style.display='none';
 			var sendQuery = { 
-				username: 	dom.login_username.value
-				,hashword:	Sha1.hash(dom.login_password.value)
+				username: 	dom.inputFields.username.value
+				,hashword:	Sha1.hash(dom.inputFields.password.value)
 			};
 			ajax.send( 'src/login.php', sendQuery, function( response ){
 				if( DEBUG ){ console.log( response ); }
 			});
 		}
 		,create: function(){
-			dom.create_error.style.display='none';
-			if(dom.create_password.value.length === 0
-				|| dom.create_passwordConfirm.value.length === 0
-				|| dom.create_username.value.length === 0
-				|| dom.create_inviteCode.value.length === 0
+			dom.error.style.display='none';
+			if(dom.inputFields.password.value.length === 0
+				|| dom.inputFields.verifyPassword.value.length === 0
+				|| dom.inputFields.username.value.length === 0
+				|| dom.inputFields.inviteCode.value.length === 0
 				){
-				dom.create_error.innerHTML = "Empty field detected. All fields are mandatory.";
-				dom.create_error.style.display='inline';
-			} else if(dom.create_password.value != dom.create_passwordConfirm.value){
-				dom.create_error.innerHTML = "Confirmation Password does not match initial password!";
-				dom.create_error.style.display='inline';
+				dom.error.innerHTML = "Empty field detected. All fields are mandatory.";
+				dom.error.style.display='inline';
+			} else if(dom.password.value != dom.verifyPassword.value){
+				dom.error.innerHTML = "Confirmation Password does not match initial password!";
+				dom.error.style.display='inline';
 			} else{	
 				var sendQuery = {
-					username: dom.create_username.value
-					,hashword: Sha1.hash(dom.create_password.value)
-					,inviteCode: Sha1.hash(dom.create_inviteCode.value)
+					username: dom.inputFields.username.value
+					,hashword: Sha1.hash(dom.inputFields.password.value)
+					,inviteCode: Sha1.hash(dom.inputFields.inviteCode.value)
 				};
 				ajax.send( 'src/create_account.php', sendQuery, function( response ){
 					if( DEBUG ){ console.log( response ); }
