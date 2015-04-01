@@ -64,8 +64,8 @@ var st_engine = st_engine || function(){
 		var rect = Canvas.getBoundingClientRect();
 		var x = event.pageX - rect.left + st_graphics.camera.x();
 		var y = event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
-		var hexY = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.side_length() ) );
-		var hexX = Math.floor( ( x - ( hexY % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect_w() );
+		var hexY = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.sideLength() ) );
+		var hexX = Math.floor( ( x - ( hexY % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect().w );
 		st_graphics.drag_prev_x = event.pageX;
 		st_graphics.drag_prev_y = event.pageY;
 		if( DEBUG ){ 
@@ -93,47 +93,38 @@ var st_engine = st_engine || function(){
 		switch (keyCode){
 			case key.NP_8:	
 			case key.UP:
-				st_graphics.camera.dy( -st_graphics.hex.side_length() * st_graphics.camera.speed() );
+				st_graphics.camera.dy( -st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
 			case key.NP_2:	
 			case key.DOWN:
-				st_graphics.camera.dy(  st_graphics.hex.side_length() * st_graphics.camera.speed() );
+				st_graphics.camera.dy(  st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
 			case key.NP_4:	
 			case key.LEFT:
-				st_graphics.camera.dx( -st_graphics.hex.side_length() * st_graphics.camera.speed() );
+				st_graphics.camera.dx( -st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
 			case key.NP_6:
 			case key.RIGHT:
-				st_graphics.camera.dx(  st_graphics.hex.side_length() *  st_graphics.camera.speed() );
+				st_graphics.camera.dx(  st_graphics.camera.z() *  st_graphics.camera.speed() );
 				break;
 			case key.NP_9:
 			case key.PAGE_UP:
-				retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() + st_graphics.hex.side_length() / 8 ); 
-				if (retval.change){ 
-					st_graphics.camera.centerOnHex( retval ); 
-				}
+				st_graphics.camera.dzoom( st_graphics.camera.z() / 8 ); 
 				break;
 			case key.NP_3:
 			case key.PAGE_DOWN:
-				retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() / ( 9/8 ) );
-				if (retval.change){ 
-					st_graphics.camera.centerOnHex( retval );
-				}
+				st_graphics.camera.zoom( st_graphics.camera.z() / ( 9/8 ) );
 				break;
 			case key.NP_7:
 			case key.HOME:
-				retval = st_graphics.hex.setSideLength( 75 );
-				if (retval.change){ 
-					st_graphics.camera.centerOnHex( retval ); 
-				}
+				st_graphics.camera.zoom( 75 );
 				break;
 			case key.NP_1:
 			case key.END:
 				if( st_data.loaded() ){
 					st_graphics.camera.centerOnHex( st_data.getHomeworld() );
 				} else{
-					st_graphics.camera.centerOnHex( 4, 4 );
+					st_graphics.camera.centerOnHex( 50, 50 );
 				}
 				break;
 		}
@@ -147,8 +138,8 @@ var st_engine = st_engine || function(){
 		var rect = Canvas.getBoundingClientRect();
 		var x=event.pageX - rect.left + st_graphics.camera.x();
 		var y=event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
-		hexHighlight.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.side_length() ) );
-		hexHighlight.x = Math.floor( ( x - ( hexHighlight.y % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect_w() );
+		hexHighlight.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.sideLength() ) );
+		hexHighlight.x = Math.floor( ( x - ( hexHighlight.y % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect().w );
 		if( st_graphics.dragging ){
 			st_graphics.camera.moveDelta( st_graphics.drag_prev_x - event.pageX, st_graphics.drag_prev_y - event.pageY );
 			st_graphics.drag_prev_x = event.pageX;
@@ -158,11 +149,8 @@ var st_engine = st_engine || function(){
 
 	var handleScroll = function( event ) {
 		var delta = Math.max( -1, Math.min( 1, ( event.wheelDelta || -event.detail ) ) );
-		var retval = st_graphics.hex.setSideLength( st_graphics.hex.side_length() + ( st_graphics.hex.side_length()*delta)/8 );
-		if (retval.change){ 
-			st_graphics.camera.centerOnHex( retval ); 
-			st_hud.disablePopup();
-		}
+		st_graphics.camera.dzoom( delta*st_graphics.camera.z() / 8 ); 
+		st_hud.disablePopup();
 	}; // handleScroll()
 	
 	

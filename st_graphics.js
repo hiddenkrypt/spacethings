@@ -76,19 +76,28 @@ var st_graphics = st_graphics || function(){
 				if( typeof dy === 'number' ){ pos_y += dy; }
 			}
 			,centerOnHex: function( coords ){  
-				pos_y = ( coords.y  * ( st_graphics.hex.rect_w() - ( st_graphics.hex.h() / 2 ) +(0.015*st_graphics.hex.side_length()) ) ) - ( st_engine.canvas().height/2 ) + ( st_graphics.hex.h() + st_graphics.hex.side_length()/2 );
-				pos_x = ( coords.x *  st_graphics.hex.rect_w() ) - ( st_engine.canvas().width/2 ) + st_graphics.hex.rect_w()/(coords.y%2?1:2);
+				pos_y = ( coords.y  * ( st_graphics.hex.rect().w - ( st_graphics.hex.h() / 2 ) +(0.015*st_graphics.hex.sideLength()) ) ) - ( st_engine.canvas().height/2 ) + ( st_graphics.hex.h() + st_graphics.hex.sideLength()/2 );
+				pos_x = ( coords.x *  st_graphics.hex.rect().w ) - ( st_engine.canvas().width/2 ) + st_graphics.hex.rect().w/(coords.y%2?1:2);
 			}
 			,dzoom: function( dz ){ 				
 				this.zoom( dz + pos_z );
 			}
 			,zoom: function( newZ ){ 
-				if( newZ < MAXZOOM && newZ > MINZOOM ){
-					pos_z = newZ; 
-					st_graphics.hex = createHexagon( newZ );
-				} else if( typeof newZ !== 'number' ) {
+				var centerX = false, centerY = false, targetY = false, targetX = false;
+				if( typeof newZ !== 'number' ) {
 					throw new Exception( "Invalid zoom level: "+newZ );
 				}
+				newZ = (newZ > MAXZOOM)? MAXZOOM : (newZ < MINZOOM)? MINZOOM : newZ;
+				if( newZ !== pos_z ){
+					centerX = st_engine.canvas().width/2 + pos_x;
+					centerY = st_engine.canvas().height/2 + pos_y;
+					targetY = Math.floor( centerY / ( st_graphics.hex .h() + st_graphics.hex .sideLength() ) );
+					targetX = Math.floor( ( centerX - ( targetY % 2 ) * st_graphics.hex .rad() ) / st_graphics.hex .rect().w );
+					pos_z = newZ; 
+					st_graphics.hex.setSideLength( newZ );
+					this.centerOnHex( {x: targetX, y: targetY } );
+				};
+				
 			}
 		};
 	}; //private createCamera() camera constructor
@@ -100,41 +109,21 @@ var st_graphics = st_graphics || function(){
 		var hex_rect_h =  		hex_side_length + ( 2 * hex_h );
 		var hex_rect_w =  		hex_rad * 2;
 		return {
-			side_length: function(){ return hex_side_length; }
+			sideLength: function(){ return hex_side_length; }
 			,rad: function(){ return hex_rad; }
 			,h: function(){ return hex_h; }
 			,rect: function(){ 
 				return{
-					x: 0
-					,y:0
-					,h:0
-					,w:0
+					h:hex_rect_h
+					,w:hex_rect_w
 				};
 			}
-			,rect_h: function(){ return hex_rect_h; }
-			,rect_w: function(){ return hex_rect_w; }
-			
 			,setSideLength:	function( newLength ){
-				var changed = true;
-				if( newLength > max_zoom ){
-					newLength = max_zoom;
-				} else if ( newLength < min_zoom ){
-					newLength = min_zoom; 
-				}
-				if( hex_side_length === newLength ){
-					changed = false;
-				}
-				var centerX = st_engine.canvas().width/2 + st_graphics.camera.x();
-				var centerY = st_engine.canvas().height/2 + st_graphics.camera.y();
-				var targetY = Math.floor( centerY / ( hex_h + hex_side_length ) );
-				var targetX = Math.floor( ( centerX - ( targetY % 2 ) * hex_rad ) / hex_rect_w );
-				
 				hex_side_length = newLength;
 				hex_rad = 		hex_side_length * Math.sqrt( 3 ) / 2;
 				hex_h = 		hex_side_length / 2;
 				hex_rect_h = 	hex_side_length + ( 2 * hex_h );
 				hex_rect_w = 	hex_rad * 2;
-				return {change:changed, x:targetX, y:targetY};
 			}
 			
 			,draw:   function( ctx, x, y, stroke, fill, alpha, line_width){
@@ -288,15 +277,15 @@ var st_graphics = st_graphics || function(){
 				break;
 		}
 		
-		canv_x += st_graphics.hex.rect_w() / 2 + ((star.offset<3)?-st_graphics.hex.h()/2:(star.offset>4)?st_graphics.hex.h()/2:0);
-		canv_y += st_graphics.hex.side_length() / 2 + st_graphics.hex.h() + ((star.offset%2==1)?-st_graphics.hex.h()/2:st_graphics.hex.h()/2);
+		canv_x += st_graphics.hex.rect().w / 2 + ((star.offset<3)?-st_graphics.hex.h()/2:(star.offset>4)?st_graphics.hex.h()/2:0);
+		canv_y += st_graphics.hex.sideLength() / 2 + st_graphics.hex.h() + ((star.offset%2==1)?-st_graphics.hex.h()/2:st_graphics.hex.h()/2);
 
 		ctx.save();
 			ctx.beginPath();
 			ctx.arc(canv_x, canv_y, (st_graphics.hex.h()*(( 30 - star.magnitude )/20))/4, 0, 2*Math.PI, false);
 			ctx.fillStyle = "rgba(" + color + ", 1)";
 			ctx.shadowColor = "rgba(" + color + ", 1)";
-			ctx.shadowBlur = 50;//st_graphics.hex.rect_w()*(30-star.magnitude)*50;
+			ctx.shadowBlur = 50;//st_graphics.hex.rect().w*(30-star.magnitude)*50;
 			ctx.fill();
 			ctx.fill();
 		ctx.restore();
@@ -304,8 +293,8 @@ var st_graphics = st_graphics || function(){
 	
 	var gridCoordinatesToCanvas = function( coords ){
 		return {
-			x: ( coords.x * st_graphics.hex.rect_w() + ( ( coords.y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x()
-			,y: ( coords.y * ( st_graphics.hex.side_length() + st_graphics.hex.h() ) ) - st_graphics.camera.y()
+			x: ( coords.x * st_graphics.hex.rect().w + ( ( coords.y % 2 ) * st_graphics.hex.rad() ) ) - st_graphics.camera.x()
+			,y: ( coords.y * ( st_graphics.hex.sideLength() + st_graphics.hex.h() ) ) - st_graphics.camera.y()
 		}
 	}
 	
