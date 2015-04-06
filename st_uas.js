@@ -12,7 +12,7 @@ var st_uas = st_uas || function(){
 			if( DEBUG ){  
 				dom.uasOverlay.style.display = "none";
 			} else {
-				switchToCreate();
+				switchToLogin();
 			}
 		}
 		,login: function(){
@@ -89,7 +89,7 @@ var st_uas = st_uas || function(){
 		
 		dom.title = document.createElement( 'img' );
 		dom.title.setAttribute( "src", "images/title.png");
-		dom.title.setAttribute( "id", "title");
+		dom.title.setAttribute( "id", "uas_title");
 		
 		dom.inputFields.username = document.createElement( 'input' );
 		dom.inputFields.username.setAttribute( "id",  "username" );
@@ -131,12 +131,12 @@ var st_uas = st_uas || function(){
 		dom.modeSubtitle.create = document.createElement( 'img' );
 		dom.modeSubtitle.create.setAttribute( "src", "images/create.png" )
 		dom.modeSubtitle.create.setAttribute( "id", "createSubtitle" );
-		dom.modeSubtitle.create.className = "subtitle";
+		dom.modeSubtitle.create.className = "uas_subtitle";
 		
 		dom.modeSubtitle.login = document.createElement( 'img' );
 		dom.modeSubtitle.login.setAttribute( "src", "images/login.png" );
 		dom.modeSubtitle.login.setAttribute( "id", "loginSubtitle" );
-		dom.modeSubtitle.login.className = "subtitle";
+		dom.modeSubtitle.login.className = "uas_subtitle";
 		
 		dom.modeSwitch.privacy = document.createElement( 'img' );
 		dom.modeSwitch.privacy.setAttribute( "src", "images/switchprivacy.png" );

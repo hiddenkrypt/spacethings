@@ -12,10 +12,10 @@ var st_hud = st_hud || function(){
 			loadTicker();
 		}
 		,render: function( ctx ){
-			if( popup.active ){
-				drawPopupBackground( ctx );
-				drawPopupData( ctx );
-			}
+		//	if( popup.active ){
+		//		drawPopupBackground( ctx );
+		//		drawPopupData( ctx );
+		//	}
 			if( popuphaseverbeenactive ){
 				updateTicker();
 			}
