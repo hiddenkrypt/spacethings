@@ -6,17 +6,18 @@
 var st_hud = st_hud || function(){
 
 	var DEBUG = st_DEBUG.hud;
-	var ticker = {}; // dom element collection for ticker bar.
-	
+	var popuphaseverbeenactive = false;
 	var hud = {
 		initialize: function(){
 			loadTicker();
-
 		}
 		,render: function( ctx ){
 			if( popup.active ){
 				drawPopupBackground( ctx );
 				drawPopupData( ctx );
+			}
+			if( popuphaseverbeenactive ){
+				updateTicker();
 			}
 		}
 		,selectHexAtGrid: function( coords ){
@@ -79,11 +80,12 @@ var st_hud = st_hud || function(){
 		} else if( popup.data.system ){
 			popup.data.systemName = "Unclaimed System";
 		} else if( hexData.owner ){
-			popup.data.systemName = hexData.owner.adjective + " Space";
+			popup.data.systemName = "Claimed Space";
 		} 
 		if( hexData.owner ){
 			popup.data.territoryOwner = hexData.owner;
 		}
+		popuphaseverbeenactive = true;
 	};
 	
 	var drawPopupData = function ( ctx ){
@@ -105,11 +107,41 @@ var st_hud = st_hud || function(){
 			ctx.fillText( lines[i].title + lines[i].text, x, position);
 		}		
 	}
-	var loadTicker = function(){
-		ticker.container = document.getElementByID( 'ticker' );
-		//build and push dom elements
-	}
+	var ticker = {
+		container: {}
+		,title: {}
+		,owner: {}
+		,ucoords: {}
+		,lcoords: {}
+	}; 
 	
+	var loadTicker = function(){
+		ticker.container = document.getElementById( 'hud_ticker_container' );
+		ticker.title = document.createElement( 'div' );
+		ticker.owner = document.createElement( 'div' );
+		ticker.lcoords = document.createElement( 'div' );
+		ticker.ucoords = document.createElement( 'div' );		
+		
+		ticker.title.setAttribute( 'id', 'hud_ticker_title' );
+		ticker.owner.setAttribute( 'id', 'hud_ticker_owner' );
+		ticker.lcoords.setAttribute( 'id', 'hud_ticker_lcoords' );
+		ticker.ucoords.setAttribute( 'id', 'hud_ticker_ucoords' );
+		
+		ticker.container.appendChild( ticker.lcoords );
+		ticker.container.appendChild( ticker.title );
+		ticker.container.appendChild( ticker.owner );
+		ticker.container.appendChild( ticker.ucoords );
+		
+		ticker.container.style.display = 'inline-block';
+	};
+	
+	var updateTicker = function(){
+		ticker.title.innerHTML = popup.data.systemName;
+		ticker.owner.style.color = "rgb("+popup.data.territoryOwner.r+","+popup.data.territoryOwner.g+","+popup.data.territoryOwner.b+")";
+		ticker.owner.innerHTML = popup.data.territoryOwner.name || "";
+		ticker.lcoords.innerHTML = "local: ["+popup.data.localCoordinates.x + ", " + popup.data.localCoordinates.y + "]";
+		ticker.ucoords.innerHTML = "Universal: ["+popup.data.universalCoordinates.x + ", " + popup.data.universalCoordinates.y + "]";
+	};
 	return hud;
 }(); // IIFE to create st_hud
 

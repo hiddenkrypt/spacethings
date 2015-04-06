@@ -1,7 +1,7 @@
 /*st.css*/
 
 
-canvas, *{
+canvas{
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -51,20 +51,38 @@ body{
 	font-size:1.5em;
 }
 
-#hud_ticker{
+#hud_ticker_container{
+	display: none;
 	position: fixed;
 	bottom:0px;
 	left:0px;
 	background-color:#000000;
 	border-top: 2px white solid;
-	height: 30px;
+	height: 4em;
 	width:100%;
 	z-index: 5;
+	font-size:1.3em;
+	text-align: center;
+}
+#hud_ticker_title{ 
+	display: inline;
+	background-color:#00ff00;
+}
+#hud_ticker_owner{ 
+	display: inline;
+	background-color:#ff0000;
+}
+#hud_ticker_ucoords{ 
+	display: inline;
+	background-color:#0000ff;
+}
+#hud_ticker_lcoords{ 
+	display: inline;
+	background-color:#ffff00;
 }
 
-#hud_sidebar{
 
-}
+#hud_sidebar_container{}
 #privacyText{
 	font-size:.6em;
 	font-weight:normal;

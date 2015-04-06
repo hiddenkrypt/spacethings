@@ -143,6 +143,7 @@ var st_engine = st_engine || function(){
 		var y=event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
 		hexHighlight.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.sideLength() ) );
 		hexHighlight.x = Math.floor( ( x - ( hexHighlight.y % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect().w );
+		st_hud.selectHexAtGrid( hexHighlight );
 		if( st_graphics.dragging ){
 			st_graphics.camera.moveDelta( st_graphics.drag_prev_x - event.pageX, st_graphics.drag_prev_y - event.pageY );
 			st_graphics.drag_prev_x = event.pageX;
