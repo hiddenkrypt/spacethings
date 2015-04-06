@@ -55,14 +55,16 @@ body{
 	display: none;
 	position: fixed;
 	bottom:0px;
-	left:0px;
-	background-color: rgba( 0,0,0, .5 );
-	border-top: 2px white solid;
+	right:0px;
+	background-color: rgba( 239,239,239, .5 );
+	border: 6px black double;
 	height: 2.5em;
-	width:100%;
+	width:50%;
 	z-index: 5;
 	font-size:1.3em;
 	text-align: center;
+	margin-bottom: 1em;
+	padding: .5em;
 }
 #hud_ticker_title{ 
 	display: inline;

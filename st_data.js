@@ -27,9 +27,12 @@ var st_data = st_data || (function(){
 					if( testUpdate() ){//if load success:
 						status = "loaded";
 						st_graphics.selectHex( playerData.homeworld );
+						st_hud.selectHexAtGrid( playerData.homeworld );
+						
 					} else{
 						status = "error";
 					}
+					if( DEBUG ){ console.log( "test data: " + status ); }	
 				}, 300);
 			} else{
 				//ajax request to server for absolutely everything. 
