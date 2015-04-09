@@ -1,7 +1,7 @@
 /*st.css*/
 
 
-canvas{
+*{
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -15,8 +15,8 @@ body{
 }
 #c{
 	position: fixed;
-	top:0px;
-	left:0px;
+	top:-1px;
+	left:-1px;
 	z-index:0;
 }
 #login_title_image{
@@ -52,6 +52,7 @@ body{
 }
 
 #hud_ticker_container{
+	pointer-events:none;
 	display: none;
 	position: fixed;
 	bottom:0px;
@@ -85,6 +86,7 @@ body{
 }
 
 #hud_ticker_collapse_icon{
+	pointer-events:default;
 	font-size: .5em;
 	width: 1.2em;
 	height: 1.2em;
@@ -100,9 +102,10 @@ body{
 }
 
 #hud_sidebar_container{	
+pointer-events:none;
 	display: none;
 	position: fixed;
-	bottom:0px;
+	top:0px;
 	right:0px;
 	background-color: rgba( 239,239,239,.7 );
 	border-top: 6px black double;
@@ -113,10 +116,11 @@ body{
 	z-index: 5;
 	font-size:1.3em;
 	text-align: center;
-	margin-bottom: 1em;
+	margin-top: 1em;
 	padding: .2em;
 }
 #hud_sidebar_collapse_icon{
+	pointer-events:default;
 	font-size: .5em;
 	width: 1.2em;
 	height: 1.2em;

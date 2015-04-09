@@ -10,11 +10,11 @@ var st_hud = st_hud || function(){
 	
 	var hud = {
 		initialize: function(){
-			loadTickerDom();
-			loadSidebarDom();
+			ticker.load();
+			sidebar.load();
 		}
 		,render: function( ctx ){
-			updateTickerDisplay();
+			ticker.update();
 		}
 		,selectHexAtGrid: function( coords ){
 			if( DEBUG ){ console.log("st_hud: selecting hex"); }
@@ -53,7 +53,8 @@ var st_hud = st_hud || function(){
 	};
 	
 	var ticker = {
-		container: {}
+		active: true
+		,container: {}
 		,title: {}
 		,owner: {}
 		,ucoords: {}
@@ -66,65 +67,80 @@ var st_hud = st_hud || function(){
 			,systemName: ""
 		}
 		,collapseIcon: {}
+		,toggle: function(){
+			if( this.active ){
+				this.title.style.display = 'none';
+				this.owner.style.display = 'none';
+				this.lcoords.style.display = 'none';
+				this.ucoords.style.display = 'none';
+				this.container.style.width - '2em;';
+				this.collapseIcon.innerHTML = '>>';
+			} else{
+				this.title.style.display = 'inital';
+				this.owner.style.display = 'inital';
+				this.lcoords.style.display = 'inital';
+				this.ucoords.style.display = 'inital';
+				this.container.style.width - 'inital;';
+				this.collapseIcon.innerHTML = '<<';
+			}
+			this.active = !this.active;
+		}
+		,update: function(){
+			this.title.innerHTML = this.data.systemName;
+			this.owner.style.color = "rgb("+this.data.territoryOwner.r+","+this.data.territoryOwner.g+","+this.data.territoryOwner.b+")";
+			this.owner.innerHTML = this.data.territoryOwner.name || "&nbsp;";
+			this.lcoords.innerHTML = "HRC:["+this.data.localCoordinates.x + ", " + this.data.localCoordinates.y + "]";
+			this.ucoords.innerHTML = "UC: ["+this.data.universalCoordinates.x + ", " + this.data.universalCoordinates.y + "]";
+		}
+		,load: function(){
+			this.container = document.getElementById( 'hud_ticker_container' );
+			this.title = document.createElement( 'div' );
+			this.owner = document.createElement( 'div' );
+			this.lcoords = document.createElement( 'div' );
+			this.ucoords = document.createElement( 'div' );		
+			this.collapseIcon = document.createElement( 'div' );	
+			this.title.setAttribute( 'id', 'hud_ticker_title' );
+			this.owner.setAttribute( 'id', 'hud_ticker_owner' );
+			this.lcoords.setAttribute( 'id', 'hud_ticker_lcoords' );
+			this.ucoords.setAttribute( 'id', 'hud_ticker_ucoords' );
+			this.collapseIcon.setAttribute( 'id', 'hud_ticker_collapse_icon' ); 
+			this.title.setAttribute( 'title', 'System/Sector name' );
+			this.owner.setAttribute( 'title', 'System Owner' );
+			this.lcoords.setAttribute( 'title', 'Homeworld Relative Coordinates' );
+			this.ucoords.setAttribute( 'title', 'Universal Coordinates' );
+			this.collapseIcon.setAttribute( 'title', 'Hide / Show' );
+			this.collapseIcon.innerHTML = '<<';
+			this.collapseIcon.addEventListener('mousedown', function(e){this.toggle();});
+			this.container.appendChild( this.title );
+			this.container.appendChild( this.owner );
+			this.container.appendChild( this.lcoords );
+			this.container.appendChild( this.ucoords );
+			this.container.appendChild( this.collapseIcon );	
+			this.container.style.display = 'inline-block';
+		}
 	}; 
 	
-	var loadTickerDom = function(){
-		ticker.container = document.getElementById( 'hud_ticker_container' );
-		ticker.title = document.createElement( 'div' );
-		ticker.owner = document.createElement( 'div' );
-		ticker.lcoords = document.createElement( 'div' );
-		ticker.ucoords = document.createElement( 'div' );		
-		ticker.collapseIcon = document.createElement( 'div' );
-		
-		ticker.title.setAttribute( 'id', 'hud_ticker_title' );
-		ticker.owner.setAttribute( 'id', 'hud_ticker_owner' );
-		ticker.lcoords.setAttribute( 'id', 'hud_ticker_lcoords' );
-		ticker.ucoords.setAttribute( 'id', 'hud_ticker_ucoords' );
-		ticker.collapseIcon.setAttribute( 'id', 'hud_ticker_collapse_icon' ); 
-		
-		ticker.title.setAttribute( 'title', 'System/Sector name' );
-		ticker.owner.setAttribute( 'title', 'System Owner' );
-		ticker.lcoords.setAttribute( 'title', 'Homeworld Relative Coordinates' );
-		ticker.ucoords.setAttribute( 'title', 'Universal Coordinates' );
-		ticker.collapseIcon.setAttribute( 'title', 'Hide / Show' );
-		
-		ticker.collapseIcon.innerHTML = '<<';
-		
-		ticker.container.appendChild( ticker.title );
-		ticker.container.appendChild( ticker.owner );
-		ticker.container.appendChild( ticker.lcoords );
-		ticker.container.appendChild( ticker.ucoords );
-		ticker.container.appendChild( ticker.collapseIcon );
-		
-		ticker.container.style.display = 'inline-block';
-	};
-	
-	var updateTickerDisplay = function(){
-		ticker.title.innerHTML = ticker.data.systemName;
-		ticker.owner.style.color = "rgb("+ticker.data.territoryOwner.r+","+ticker.data.territoryOwner.g+","+ticker.data.territoryOwner.b+")";
-		ticker.owner.innerHTML = ticker.data.territoryOwner.name || "&nbsp;";
-		ticker.lcoords.innerHTML = "HRC:["+ticker.data.localCoordinates.x + ", " + ticker.data.localCoordinates.y + "]";
-		ticker.ucoords.innerHTML = "UC: ["+ticker.data.universalCoordinates.x + ", " + ticker.data.universalCoordinates.y + "]";
-	};
 	var sidebar = {
-		container: {}
+		active: true
+		,container: {}
 		,collapseIcon: {}
-	};
-	var loadSidebarDom = function(){
-		
-		sidebar.container = document.getElementById( 'hud_sidebar_container' );
-		
-		sidebar.collapseIcon = document.createElement( 'div' );
-		
-		sidebar.collapseIcon.setAttribute( 'id', 'hud_sidebar_collapse_icon' ); 
-		
-		sidebar.collapseIcon.setAttribute( 'title', 'Hide / Show' );
-		
-		sidebar.collapseIcon.innerHTML = '>>';
-		
-		sidebar.container.appendChild( sidebar.collapseIcon );
-		
-		sidebar.container.style.display = 'inline-block';
+		,hide: function(){}
+		,show: function(){}
+		,load: function(){
+			sidebar.container = document.getElementById( 'hud_sidebar_container' );
+			
+			sidebar.collapseIcon = document.createElement( 'div' );
+			
+			sidebar.collapseIcon.setAttribute( 'id', 'hud_sidebar_collapse_icon' ); 
+			
+			sidebar.collapseIcon.setAttribute( 'title', 'Hide / Show' );
+			
+			sidebar.collapseIcon.innerHTML = '>>';
+			
+			sidebar.container.appendChild( sidebar.collapseIcon );
+			
+			sidebar.container.style.display = 'inline-block';
+		}
 	};
 	return hud;
 }(); // IIFE to create st_hud
