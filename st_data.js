@@ -19,6 +19,8 @@ var st_data = st_data || (function(){
 			if( DEBUG ){
 				this.update();
 			}
+			
+			if( DEBUG ){ console.log( "st_data initialized" ); }
 		}
 		,update: function(){
 			if( DEBUG ){
@@ -56,7 +58,7 @@ var st_data = st_data || (function(){
 			return false;
 		}
 		,getHomeworld: function(){ 			
-			return this.getMapHexByGrid( playerData.homeworld ); 
+			return this.getMapHexByGrid( playerData.homeworld );
 		}
 		,getHexDataByGrid: function( coordinates ){
 			var hex = this.getMapHexByGrid( coordinates );

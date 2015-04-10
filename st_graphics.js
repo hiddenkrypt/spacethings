@@ -26,12 +26,8 @@ var st_graphics = st_graphics || function(){
 			background.src = bg_filename;
 			background.onload = function(){ 
 				imageLoaded = true; 
-				if( DEBUG ){
-					console.log( "st_graphics initialized." );
-					console.log( "image: (" + background.width + "," + background.height + ")" ); 
-				}
 			};
-			if( DEBUG ) { console.log( "st_graphics initialized." ); }
+			if( DEBUG ) { console.log( "st_graphics initialized" ); }
 		}
 		,render: function( ctx ){
 			if( imageLoaded ){

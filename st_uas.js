@@ -14,6 +14,8 @@ var st_uas = st_uas || function(){
 			} else {
 				switchToLogin();
 			}
+			
+			if( DEBUG ){ console.log( "st_uas initialized" ); }
 		}
 		,login: function(){
 			dom.error.style.display='none';
