@@ -17,12 +17,12 @@ var st_hud = st_hud || function(){
 			ticker.update();
 		}
 		,selectHexAtGrid: function( coords ){
-			if( DEBUG ){ console.log("st_hud: selecting hex"); }
 			if( st_data.loaded() ){
 				updateTickerData( st_data.getHexDataByGrid( coords ) );
 			}
 		}
-		,disablePopup: function(){ popup.active = false; }
+		,disableMouse: function(){ ticker.container.style["pointer-events"] = "none"; }
+		,enableMouse: function(){ ticker.container.style["pointer-events"] = "auto"; }
 	};
 	
 	var	updateTickerData = function ( hexData ){
@@ -69,18 +69,17 @@ var st_hud = st_hud || function(){
 		,collapseIcon: {}
 		,toggle: function(){
 			if( this.active ){
-				this.title.style.display = 'none';
-				this.owner.style.display = 'none';
-				this.lcoords.style.display = 'none';
-				this.ucoords.style.display = 'none';
-				this.container.style.width - '2em;';
+				for( var i = 0; i < this.container.childNodes.length; i++){
+					this.container.childNodes[i].style.display = 'none';
+				}
+				this.container.style.width = '1em';
 				this.collapseIcon.innerHTML = '>>';
+				this.collapseIcon.style.display = 'block';
 			} else{
-				this.title.style.display = 'inital';
-				this.owner.style.display = 'inital';
-				this.lcoords.style.display = 'inital';
-				this.ucoords.style.display = 'inital';
-				this.container.style.width - 'inital;';
+				for( var i = 0; i < this.container.childNodes.length; i++){
+					this.container.childNodes[i].style.display = 'block';
+				}
+				this.container.style.width = '13em';
 				this.collapseIcon.innerHTML = '<<';
 			}
 			this.active = !this.active;
@@ -110,7 +109,7 @@ var st_hud = st_hud || function(){
 			this.ucoords.setAttribute( 'title', 'Universal Coordinates' );
 			this.collapseIcon.setAttribute( 'title', 'Hide / Show' );
 			this.collapseIcon.innerHTML = '<<';
-			this.collapseIcon.addEventListener('mousedown', function(e){this.toggle();});
+			this.collapseIcon.addEventListener('mousedown', function(e){ticker.toggle();});
 			this.container.appendChild( this.title );
 			this.container.appendChild( this.owner );
 			this.container.appendChild( this.lcoords );
@@ -137,9 +136,27 @@ var st_hud = st_hud || function(){
 			
 			sidebar.collapseIcon.innerHTML = '>>';
 			
+			sidebar.collapseIcon.addEventListener('mousedown', function(e){sidebar.toggle();});
 			sidebar.container.appendChild( sidebar.collapseIcon );
 			
 			sidebar.container.style.display = 'inline-block';
+		}
+		,toggle: function(){
+			if( sidebar.active ){ //hide
+				for( var i = 0; i < sidebar.container.childNodes.length; i++){
+					sidebar.container.childNodes[i].style.display = 'none';
+				}
+				sidebar.container.style.width = '1em';
+				sidebar.collapseIcon.innerHTML = '<<';
+				sidebar.collapseIcon.style.display = 'block';
+			} else{ 
+				for( var i = 0; i < this.container.childNodes.length; i++){
+					this.container.childNodes[i].style.display = 'block';
+				}
+				sidebar.container.style.width = '15em';
+				sidebar.collapseIcon.innerHTML = '>>';
+			}
+			sidebar.active = !sidebar.active;
 		}
 	};
 	return hud;
