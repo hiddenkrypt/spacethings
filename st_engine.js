@@ -31,7 +31,7 @@ var st_engine = st_engine || function(){
 			document.body.addEventListener( "keydown", handleKeyDown, false ); 
 			Canvas.setAttribute("tabindex", 0);
 			Canvas.addEventListener( "contextmenu", handleMouseMenu, false ); 
-			Canvas.addEventListener( "mousedown", handleMouseDown, false );
+			Canvas.addEventListener( "mousedown", c_handleMouseDown, false );
 			Canvas.addEventListener( "mousemove", handleMouseMove, false );
 			Canvas.addEventListener( "mousewheel", handleScroll, false );
 			Canvas.addEventListener( "DOMMouseScroll", handleScroll, false );  //firefox
@@ -59,7 +59,8 @@ var st_engine = st_engine || function(){
 			event.preventDefault();
 	}; //handleMouseMenu()
 	
-	var handleMouseDown = function( event ){  
+	var c_handleMouseDown = function( event ){  
+		st_hud.disableMouse();
 		st_graphics.dragging = true;
 		var rect = Canvas.getBoundingClientRect();
 		var x = event.pageX - rect.left + st_graphics.camera.x();
@@ -85,53 +86,61 @@ var st_engine = st_engine || function(){
 
 	var handleMouseUp = function( event ){
 		st_graphics.dragging = false;
+		st_hud.enableMouse();
 	}; // private handleMouseUp()
 
 	var handleKeyDown = function( event ){
 		var keyCode = event.keyCode;
 		switch (keyCode){
+			
 			case key.NP_7:
-				st_graphics.camera.dx( -st_graphics.camera.z() * st_graphics.camera.speed() ); //fall
-			case key.NP_8:	 //fall
+				st_graphics.camera.dx( -st_graphics.camera.z() * st_graphics.camera.speed() );
+			case key.NP_8:
 			case key.UP:
 				st_graphics.camera.dy( -st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
+				
 			case key.NP_3:
 				st_graphics.camera.dx(  st_graphics.camera.z() *  st_graphics.camera.speed() );
 			case key.NP_2:	
 			case key.DOWN:
 				st_graphics.camera.dy(  st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
+				
 			case key.NP_1:
 				st_graphics.camera.dy(  st_graphics.camera.z() * st_graphics.camera.speed() );
 			case key.NP_4:	
 			case key.LEFT:
 				st_graphics.camera.dx( -st_graphics.camera.z() * st_graphics.camera.speed() );
 				break;
+				
 			case key.NP_9:
-				st_graphics.camera.dy( -st_graphics.camera.z() * st_graphics.camera.speed() );//fall
-			case key.NP_6:	//fall
+				st_graphics.camera.dy( -st_graphics.camera.z() * st_graphics.camera.speed() );
+			case key.NP_6:	
 			case key.RIGHT:
 				st_graphics.camera.dx(  st_graphics.camera.z() *  st_graphics.camera.speed() );
 				break;
+				
 			case key.NP_PLUS:
 			case key.PAGE_UP:
 				st_graphics.camera.dzoom( st_graphics.camera.z() / 8 ); 
 				break;
+				
 			case key.NP_MINUS:
 			case key.PAGE_DOWN:
 				st_graphics.camera.zoom( st_graphics.camera.z() / ( 9/8 ) );
 				break;
+				
 			case key.HOME:
 			case key.ENTER:
 				st_graphics.camera.returnToInitialZoom();
 				st_graphics.camera.returnToInitialPosition();
 				break;
+				
 			case key.END:
 				st_graphics.camera.returnToInitialZoom();
 				break;
 		}
-		st_hud.disablePopup();
 		if( DEBUG ){
 			console.log( "Camera:("+st_graphics.camera.x()+","+st_graphics.camera.y()+")" );
 		}
@@ -154,7 +163,6 @@ var st_engine = st_engine || function(){
 	var handleScroll = function( event ) {
 		var delta = Math.max( -1, Math.min( 1, ( event.wheelDelta || -event.detail ) ) );
 		st_graphics.camera.dzoom( delta*st_graphics.camera.z() / 8 ); 
-		st_hud.disablePopup();
 	}; // handleScroll()
 	
 	
