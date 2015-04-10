@@ -15,8 +15,8 @@ body{
 }
 #c{
 	position: fixed;
-	top:-1px;
-	left:-1px;
+	top:0px;
+	left:0px;
 	z-index:0;
 }
 #login_title_image{
@@ -52,7 +52,7 @@ body{
 }
 
 #hud_ticker_container{
-	pointer-events:none;
+	pointer-events:auto;
 	display: none;
 	position: fixed;
 	bottom:0px;
@@ -62,7 +62,7 @@ body{
 	border-right: 6px black double;
 	border-bottom: 6px black double;
 	height: 3em;
-	width:30%;
+	width:13em;
 	z-index: 5;
 	font-size:1.3em;
 	text-align: center;
@@ -99,10 +99,11 @@ body{
 	color: rgb(239,239,239);
 	background-color: rgba(0,0,0,.9);
 	border: none;
+	cursor: pointer;
 }
 
 #hud_sidebar_container{	
-pointer-events:none;
+	pointer-events:auto;
 	display: none;
 	position: fixed;
 	top:0px;
@@ -112,7 +113,7 @@ pointer-events:none;
 	border-left: 6px black double;
 	border-bottom: 6px black double;
 	height: 8em;
-	width:30%;
+	width: 15em;
 	z-index: 5;
 	font-size:1.3em;
 	text-align: center;
@@ -133,6 +134,7 @@ pointer-events:none;
 	color: rgb(255,255,255);
 	background-color: rgba(0,0,0,.9);
 	border: none;
+	cursor: pointer;
 }
 
 
