@@ -6,11 +6,13 @@ var st_uas = st_uas || function(){
 	"use strict";
 	var DEBUG = st_DEBUG.uas;
 	
+	
 	var uas = {
 		initialize: function(){
 			loadDom();
 			if( DEBUG ){  
-				dom.uasOverlay.style.display = "none";
+				dom.container.style.display = "none";
+				st_engine.hideOverlay();
 			} else {
 				switchToLogin();
 			}
@@ -52,8 +54,7 @@ var st_uas = st_uas || function(){
 		}
 	};
 	var dom = {
-		uasOverlay:  {}
-		,uasContainer: 	{}
+		container: 	{}
 		,title:			{}
 		,error:			{}
 		,submit:		{}
@@ -86,12 +87,13 @@ var st_uas = st_uas || function(){
 	};
 	
 	var loadDom = function(){
-		dom.uasOverlay = document.getElementById( "uas_overlay" );
-		dom.uasContainer = document.getElementById( "uas_container" );
+		dom.container = document.createElement( 'div' );
+		dom.container.setAttribute( "id", "uas_container" );
+		document.getElementById( 'b' ).appendChild( dom.container );
 		
 		dom.title = document.createElement( 'img' );
-		dom.title.setAttribute( "src", "images/title.png");
-		dom.title.setAttribute( "id", "uas_title");
+		dom.title.setAttribute( "src", "images/title.png" );
+		dom.title.setAttribute( "id", "uas_title" );
 		
 		dom.inputFields.username = document.createElement( 'input' );
 		dom.inputFields.username.setAttribute( "id",  "username" );
@@ -158,7 +160,7 @@ var st_uas = st_uas || function(){
 	
 	
 	var switchToLogin = function(){
-		dom.uasContainer = scrubElement( dom.uasContainer );
+		dom.uasContainer = scrubElement( dom.container );
 		dom.uasContainer.style.width = '40%';
 		dom.uasContainer.appendChild( dom.title );
 		dom.uasContainer.appendChild( dom.modeSubtitle.login );
@@ -176,7 +178,7 @@ var st_uas = st_uas || function(){
 		dom.uasContainer.style.display = "block";
 	};
 	var switchToCreate = function(){
-		dom.uasContainer = scrubElement( dom.uasContainer );
+		dom.uasContainer = scrubElement( dom.container );
 		dom.uasContainer.style.width = '40%';
 		dom.uasContainer.appendChild( dom.title );
 		dom.uasContainer.appendChild( dom.modeSubtitle.create );

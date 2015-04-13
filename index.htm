@@ -10,11 +10,11 @@
 		<link rel="stylesheet" type="text/css" href="st.css">
 		<script>
 			var st_DEBUG = {
-				engine:		true
+				engine:		false
 				,graphics:	false
-				,hud:		true
-				,uas:		true
-				,data:		true
+				,hud:		false
+				,uas:		false
+				,data:		false
 			};
 		</script>
 		<script src="lib/sha-1.js"></script>
@@ -27,13 +27,8 @@
 		<script src="st_hud.js"></script>
 		<script src="st_engine.js"></script>
 	</head>
-	<body onload="st_engine.init();">
+	<body onload="st_engine.init();"  id='b'>
 		<canvas id="c"></canvas>
-		<div id="uas_overlay">
-			<div id="uas_container">
-			</div>
-		</div>
-		<div id="hud_ticker_container"></div>
-		<div id="hud_sidebar_container"></div>
+		<div id="overlay"></div>
 	</body>
 </html>

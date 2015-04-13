@@ -14,6 +14,7 @@ var st_engine = st_engine || function(){
 	var dClickWindow = 300;
 	var dClickTimeout = {};
 	
+	var overlay = {};
 	
 	var engine = {
 		init: function(){
@@ -21,7 +22,8 @@ var st_engine = st_engine || function(){
 			Context = Canvas.getContext( "2d" );
 			Canvas.style.width = Canvas.width = window.innerWidth;
 			Canvas.style.height = Canvas.height = window.innerHeight;
-			
+			overlay =  document.getElementById( 'overlay' );
+
 			st_graphics.initialize(); // start graphics module
 			st_uas.initialize(); // start user account service module
 			st_data.initialize(); // start game data module
@@ -56,6 +58,12 @@ var st_engine = st_engine || function(){
 			st_graphics.selectHex( st_data.getHomeworld() );
 			st_hud.selectHexAtGrid( st_data.getHomeworld() );
 			st_hud.loadSidebar( st_data.getPlayerData() );
+		}
+		,showOverlay: function(){
+			overlay.style.display = 'block';
+		}
+		,hideOverlay: function(){
+			overlay.style.display = 'none';
 		}
 	};
 	

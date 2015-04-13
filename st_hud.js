@@ -100,7 +100,8 @@ var st_hud = st_hud || function(){
 			}
 			
 			,load: function(){
-				container = document.getElementById( 'hud_ticker_container' );
+				container = createHudElement( 'div', 'hud_ticker_container', '', document.getElementById( 'b' ) );
+				
 				title = createHudElement( 'div', 'hud_ticker_title', 'System/Sector Name', container );
 				owner = createHudElement( 'div', 'hud_ticker_owner', 'System Owner', container );
 				lcoords = createHudElement( 'div', 'hud_ticker_lcoords', 'Homeworld Relative Coordinates', container );
@@ -140,7 +141,7 @@ var st_hud = st_hud || function(){
 			,collapseIcon = {};
 		return {
 			load: function(){
-				container = document.getElementById( 'hud_sidebar_container' );
+				container = createHudElement( 'div', 'hud_sidebar_container', '', document.getElementById( 'b' ) );
 				collapseIcon = createHudElement( 'div', 'hud_sidebar_collapse_icon', 'Hide / Show', container );
 				name = createHudElement( 'div', 'hud_sidebar_thing_name', 'Your THING', container );
 				
