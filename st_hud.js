@@ -15,7 +15,7 @@ var st_hud = st_hud || function(){
 			if( DEBUG ){ console.log( "st_hud initialized" ); }
 		}
 		,render: function( ctx ){
-			ticker.publish();
+		//	ticker.publish();
 		}
 		,selectHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
@@ -30,6 +30,9 @@ var st_hud = st_hud || function(){
 		,enableMouse: function(){ 
 			ticker.enableMouse();
 			sidebar.enableMouse();
+		}
+		,loadSidebar: function( playerData ){
+			sidebar.update( playerData );
 		}
 	};
 	
@@ -78,36 +81,24 @@ var st_hud = st_hud || function(){
 			}
 			,update: function( hexData ){
 				var homeworld = st_data.getHomeworld();
-				ticker.data = {
-					localCoordinates:{ 
-						x: -(homeworld.x - hexData.coords.x)
-						,y: homeworld.y - hexData.coords.y
-					}
-					,universalCoordinates:{
-						x: hashID.encode( hexData.coords.x + 100 )
-						,y: hashID.encode( hexData.coords.y + 100 )	
-					}
-					,territoryOwner: {r:0, g:0, b:0}
-					,systemName: "Unclaimed Space"
-				}		
+				lcoords.innerHTML = "HRC:["+ -(homeworld.x - hexData.coords.x) + ", " + (homeworld.y - hexData.coords.y) + "]";
+				ucoords.innerHTML = "UC: ["+ hashID.encode( hexData.coords.x + 100 ) + ", " + hashID.encode( hexData.coords.y + 100 ) + "]";
+
 				if( hexData.system && hexData.system.name ){
-					ticker.data.systemName = hexData.system.name;
+					title.innerHTML = hexData.system.name;
 				} else if( !hexData.owner && hexData.system ){
-					ticker.data.systemName = "Unclaimed System";
+					title.innerHTML = "Unclaimed System";
 				} else if( hexData.owner && !hexData.system ){
-					ticker.data.systemName = hexData.owner.adjective+" Space";
+					title.innerHTML = hexData.owner.adjective+" Space";
 				} 
 				if( hexData.owner && hexData.system ){
-					ticker.data.territoryOwner = hexData.owner;
-				}				
+					owner.innerHTML = hexData.owner.name;
+				} else{
+					owner.innerHTML = "&nbsp;";
+				}
+				// ticker.publish();
 			}
-			,publish: function(){
-				title.innerHTML = ticker.data.systemName;
-				owner.style.color = "rgb("+ticker.data.territoryOwner.r+","+ticker.data.territoryOwner.g+","+ticker.data.territoryOwner.b+")";
-				owner.innerHTML = ticker.data.territoryOwner.name || "&nbsp;";
-				lcoords.innerHTML = "HRC:["+ticker.data.localCoordinates.x + ", " + ticker.data.localCoordinates.y + "]";
-				ucoords.innerHTML = "UC: ["+ticker.data.universalCoordinates.x + ", " + ticker.data.universalCoordinates.y + "]";
-			}
+			
 			,load: function(){
 				container = document.getElementById( 'hud_ticker_container' );
 				title = createHudElement( 'div', 'hud_ticker_title', 'System/Sector Name', container );
@@ -130,11 +121,46 @@ var st_hud = st_hud || function(){
 	var sidebar = (function(){
 		var active = true
 			,container = {}
+			,name = {}
+			,military = {
+				container: {}
+				,label: {}
+				,value: {}
+			}
+			,population = {
+				container: {}
+				,label: {}
+				,value: {}
+			}
+			,resources = {
+				container: {}
+				,label: {}
+				,value: {}
+			}
 			,collapseIcon = {};
 		return {
 			load: function(){
 				container = document.getElementById( 'hud_sidebar_container' );
 				collapseIcon = createHudElement( 'div', 'hud_sidebar_collapse_icon', 'Hide / Show', container );
+				name = createHudElement( 'div', 'hud_sidebar_thing_name', 'Your THING', container );
+				
+				
+				military.container = createHudElement( 'div', 'hud_sidebar_military_container', 'Current Military Score', container );
+				resources.container = createHudElement( 'div', 'hud_sidebar_resources_container', 'Current THING-wide resource level', container );
+				population.container = createHudElement( 'div', 'hud_sidebar_population_container', 'Current Galactic Population', container );
+				
+				military.label = createHudElement( 'span', 'hud_sidebar_military_label', 'Current Military Score', military.container );
+				resources.label = createHudElement( 'span', 'hud_sidebar_resources_label', 'Current Military Score', resources.container );
+				population.label = createHudElement( 'span', 'hud_sidebar_population_label', 'Current Military Score', population.container );
+				
+				military.value = createHudElement( 'span', 'hud_sidebar_military_value', 'Current Military Score', military.container );
+				resources.value = createHudElement( 'span', 'hud_sidebar_resources_value', 'Current Military Score', resources.container );
+				population.value = createHudElement( 'span', 'hud_sidebar_population_value', 'Current Military Score', population.container );
+				
+				military.label.innerHTML = "Military Strength: ";
+				resources.label.innerHTML = "Resources: "; 
+				population.label.innerHTML = "Total Population: ";
+				
 				collapseIcon.innerHTML = '>>';
 				collapseIcon.addEventListener( 'mousedown', function(e){ sidebar.toggle(); } );
 				container.style.display = 'inline-block';
@@ -162,9 +188,27 @@ var st_hud = st_hud || function(){
 			,enableMouse: function(){
 				container.style["pointer-events"] = "auto"; 
 			}
+			,update: function( playerData ){ 
+				name.innerHTML = playerData.name;
+				name.style.border = "2px solid rgb(" + playerData.color + ")";
+				military.value.innerHTML = playerData.militaryPower;
+				population.value.innerHTML = playerData.population;
+				resources.value.innerHTML = playerData.resources;
+			}
 		};
 	})();
-	
+			// playerData = {
+			// loaded: true
+			// ,id: 7
+			// ,name: "Waaagh 'elmit'ead"
+			// ,race: "Da Orks"
+			// ,adjective: "Ork"
+			// ,homeworld: { x: 21, y: 15, id:66}
+			// ,military_power: 15
+			// ,population: 23
+			// ,resources: 24
+			
+
 	return hud;
 }(); // IIFE to create st_hud
 
