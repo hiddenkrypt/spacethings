@@ -28,9 +28,7 @@ var st_data = st_data || (function(){
 				setTimeout( function(){		
 					if( testUpdate() ){//if load success:
 						status = "loaded";
-						st_graphics.selectHex( playerData.homeworld );
-						st_hud.selectHexAtGrid( playerData.homeworld );
-						
+						st_engine.loadComplete();						
 					} else{
 						status = "error";
 					}
@@ -43,6 +41,7 @@ var st_data = st_data || (function(){
 			}
 
 		}
+		,getPlayerData: function(){ return playerData; }
 		,getRevealedHexes: function(){ return mapData.hexes; }
 		,getMap: function(){ if( DEBUG ){ return mapData; } }
 		,getStatus: function(){ return status; }
@@ -58,10 +57,10 @@ var st_data = st_data || (function(){
 			return false;
 		}
 		,getHomeworld: function(){ 			
-			return this.getMapHexByGrid( playerData.homeworld );
+			return st_data.getMapHexByGrid( playerData.homeworld );
 		}
 		,getHexDataByGrid: function( coordinates ){
-			var hex = this.getMapHexByGrid( coordinates );
+			var hex = st_data.getMapHexByGrid( coordinates );
 			if(!hex){
 				return {
 					explored: false,
@@ -90,14 +89,16 @@ var st_data = st_data || (function(){
 	
 	var testUpdate = function(){
 		playerData = {
-			id: 7
+			loaded: true
+			,id: 7
 			,name: "Waaagh 'elmit'ead"
 			,race: "Da Orks"
 			,adjective: "Ork"
 			,homeworld: { x: 21, y: 15, id:66}
-			,military_power: 15
+			,militaryPower: 15
 			,population: 23
 			,resources: 24
+			,color: "30, 230, 0"
 		};
 		mapData = {
 			loaded: true,
@@ -115,8 +116,8 @@ var st_data = st_data || (function(){
 				,{ x: 21, y: 15, owner: 7, 		system: 5}
 				,{ x: 21, y: 16, owner: false,	system: false } 
 				,{ x: 20, y: 15, owner: false,	system: false } 
-				,{ x: 21, y: 14, owner: 8, 	system: 56 } 
-				,{ x: 22, y: 14, owner: 8, 	system: false } 
+				,{ x: 21, y: 14, owner: 8, 		system: 56 } 
+				,{ x: 22, y: 14, owner: 8, 		system: false } 
 			]
 			,systems: {
 				"1234": { name:"Alternia",magnitude:5, MKclass: "V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
@@ -143,7 +144,7 @@ var st_data = st_data || (function(){
 				,"3": { r:0, g:0, b:86, name: "Sontaran Empire", adjective: "Sontaran"}
 				,"6": { r:0, g:0, b:86, name: "Centauri Republic", adjective: "Centauri"}
 				,"7": { r:30, g:230, b:0, name: "Waaagh 'elmit'ead", adjective: "Ork"}
-				,"8": { r:0, g: 127, b:50, name: "Roman Empire", adjective: "Roman"}
+				,"8": { r:127, g: 127, b:50, name: "Roman Empire", adjective: "Roman"}
 			}
 		};
 		console.log("Loaded test map and player data");

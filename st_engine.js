@@ -52,6 +52,11 @@ var st_engine = st_engine || function(){
 		,getHighlightedHex: function(){ return hexHighlight; }
 		,canvas: function(){ return Canvas; }
 		,ctx: function(){ return Context; }
+		,loadComplete: function(){
+			st_graphics.selectHex( st_data.getHomeworld() );
+			st_hud.selectHexAtGrid( st_data.getHomeworld() );
+			st_hud.loadSidebar( st_data.getPlayerData() );
+		}
 	};
 	
 	
