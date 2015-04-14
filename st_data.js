@@ -99,6 +99,7 @@ var st_data = st_data || (function(){
 			,population: 23
 			,resources: 24
 			,color: "30, 230, 0"
+			,logo:".\7_logo_test.png"
 		};
 		mapData = {
 			loaded: true,
@@ -143,7 +144,7 @@ var st_data = st_data || (function(){
 				"13": { r:153, g:23, b:77, name: "Alternian Empire", adjective: "Alternian"}
 				,"3": { r:0, g:0, b:86, name: "Sontaran Empire", adjective: "Sontaran"}
 				,"6": { r:0, g:0, b:86, name: "Centauri Republic", adjective: "Centauri"}
-				,"7": { r:30, g:230, b:0, name: "Waaagh 'elmit'ead", adjective: "Ork"}
+				,"7": { r:30, g:230, b:0, name: "Waaagh 'elmit'ead", adjective: "Ork", logo:".\7_logo_test.png"}
 				,"8": { r:127, g: 127, b:50, name: "Roman Empire", adjective: "Roman"}
 			}
 		};
