@@ -108,13 +108,19 @@ body{
 	top:0px;
 	right:0px;
 	background-color: rgba( 239,239,239,.7 );
-	height: 8em;
 	width: 15em;
 	z-index: 5;
 	font-size:1.3em;
 	text-align: center;
 	margin-top: 1em;
 	padding: .2em;
+}
+#hud_sidebar_thing_logo{
+	width: 100px;
+	height: 100px;
+	border: 2px solid black;
+	margin-left:auto;
+	margin-right:auto;
 }
 #hud_sidebar_collapse_icon{
 	pointer-events:default;
@@ -132,7 +138,10 @@ body{
 	border: none;
 	cursor: pointer;
 }
-
+.hud_orders{
+	margin:  .2em;
+	border: 1px solid black;
+}
 
 
 #privacyText{

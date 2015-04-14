@@ -134,6 +134,7 @@ var st_hud = st_hud || function(){
 	var sidebar = (function(){
 		var active = true
 			,container = {}
+			,logo = {}
 			,name = {}
 			,military = {
 				container: {}
@@ -150,17 +151,21 @@ var st_hud = st_hud || function(){
 				,label: {}
 				,value: {}
 			}
+			,orders = [{},{},{},{}]
 			,collapseIcon = {};
 		return {
 			load: function(){
 				container = createHudElement( 'div', 'hud_sidebar_container', '', document.getElementById( 'b' ) );
 				collapseIcon = createHudElement( 'div', 'hud_sidebar_collapse_icon', 'Hide / Show', container );
-				name = createHudElement( 'div', 'hud_sidebar_thing_name', 'Your THING', container );
-				
-				
+				logo = createHudElement( 'img', 'hud_sidebar_thing_logo', 'Your THING', container );
+				name = createHudElement( 'div', 'hud_sidebar_thing_name', 'Your THING', container );				
 				military.container = createHudElement( 'div', 'hud_sidebar_military_container', 'Current Military Score', container );
 				resources.container = createHudElement( 'div', 'hud_sidebar_resources_container', 'Current THING-wide resource level', container );
 				population.container = createHudElement( 'div', 'hud_sidebar_population_container', 'Current Galactic Population', container );
+				orders[0] = createHudElement( 'div', '', 'Orders', container );
+				orders[1] = createHudElement( 'div', '', 'Orders', container );
+				orders[2] = createHudElement( 'div', '', 'Orders', container );
+				orders[3] = createHudElement( 'div', '', 'Orders', container );
 				
 				military.label = createHudElement( 'span', 'hud_sidebar_military_label', 'Current Military Score', military.container );
 				resources.label = createHudElement( 'span', 'hud_sidebar_resources_label', 'Current Military Score', resources.container );
@@ -170,6 +175,10 @@ var st_hud = st_hud || function(){
 				resources.value = createHudElement( 'span', 'hud_sidebar_resources_value', 'Current Military Score', resources.container );
 				population.value = createHudElement( 'span', 'hud_sidebar_population_value', 'Current Military Score', population.container );
 				
+				orders[0].setAttribute( 'class', 'hud_orders' );
+				orders[1].setAttribute( 'class', 'hud_orders' );
+				orders[2].setAttribute( 'class', 'hud_orders' );
+				orders[3].setAttribute( 'class', 'hud_orders' );
 				military.label.innerHTML = "Military Strength: ";
 				resources.label.innerHTML = "Resources: "; 
 				population.label.innerHTML = "Total Population: ";
@@ -202,8 +211,9 @@ var st_hud = st_hud || function(){
 				container.style["pointer-events"] = "auto"; 
 			}
 			,update: function( playerData ){ 
+				logo.setAttribute( 'src', playerData.logo );
+				logo.style.border = "2px solid rgb(" + playerData.color + ")";
 				name.innerHTML = playerData.name;
-				name.style.border = "2px solid rgb(" + playerData.color + ")";
 				military.value.innerHTML = playerData.militaryPower;
 				population.value.innerHTML = playerData.population;
 				resources.value.innerHTML = playerData.resources;
@@ -226,7 +236,7 @@ var st_hud = st_hud || function(){
 			// ,military_power: 15
 			// ,population: 23
 			// ,resources: 24
-			
+			// ,logo:".\7_logo_test.png"
 
 	return hud;
 }(); // IIFE to create st_hud
