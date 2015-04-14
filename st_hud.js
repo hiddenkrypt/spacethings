@@ -166,11 +166,9 @@ var st_hud = st_hud || function(){
 				orders[1] = createHudElement( 'div', '', 'Orders', container );
 				orders[2] = createHudElement( 'div', '', 'Orders', container );
 				orders[3] = createHudElement( 'div', '', 'Orders', container );
-				
 				military.label = createHudElement( 'span', 'hud_sidebar_military_label', 'Current Military Score', military.container );
 				resources.label = createHudElement( 'span', 'hud_sidebar_resources_label', 'Current Military Score', resources.container );
 				population.label = createHudElement( 'span', 'hud_sidebar_population_label', 'Current Military Score', population.container );
-				
 				military.value = createHudElement( 'span', 'hud_sidebar_military_value', 'Current Military Score', military.container );
 				resources.value = createHudElement( 'span', 'hud_sidebar_resources_value', 'Current Military Score', resources.container );
 				population.value = createHudElement( 'span', 'hud_sidebar_population_value', 'Current Military Score', population.container );
@@ -179,6 +177,11 @@ var st_hud = st_hud || function(){
 				orders[1].setAttribute( 'class', 'hud_orders' );
 				orders[2].setAttribute( 'class', 'hud_orders' );
 				orders[3].setAttribute( 'class', 'hud_orders' );
+						
+				orders[0].innerHTML = "&nbsp;";
+				orders[1].innerHTML = "&nbsp;";
+				orders[2].innerHTML = "&nbsp;";
+				orders[3].innerHTML = "&nbsp;";
 				military.label.innerHTML = "Military Strength: ";
 				resources.label.innerHTML = "Resources: "; 
 				population.label.innerHTML = "Total Population: ";
@@ -212,7 +215,7 @@ var st_hud = st_hud || function(){
 			}
 			,update: function( playerData ){ 
 				logo.setAttribute( 'src', playerData.logo );
-				logo.style.border = "2px solid rgb(" + playerData.color + ")";
+				logo.style["border-color"] = "rgb(" + playerData.color + ")";
 				name.innerHTML = playerData.name;
 				military.value.innerHTML = playerData.militaryPower;
 				population.value.innerHTML = playerData.population;
