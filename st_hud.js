@@ -12,7 +12,13 @@ var st_hud = st_hud || function(){
 		initialize: function(){
 			ticker.load();
 			sidebar.load();
-			if( DEBUG ){ console.log( "st_hud initialized" ); }
+			ticker.hide();
+			sidebar.hide();
+			if( DEBUG ){ 
+				ticker.show();
+				sidebar.show();
+				console.log( "st_hud initialized" ); 
+			}
 		}
 		,render: function( ctx ){
 		//	ticker.publish();
@@ -112,10 +118,16 @@ var st_hud = st_hud || function(){
 				container.style.display = 'inline-block';
 			}
 			,disableMouse: function(){
-				container.style["pointer-events"] = "none"; 	
+				container.style["pointer-events"] = 'none'; 	
 			}
 			,enableMouse: function(){
-				container.style["pointer-events"] = "auto"; 
+				container.style["pointer-events"] = 'auto'; 
+			}
+			,hide: function(){
+				container.style.display = 'none';
+			}
+			,show: function(){
+				container.style.display = 'block';
 			}
 		};
 	})(); 
@@ -195,6 +207,12 @@ var st_hud = st_hud || function(){
 				military.value.innerHTML = playerData.militaryPower;
 				population.value.innerHTML = playerData.population;
 				resources.value.innerHTML = playerData.resources;
+			}
+			,hide: function(){
+				container.style.display = 'none';
+			}
+			,show: function(){
+				container.style.display = 'block';
 			}
 		};
 	})();
