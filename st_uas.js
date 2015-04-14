@@ -9,9 +9,9 @@ var st_uas = st_uas || function(){
 	
 	var uas = {
 		initialize: function(){
-			loadDom();
+			loadUasDom();
 			if( DEBUG ){  
-				dom.container.style.display = "none";
+				uasDom.container.style.display = "none";
 				st_engine.hideOverlay();
 			} else {
 				switchToLogin();
@@ -20,32 +20,32 @@ var st_uas = st_uas || function(){
 			if( DEBUG ){ console.log( "st_uas initialized" ); }
 		}
 		,login: function(){
-			dom.error.style.display='none';
+			uasDom.error.style.display='none';
 			var sendQuery = { 
-				username: 	dom.inputFields.username.value
-				,hashword:	Sha1.hash(dom.inputFields.password.value)
+				username: 	uasDom.inputFields.username.value
+				,hashword:	Sha1.hash(uasDom.inputFields.password.value)
 			};
 			ajax.send( 'src/login.php', sendQuery, function( response ){
 				if( DEBUG ){ console.log( response ); }
 			});
 		}
 		,create: function(){
-			dom.error.style.display='none';
-			if(dom.inputFields.password.value.length === 0
-				|| dom.inputFields.verifyPassword.value.length === 0
-				|| dom.inputFields.username.value.length === 0
-				|| dom.inputFields.inviteCode.value.length === 0
+			uasDom.error.style.display='none';
+			if(uasDom.inputFields.password.value.length === 0
+				|| uasDom.inputFields.verifyPassword.value.length === 0
+				|| uasDom.inputFields.username.value.length === 0
+				|| uasDom.inputFields.inviteCode.value.length === 0
 				){
-				dom.error.innerHTML = "Empty field detected. All fields are mandatory.";
-				dom.error.style.display='inline';
-			} else if(dom.password.value != dom.verifyPassword.value){
-				dom.error.innerHTML = "Confirmation Password does not match initial password!";
-				dom.error.style.display='inline';
+				uasDom.error.innerHTML = "Empty field detected. All fields are mandatory.";
+				uasDom.error.style.display='inline';
+			} else if(uasDom.password.value != uasDom.verifyPassword.value){
+				uasDom.error.innerHTML = "Confirmation Password does not match initial password!";
+				uasDom.error.style.display='inline';
 			} else{	
 				var sendQuery = {
-					username: dom.inputFields.username.value
-					,hashword: Sha1.hash(dom.inputFields.password.value)
-					,inviteCode: Sha1.hash(dom.inputFields.inviteCode.value)
+					username: uasDom.inputFields.username.value
+					,hashword: Sha1.hash(uasDom.inputFields.password.value)
+					,inviteCode: Sha1.hash(uasDom.inputFields.inviteCode.value)
 				};
 				ajax.send( 'src/create_account.php', sendQuery, function( response ){
 					if( DEBUG ){ console.log( response ); }
@@ -53,7 +53,7 @@ var st_uas = st_uas || function(){
 			}
 		}
 	};
-	var dom = {
+	var uasDom = {
 		container: 	{}
 		,title:			{}
 		,error:			{}
@@ -86,119 +86,119 @@ var st_uas = st_uas || function(){
 		}
 	};
 	
-	var loadDom = function(){
-		dom.container = document.createElement( 'div' );
-		dom.container.setAttribute( "id", "uas_container" );
-		document.getElementById( 'b' ).appendChild( dom.container );
+	var loadUasDom = function(){
+		uasDom.container = document.createElement( 'div' );
+		uasDom.container.setAttribute( "id", "uas_container" );
+		document.getElementById( 'b' ).appendChild( uasDom.container );
 		
-		dom.title = document.createElement( 'img' );
-		dom.title.setAttribute( "src", "images/title.png" );
-		dom.title.setAttribute( "id", "uas_title" );
+		uasDom.title = document.createElement( 'img' );
+		uasDom.title.setAttribute( "src", "images/title.png" );
+		uasDom.title.setAttribute( "id", "uas_title" );
 		
-		dom.inputFields.username = document.createElement( 'input' );
-		dom.inputFields.username.setAttribute( "id",  "username" );
-		dom.inputFields.username.setAttribute( "type",  "text" );
-		dom.inputLabels.username = document.createElement( 'img' );
-		dom.inputLabels.username.setAttribute( "id",  "username_label" );
-		dom.inputLabels.username.setAttribute( "src", "images/username.png" );
+		uasDom.inputFields.username = document.createElement( 'input' );
+		uasDom.inputFields.username.setAttribute( "id",  "username" );
+		uasDom.inputFields.username.setAttribute( "type",  "text" );
+		uasDom.inputLabels.username = document.createElement( 'img' );
+		uasDom.inputLabels.username.setAttribute( "id",  "username_label" );
+		uasDom.inputLabels.username.setAttribute( "src", "images/username.png" );
 		
-		dom.inputFields.password = document.createElement( 'input' );
-		dom.inputFields.password.setAttribute( "id", "password" );
-		dom.inputFields.password.setAttribute( "type", "password" );
-		dom.inputLabels.password = document.createElement( 'img' );
-		dom.inputLabels.password.setAttribute( "id", "password_label" );
-		dom.inputLabels.password.setAttribute( "src", "images/password.png" );
+		uasDom.inputFields.password = document.createElement( 'input' );
+		uasDom.inputFields.password.setAttribute( "id", "password" );
+		uasDom.inputFields.password.setAttribute( "type", "password" );
+		uasDom.inputLabels.password = document.createElement( 'img' );
+		uasDom.inputLabels.password.setAttribute( "id", "password_label" );
+		uasDom.inputLabels.password.setAttribute( "src", "images/password.png" );
 		
-		dom.inputFields.verifyPassword = document.createElement( 'input' );
-		dom.inputFields.verifyPassword.setAttribute( "id", "verify_password" );
-		dom.inputFields.verifyPassword.setAttribute( "type", "password" );
-		dom.inputLabels.verifyPassword = document.createElement( 'img' );
-		dom.inputLabels.verifyPassword.setAttribute( "id", "verify_password_label" );
-		dom.inputLabels.verifyPassword.setAttribute( "src", "images/verifypassword.png" );
+		uasDom.inputFields.verifyPassword = document.createElement( 'input' );
+		uasDom.inputFields.verifyPassword.setAttribute( "id", "verify_password" );
+		uasDom.inputFields.verifyPassword.setAttribute( "type", "password" );
+		uasDom.inputLabels.verifyPassword = document.createElement( 'img' );
+		uasDom.inputLabels.verifyPassword.setAttribute( "id", "verify_password_label" );
+		uasDom.inputLabels.verifyPassword.setAttribute( "src", "images/verifypassword.png" );
 		
-		dom.inputFields.inviteCode = document.createElement( 'input' );
-		dom.inputFields.inviteCode.setAttribute( "id", "invite_code" );
-		dom.inputFields.inviteCode.setAttribute( "type", "password" );
-		dom.inputLabels.inviteCode = document.createElement( 'img' );
-		dom.inputLabels.inviteCode.setAttribute( "id", "invite_code_label" );
-		dom.inputLabels.inviteCode.setAttribute( "src", "images/invitecode.png" );
+		uasDom.inputFields.inviteCode = document.createElement( 'input' );
+		uasDom.inputFields.inviteCode.setAttribute( "id", "invite_code" );
+		uasDom.inputFields.inviteCode.setAttribute( "type", "password" );
+		uasDom.inputLabels.inviteCode = document.createElement( 'img' );
+		uasDom.inputLabels.inviteCode.setAttribute( "id", "invite_code_label" );
+		uasDom.inputLabels.inviteCode.setAttribute( "src", "images/invitecode.png" );
 				
-		dom.submit = document.createElement( 'input' );
-		dom.submit.setAttribute( "id", "submit" );
-		dom.submit.setAttribute( "type", "button" );
-		dom.submit.setAttribute( "value", "Submit" );
+		uasDom.submit = document.createElement( 'input' );
+		uasDom.submit.setAttribute( "id", "submit" );
+		uasDom.submit.setAttribute( "type", "button" );
+		uasDom.submit.setAttribute( "value", "Submit" );
 		
-		dom.error = document.createElement( 'div' );
-		dom.error.setAttribute( "id", "uas_error" );
+		uasDom.error = document.createElement( 'div' );
+		uasDom.error.setAttribute( "id", "uas_error" );
 
 		
-		dom.modeSubtitle.create = document.createElement( 'img' );
-		dom.modeSubtitle.create.setAttribute( "src", "images/create.png" )
-		dom.modeSubtitle.create.setAttribute( "id", "createSubtitle" );
-		dom.modeSubtitle.create.className = "uas_subtitle";
+		uasDom.modeSubtitle.create = document.createElement( 'img' );
+		uasDom.modeSubtitle.create.setAttribute( "src", "images/create.png" )
+		uasDom.modeSubtitle.create.setAttribute( "id", "createSubtitle" );
+		uasDom.modeSubtitle.create.className = "uas_subtitle";
 		
-		dom.modeSubtitle.login = document.createElement( 'img' );
-		dom.modeSubtitle.login.setAttribute( "src", "images/login.png" );
-		dom.modeSubtitle.login.setAttribute( "id", "loginSubtitle" );
-		dom.modeSubtitle.login.className = "uas_subtitle";
+		uasDom.modeSubtitle.login = document.createElement( 'img' );
+		uasDom.modeSubtitle.login.setAttribute( "src", "images/login.png" );
+		uasDom.modeSubtitle.login.setAttribute( "id", "loginSubtitle" );
+		uasDom.modeSubtitle.login.className = "uas_subtitle";
 		
-		dom.modeSwitch.privacy = document.createElement( 'img' );
-		dom.modeSwitch.privacy.setAttribute( "src", "images/switchprivacy.png" );
-		dom.modeSwitch.privacy.setAttribute( "id", "privacySwitch" );
+		uasDom.modeSwitch.privacy = document.createElement( 'img' );
+		uasDom.modeSwitch.privacy.setAttribute( "src", "images/switchprivacy.png" );
+		uasDom.modeSwitch.privacy.setAttribute( "id", "privacySwitch" );
 		
-		dom.modeSwitch.create = document.createElement( 'img' );
-		dom.modeSwitch.create.setAttribute( "src", "images/switchcreate.png" )
-		dom.modeSwitch.create.setAttribute( "id", "createSwitch" );
+		uasDom.modeSwitch.create = document.createElement( 'img' );
+		uasDom.modeSwitch.create.setAttribute( "src", "images/switchcreate.png" )
+		uasDom.modeSwitch.create.setAttribute( "id", "createSwitch" );
 		
-		dom.modeSwitch.login = document.createElement( 'img' );
-		dom.modeSwitch.login.setAttribute( "src", "images/switchlogin.png" );
-		dom.modeSwitch.login.setAttribute( "id", "loginSwitch" );
+		uasDom.modeSwitch.login = document.createElement( 'img' );
+		uasDom.modeSwitch.login.setAttribute( "src", "images/switchlogin.png" );
+		uasDom.modeSwitch.login.setAttribute( "id", "loginSwitch" );
 		
-		dom.privacyStatement = document.createElement( 'div' );
+		uasDom.privacyStatement = document.createElement( 'div' );
 		
 	};
 	
 	
 	var switchToLogin = function(){
-		dom.uasContainer = scrubElement( dom.container );
-		dom.uasContainer.style.width = '40%';
-		dom.uasContainer.appendChild( dom.title );
-		dom.uasContainer.appendChild( dom.modeSubtitle.login );
-		dom.uasContainer.appendChild( dom.inputLabels.username );
-		dom.uasContainer.appendChild( dom.inputFields.username );
-		dom.uasContainer.appendChild( document.createElement( 'br' ) );
-		dom.uasContainer.appendChild( dom.inputLabels.password );
-		dom.uasContainer.appendChild( dom.inputFields.password );
-		dom.uasContainer.appendChild( document.createElement( 'br' ) );
-		dom.uasContainer.appendChild( dom.submit );
-		dom.uasContainer.appendChild( document.createElement( 'br' ) );
-		dom.uasContainer.appendChild( dom.modeSwitch.create );
-		dom.uasContainer.appendChild( dom.modeSwitch.privacy );
+		uasDom.container = scrubElement( uasDom.container );
+		uasDom.container.style.width = '40%';
+		uasDom.container.appendChild( uasDom.title );
+		uasDom.container.appendChild( uasDom.modeSubtitle.login );
+		uasDom.container.appendChild( uasDom.inputLabels.username );
+		uasDom.container.appendChild( uasDom.inputFields.username );
+		uasDom.container.appendChild( document.createElement( 'br' ) );
+		uasDom.container.appendChild( uasDom.inputLabels.password );
+		uasDom.container.appendChild( uasDom.inputFields.password );
+		uasDom.container.appendChild( document.createElement( 'br' ) );
+		uasDom.container.appendChild( uasDom.submit );
+		uasDom.container.appendChild( document.createElement( 'br' ) );
+		uasDom.container.appendChild( uasDom.modeSwitch.create );
+		uasDom.container.appendChild( uasDom.modeSwitch.privacy );
 
-		dom.uasContainer.style.display = "block";
+		uasDom.container.style.display = "block";
 	};
 	var switchToCreate = function(){
-		dom.uasContainer = scrubElement( dom.container );
-		dom.uasContainer.style.width = '40%';
-		dom.uasContainer.appendChild( dom.title );
-		dom.uasContainer.appendChild( dom.modeSubtitle.create );
-		dom.uasContainer.appendChild( dom.inputLabels.username );
-		dom.uasContainer.appendChild( dom.inputFields.username );
-		dom.uasContainer.appendChild( document.createElement( 'br' ) );
-		dom.uasContainer.appendChild( dom.inputLabels.password );
-		dom.uasContainer.appendChild( dom.inputFields.password );
-		dom.uasContainer.appendChild( document.createElement( 'br' ) );
-		dom.uasContainer.appendChild( dom.inputLabels.verifyPassword );
-		dom.uasContainer.appendChild( dom.inputFields.verifyPassword );
-		dom.uasContainer.appendChild( document.createElement( 'br' ) );
-		dom.uasContainer.appendChild( dom.inputLabels.inviteCode );
-		dom.uasContainer.appendChild( dom.inputFields.inviteCode );
-		dom.uasContainer.appendChild( document.createElement( 'br' ) );
-		dom.uasContainer.appendChild( dom.submit );
-		dom.uasContainer.appendChild( document.createElement( 'br' ) );
-		dom.uasContainer.appendChild( dom.modeSwitch.create );
-		dom.uasContainer.appendChild( dom.modeSwitch.privacy );
-		dom.uasContainer.style.display = "block";
+		uasDom.container = scrubElement( uasDom.container );
+		uasDom.container.style.width = '40%';
+		uasDom.container.appendChild( uasDom.title );
+		uasDom.container.appendChild( uasDom.modeSubtitle.create );
+		uasDom.container.appendChild( uasDom.inputLabels.username );
+		uasDom.container.appendChild( uasDom.inputFields.username );
+		uasDom.container.appendChild( document.createElement( 'br' ) );
+		uasDom.container.appendChild( uasDom.inputLabels.password );
+		uasDom.container.appendChild( uasDom.inputFields.password );
+		uasDom.container.appendChild( document.createElement( 'br' ) );
+		uasDom.container.appendChild( uasDom.inputLabels.verifyPassword );
+		uasDom.container.appendChild( uasDom.inputFields.verifyPassword );
+		uasDom.container.appendChild( document.createElement( 'br' ) );
+		uasDom.container.appendChild( uasDom.inputLabels.inviteCode );
+		uasDom.container.appendChild( uasDom.inputFields.inviteCode );
+		uasDom.container.appendChild( document.createElement( 'br' ) );
+		uasDom.container.appendChild( uasDom.submit );
+		uasDom.container.appendChild( document.createElement( 'br' ) );
+		uasDom.container.appendChild( uasDom.modeSwitch.create );
+		uasDom.container.appendChild( uasDom.modeSwitch.privacy );
+		uasDom.container.style.display = "block";
 		
 	}
 	
