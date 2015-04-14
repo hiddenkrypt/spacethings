@@ -6,6 +6,7 @@ var st_engine = st_engine || function(){
 	"use strict";
 	
 	var DEBUG = st_DEBUG.engine;
+	var Overlay = {};
 	var Canvas = {};
 	var Context = {};
 	var hexHighlight = { x:-1, y:-1 };
@@ -14,15 +15,14 @@ var st_engine = st_engine || function(){
 	var dClickWindow = 300;
 	var dClickTimeout = {};
 	
-	var overlay = {};
 	
 	var engine = {
 		init: function(){
+			Overlay =  document.getElementById( 'overlay' );
 			Canvas = document.getElementById( "c" );
 			Context = Canvas.getContext( "2d" );
 			Canvas.style.width = Canvas.width = window.innerWidth;
 			Canvas.style.height = Canvas.height = window.innerHeight;
-			overlay =  document.getElementById( 'overlay' );
 
 			st_graphics.initialize(); // start graphics module
 			st_uas.initialize(); // start user account service module
@@ -60,10 +60,10 @@ var st_engine = st_engine || function(){
 			st_hud.loadSidebar( st_data.getPlayerData() );
 		}
 		,showOverlay: function(){
-			overlay.style.display = 'block';
+			Overlay.style.display = 'block';
 		}
 		,hideOverlay: function(){
-			overlay.style.display = 'none';
+			Overlay.style.display = 'none';
 		}
 	};
 	
