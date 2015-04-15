@@ -63,26 +63,23 @@ var st_data = st_data || (function(){
 			var hex = st_data.getMapHexByGrid( coordinates );
 			if(!hex){
 				return {
-					explored: false,
 					coords:coordinates
+					,planets: false
+					,name: "Unexplored Space"
+					,ownerName: "&nbsp;"
 				};
 			}
 			var hexData = {
-				explored: true
-				,coords: {
+				coords: {
 					x: hex.x
 					,y:hex.y
 				}
-				,system: false
-				,owner: false
 				,planets: false
+				,name: hex.system ? mapData.systems[hex.system].name : hex.owner? mapData.owners[hex.owner].adjective+" Space" : "Unclaimed Space"
+				,ownerName: (hex.owner && hex.system) ? mapData.owners[hex.owner].name : "&nbsp;"
 			}
-			if( hex.system ){
-				hexData.system = mapData.systems[hex.system];
-			}
-			if( hex.owner ){
-				hexData.owner = mapData.owners[hex.owner];
-			}
+			// hexData.name = hexData.system? hexData.system.name
+			
 			return hexData;
 		}
 	};
@@ -104,7 +101,7 @@ var st_data = st_data || (function(){
 		mapData = {
 			loaded: true,
 			hexes: [
-				 { x: 22, y: 15, owner: 13, 	system: false }
+				 { x: 22, y: 15, owner: 7, 		system: false }
 				,{ x: 22, y: 16, owner: 13, 	system: false }
 				,{ x: 22, y: 17, owner: 13, 	system: false }
 				,{ x: 23, y: 16, owner: 13, 	system: false }
@@ -119,13 +116,16 @@ var st_data = st_data || (function(){
 				,{ x: 20, y: 15, owner: false,	system: false } 
 				,{ x: 21, y: 14, owner: 8, 		system: 56 } 
 				,{ x: 22, y: 14, owner: 8, 		system: false } 
+				,{ x: 23, y: 14, owner: false, 	system: false }
+				,{ x: 20, y: 16, owner: false, 	system: 10 } 
 			]
 			,systems: {
-				"1234": { name:"Alternia",magnitude:5, MKclass: "V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
-				,"3456": { name:"Earth",  magnitude:-15, MKclass: "I", MKspectrum: "L", offset:Math.floor(Math.random()*7)+1, planets:2 }	
+				"1234": { name:"Earth",magnitude:5, MKclass: "V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
+				,"3456": { name:"Alternia",  magnitude:-15, MKclass: "I", MKspectrum: "L", offset:Math.floor(Math.random()*7)+1, planets:2 }	
 				,"2": { name: "Sontar",  magnitude:15, MKclass: "V", MKspectrum: "B", offset:Math.floor(Math.random()*7)+1, planets:5 }
-				,"5": { name: "Orkus",   magnitude: 0, MKClass: "V", MKSpecturm: "A", offset:Math.floor(Math.random()*7)+1, planets:1 }
-				,"56": { name: "Conquered Gaul",    magnitude: 0, MKClass: "V", MKSpecturm: "A", offset:Math.floor(Math.random()*7)+1, planets:0 }
+				,"5": { name: "Orkus",   magnitude: 0, MKClass: "V", MKspectrum: "A", offset:Math.floor(Math.random()*7)+1, planets:1 }
+				,"56": { name: "Conquered Gaul",    magnitude: 0, MKClass: "V", MKspectrum: "O", offset:Math.floor(Math.random()*7)+1, planets:0 }
+				,"10": { name: "Unidentified System", magnitude: 7, MKClass: "III", MKspectrum: "T", offset:Math.floor(Math.random()*7)+1, planets:0 }
 			}
 			,planets: {
 				"612": 	{ system: 1234, orbit: 0}
@@ -152,5 +152,5 @@ var st_data = st_data || (function(){
 		return true;
 	};
 	return data
-})();
+}());
 

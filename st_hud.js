@@ -89,20 +89,8 @@ var st_hud = st_hud || function(){
 				var homeworld = st_data.getHomeworld();
 				lcoords.innerHTML = "HRC:["+ -(homeworld.x - hexData.coords.x) + ", " + (homeworld.y - hexData.coords.y) + "]";
 				ucoords.innerHTML = "UC: ["+ hashID.encode( hexData.coords.x + 100 ) + ", " + hashID.encode( hexData.coords.y + 100 ) + "]";
-
-				if( hexData.system && hexData.system.name ){
-					title.innerHTML = hexData.system.name;
-				} else if( !hexData.owner && hexData.system ){
-					title.innerHTML = "Unclaimed System";
-				} else if( hexData.owner && !hexData.system ){
-					title.innerHTML = hexData.owner.adjective+" Space";
-				} 
-				if( hexData.owner && hexData.system ){
-					owner.innerHTML = hexData.owner.name;
-				} else{
-					owner.innerHTML = "&nbsp;";
-				}
-				// ticker.publish();
+				title.innerHTML = hexData.name;
+				owner.innerHTML = hexData.ownerName;
 			}
 			
 			,load: function(){
@@ -191,11 +179,12 @@ var st_hud = st_hud || function(){
 				container.style.display = 'inline-block';
 			}
 			,toggle: function(){
-				if( active ){ //hide
+				if( active ){
 					for( var i = 0; i < container.childNodes.length; i++){
 						container.childNodes[i].style.display = 'none';
 					}
 					container.style.width = '1em';
+					container.style.height = '3em';
 					collapseIcon.innerHTML = '<<';
 					collapseIcon.style.display = 'block';
 				} else{ 
@@ -203,6 +192,7 @@ var st_hud = st_hud || function(){
 						container.childNodes[i].style.display = 'block';
 					}
 					container.style.width = '15em';
+					container.style.height = '';
 					collapseIcon.innerHTML = '>>';
 				}
 				active = !active;
@@ -229,17 +219,6 @@ var st_hud = st_hud || function(){
 			}
 		};
 	})();
-			// playerData = {
-			// loaded: true
-			// ,id: 7
-			// ,name: "Waaagh 'elmit'ead"
-			// ,race: "Da Orks"
-			// ,adjective: "Ork"
-			// ,homeworld: { x: 21, y: 15, id:66}
-			// ,military_power: 15
-			// ,population: 23
-			// ,resources: 24
-			// ,logo:".\7_logo_test.png"
 
 	return hud;
 }(); // IIFE to create st_hud
