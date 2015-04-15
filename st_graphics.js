@@ -6,30 +6,33 @@ var st_graphics = st_graphics || function(){
 
 	var DEBUG = st_DEBUG.graphics;
 	
-	var max_zoom = 150;
 	var MAXZOOM = 150;
-	var min_zoom = 10;
 	var MINZOOM = 10;
 	var bg_filename = 'images/stars.jpg';
 	var imageLoaded = false;
-	var background = new Image();
+	var background = {
+		image: new Image()
+		,x: 0
+		,y: 0
+		,parallax: 0.1
+	};
 	
 	var graphics = {
 		camera:				{}
 		,hex:				{}
-		,parallax_d: 		0.1
 		,initialize: function(){
 			var cameraInitalPosition = {x:50, y:50, z:75};
 			st_graphics.camera = createCamera( cameraInitalPosition );
 			st_graphics.hex = createHexagon( cameraInitalPosition.z );
 			st_graphics.camera.centerOnHex( cameraInitalPosition );
-			background.src = bg_filename;
-			background.onload = function(){ 
+			background.image.src = bg_filename;
+			background.image.onload = function(){ 
 				imageLoaded = true; 
 			};
 			if( DEBUG ) { console.log( "st_graphics initialized" ); }
 		}
 		,render: function( ctx ){
+			
 			if( imageLoaded ){
 				drawBackground( ctx );
 			}
@@ -71,6 +74,9 @@ var st_graphics = st_graphics || function(){
 			,moveDelta: function(dx, dy){
 				if( typeof dx === 'number' ){ pos_x += dx; }
 				if( typeof dy === 'number' ){ pos_y += dy; }
+				
+				background.x += -dx * background.parallax;
+				background.y += -dy * background.parallax;
 			}
 			,centerOnHex: function( coords ){  
 				pos_y = ( coords.y  * ( st_graphics.hex.rect().w - ( st_graphics.hex.h() / 2 ) +(0.015*st_graphics.hex.sideLength()) ) ) - ( st_engine.canvas().height/2 ) + ( st_graphics.hex.h() + st_graphics.hex.sideLength()/2 );
@@ -198,17 +204,15 @@ var st_graphics = st_graphics || function(){
 	}; //private createHexagon() hex constructor
 		
 	var drawBackground = function( ctx ){
-		var bg_x = -st_graphics.camera.x() * st_graphics.parallax_d;
-		var bg_y = -st_graphics.camera.y() * st_graphics.parallax_d;
-		ctx.drawImage(background, bg_x - background.width, bg_y + background.height);
-		ctx.drawImage(background, bg_x - background.width, bg_y);
-		ctx.drawImage(background, bg_x - background.width, bg_y - background.height);
-		ctx.drawImage(background, bg_x, bg_y + background.height);
-		ctx.drawImage(background, bg_x, bg_y);
-		ctx.drawImage(background, bg_x, bg_y - background.height);
-		ctx.drawImage(background, bg_x + background.width, bg_y + background.height);
-		ctx.drawImage(background, bg_x + background.width, bg_y);
-		ctx.drawImage(background, bg_x + background.width, bg_y - background.height);
+		ctx.drawImage(background.image, background.x - background.image.width, background.y + background.image.height);
+		ctx.drawImage(background.image, background.x - background.image.width, background.y);
+		ctx.drawImage(background.image, background.x - background.image.width, background.y - background.image.height);
+		ctx.drawImage(background.image, background.x, background.y + background.image.height);
+		ctx.drawImage(background.image, background.x, background.y);
+		ctx.drawImage(background.image, background.x, background.y - background.image.height);
+		ctx.drawImage(background.image, background.x + background.image.width, background.y + background.image.height);
+		ctx.drawImage(background.image, background.x + background.image.width, background.y);
+		ctx.drawImage(background.image, background.x + background.image.width, background.y - background.image.height);
 	}; // private drawBackground()
 	
 	var drawDefaultHexField = function( ctx ){
