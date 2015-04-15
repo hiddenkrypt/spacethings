@@ -133,11 +133,11 @@ var st_graphics = st_graphics || function(){
 				hex_rect_w = 	hex_rad * 2;
 			}
 			
-			,draw:   function( ctx, x, y, stroke, fill, alpha, line_width){
+			,draw:   function( ctx, x, y, stroke, fill, alpha, lineWidth){
 				fill = fill || false; // if no fill provided, hex will be drawn empty
 				stroke = stroke || "#efefef"; // default stroke if none provided
 				alpha = typeof alpha === "number"? alpha : 1; // alpha defaults to 1 if none defined, or if not a number
-				line_width = typeof line_width === "number"? line_width : 2;
+				lineWidth = typeof lineWidth === "number"? lineWidth : 2;
 				ctx.beginPath();
 				ctx.moveTo( x + hex_rad, y );
 				ctx.lineTo( x + hex_rect_w, y+hex_h );
@@ -157,20 +157,20 @@ var st_graphics = st_graphics || function(){
 						ctx.restore();
 					}
 				}
-				ctx.lineWidth = 2;
+				ctx.lineWidth = lineWidth;
 				ctx.strokeStyle = stroke;
 				ctx.stroke();
 				if( DEBUG ){
-					ctx.lineWidth = line_width;
+					ctx.lineWidth = lineWidth;
 					ctx.strokeStyle = "#ff0000";
 					ctx.strokeRect( x, y + ( hex_h / 2 ), hex_rect_w, hex_rect_w - ( hex_h / 2 ));  
 				}
 			}
-			,drawAtGrid: function(ctx, coords, stroke, fill, alpha){
+			,drawAtGrid: function(ctx, coords, stroke, fill, alpha, lineWidth){
 				var canvasCoords = gridCoordinatesToCanvas( coords );
 				this.draw(ctx, canvasCoords.x, canvasCoords.y, stroke, fill, alpha);
 			}
-			,drawScaledAtGrid:    function( scale, ctx, coords, stroke, fill, alpha){
+			,drawScaledAtGrid:    function( scale, ctx, coords, stroke, fill, alpha, lineWidth){
 
 				var canvasCoords = gridCoordinatesToCanvas( coords );
 				
@@ -181,7 +181,7 @@ var st_graphics = st_graphics || function(){
 				this.setSideLength( normal_size*scale );	
 					var adj_x =  canvasCoords.x + ( ( normal_hex_width - hex_rect_w ) / 2 * ( ( scale > 1 ) ? -1 : 1) );
 					var adj_y = canvasCoords.y + ( ( ( normal_size + ( normal_hex_h * 2 ) )  - ( hex_side_length + ( hex_h * 2 ) ) ) / 2  * ( ( scale > 1 ) ? -1 : 1) );
-					this.draw(ctx, adj_x, adj_y, stroke, fill, alpha);
+					this.draw(ctx, adj_x, adj_y, stroke, fill, alpha, lineWidth);
 				this.setSideLength( normal_size );
 			}
 			,visible: function( x, y ){
@@ -230,8 +230,9 @@ var st_graphics = st_graphics || function(){
 				var ownerColor = owner? "rgb(" + owner.r + ", " + owner.g + ", "+owner.b + ")"	: false;
 				if( system ){ //there is a system there
 				
-					st_graphics.hex.drawAtGrid( ctx, map[i], false, ownerColor,  0.1 ); 
-					st_graphics.hex.drawScaledAtGrid(0.9, ctx, map[i], ownerColor, false,  0.5 );
+					st_graphics.hex.drawAtGrid( ctx, map[i], false, false,  0.1 ); 
+					st_graphics.hex.drawScaledAtGrid(0.85, ctx, map[i], ownerColor, ownerColor, .15, 6);
+				//	,drawScaledAtGrid:    function( scale, ctx, coords, stroke, fill, alpha, lineWidth){
 					drawStarAtGrid( ctx, map[i], system );
 				} else {
 					st_graphics.hex.drawAtGrid( ctx, map[i], false, ownerColor,  0.5 ); 
