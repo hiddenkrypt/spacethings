@@ -47,6 +47,9 @@ var st_data = st_data || (function(){
 		,getStatus: function(){ return status; }
 		,getOwnerById: function( id ){ return mapData.owners[id]; }
 		,getSystemById: function( id ){ return mapData.systems[id]; }
+		,getSystemDataByGrid: function( coords ){  
+		
+		}
 		,loaded: function(){ return status === "loaded"; }
 		,getMapHexByGrid:function( coords ){
 			for(var i = 0; i < mapData.hexes.length; i++){
@@ -64,7 +67,6 @@ var st_data = st_data || (function(){
 			if(!hex){
 				return {
 					coords:coordinates
-					,planets: false
 					,name: "Unexplored Space"
 					,ownerName: "&nbsp;"
 				};
@@ -74,7 +76,6 @@ var st_data = st_data || (function(){
 					x: hex.x
 					,y:hex.y
 				}
-				,planets: false
 				,name: hex.system ? mapData.systems[hex.system].name : hex.owner? mapData.owners[hex.owner].adjective+" Space" : "Unclaimed Space"
 				,ownerName: (hex.owner && hex.system) ? mapData.owners[hex.owner].name : "&nbsp;"
 			}
