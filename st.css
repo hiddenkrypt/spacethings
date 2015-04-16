@@ -1,6 +1,10 @@
 /*st.css*/
 
 
+/***********************
+* PRIMARY DOM ELEMENTS *
+***********************/
+
 *{
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -19,15 +23,6 @@ body{
 	left:0px;
 	z-index:0;
 }
-#login_title_image{
-	/* -webkit-border-radius: 1em;
-	-moz-border-radius: 1em;
-	border-radius: 1em; */
-	float:right;
-}
-#login_block{
-	float:left;
-}
 #overlay{
 	background-color: rgba(0,255,255,.2);
 	position:absolute;
@@ -37,21 +32,13 @@ body{
 	height:100%;
 	z-index: 10;
 }
-#uas_container{
-	position:fixed;
-	left: 50%;
-	overflow: hidden;
-	background-color: rgba(0,0,0,.80);
-	color:#ffffff;
-	font-weight:bold;
-	visibility:visible;
-	margin-top: 1em;
-	margin-left: -10em;
-	padding:2em;
-	width:20em; 
-	font-size:1.5em;
-	z-index: 11;
-}
+
+
+/*************
+* HUD MODULE *
+*************/
+
+/*  highlightedHexInfo  */
 
 #hud_highlightedHexInfo_container{
 	pointer-events:auto;
@@ -101,6 +88,8 @@ body{
 	cursor: pointer;
 }
 
+/*  thingInfo  */
+
 #hud_thingInfo_container{	
 	pointer-events:auto;
 	display: none;
@@ -142,10 +131,37 @@ body{
 	border: none;
 	cursor: pointer;
 }
-.hud_orders{
+.hud_thingInfo_orders{
 	margin:  .2em;
 	border: 1px solid black;
 }
+
+/*  systemPopupInfo  */
+
+#hud_systemPopupInfo_container{
+	position:fixed;
+	left: 50%;
+	overflow: hidden;
+	background-color: rgba(0,0,0,.80);
+	color:#ffffff;
+	font-weight:bold;
+	visibility:visible;
+	margin-top: 1em;
+	margin-left: -10em;
+	padding:2em;
+	width:20em;
+	height: 10em;
+	font-size:1em;
+	z-index: 12;
+}
+
+
+
+
+
+/*************
+* UAS MODULE *
+*************/
 
 
 #privacyText{
@@ -171,4 +187,28 @@ body{
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+#login_title_image{
+	/* -webkit-border-radius: 1em;
+	-moz-border-radius: 1em;
+	border-radius: 1em; */
+	float:right;
+}
+#login_block{
+	float:left;
+}
+#uas_container{
+	position:fixed;
+	left: 50%;
+	overflow: hidden;
+	background-color: rgba(0,0,0,.80);
+	color:#ffffff;
+	font-weight:bold;
+	visibility:visible;
+	margin-top: 1em;
+	margin-left: -10em;
+	padding:2em;
+	width:20em; 
+	font-size:1.5em;
+	z-index: 11;
 }
