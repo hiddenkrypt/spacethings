@@ -53,7 +53,7 @@ body{
 	z-index: 11;
 }
 
-#hud_ticker_container{
+#hud_highlightedHexInfo_container{
 	pointer-events:auto;
 	display: none;
 	position: fixed;
@@ -68,23 +68,23 @@ body{
 	margin-bottom: 1em;
 	padding: .2em;
 }
-#hud_ticker_title{ 
+#hud_highlightedHexInfo_title{ 
 }
-#hud_ticker_owner{ 
+#hud_highlightedHexInfo_owner{ 
 	font-size: .75em;
 }
-#hud_ticker_ucoords{ 
+#hud_highlightedHexInfo_ucoords{ 
 	font-size: .75em;
 	display: inline;
 	float:right;
 }
-#hud_ticker_lcoords{ 
+#hud_highlightedHexInfo_lcoords{ 
 	font-size: .75em;
 	display: inline;
 	float:left;
 }
 
-#hud_ticker_collapse_icon{
+#hud_highlightedHexInfo_collapse_icon{
 	pointer-events:default;
 	font-size: .5em;
 	width: 1.2em;
@@ -101,7 +101,7 @@ body{
 	cursor: pointer;
 }
 
-#hud_sidebar_container{	
+#hud_thingInfo_container{	
 	pointer-events:auto;
 	display: none;
 	position: fixed;
@@ -115,7 +115,7 @@ body{
 	margin-top: 1em;
 	padding: .2em;
 }
-#hud_sidebar_thing_logo{
+#hud_thingInfo_thing_logo{
 	width: 100px;
 	height: 100px;
 	border-top: .2em solid;
@@ -126,7 +126,7 @@ body{
 	margin-left:auto;
 	margin-right:auto;
 }
-#hud_sidebar_collapse_icon{
+#hud_thingInfo_collapse_icon{
 	pointer-events:default;
 	font-size: .5em;
 	width: 1.2em;

@@ -10,35 +10,32 @@ var st_hud = st_hud || function(){
 	
 	var hud = {
 		initialize: function(){
-			ticker.load();
-			sidebar.load();
-			ticker.hide();
-			sidebar.hide();
+			highlightedHexInfo.load();
+			thingInfo.load();
+			highlightedHexInfo.hide();
+			thingInfo.hide();
 			if( DEBUG ){ 
-				ticker.show();
-				sidebar.show();
+				highlightedHexInfo.show();
+				thingInfo.show();
 				console.log( "st_hud initialized" ); 
 			}
 		}
-		,render: function( ctx ){
-		//	ticker.publish();
-		}
 		,selectHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
-				ticker.update( st_data.getHexDataByGrid( coords ) );
+				highlightedHexInfo.update( st_data.getHexDataByGrid( coords ) );
 			}
 		}
 		,disableMouse: function(){ 
 		
-			ticker.disableMouse();
-			sidebar.disableMouse();
+			highlightedHexInfo.disableMouse();
+			thingInfo.disableMouse();
 		}
 		,enableMouse: function(){ 
-			ticker.enableMouse();
-			sidebar.enableMouse();
+			highlightedHexInfo.enableMouse();
+			thingInfo.enableMouse();
 		}
 		,loadSidebar: function( playerData ){
-			sidebar.update( playerData );
+			thingInfo.update( playerData );
 		}
 	};
 	
@@ -50,7 +47,7 @@ var st_hud = st_hud || function(){
 		return element;
 	};
 	
-	var ticker = (function(){
+	var highlightedHexInfo = (function(){
 		var active = true
 			,container = {}
 			,title = {}
@@ -94,15 +91,15 @@ var st_hud = st_hud || function(){
 			}
 			
 			,load: function(){
-				container = createHudElement( 'div', 'hud_ticker_container', '', document.getElementById( 'b' ) );
+				container = createHudElement( 'div', 'hud_highlightedHexInfo_container', '', document.getElementById( 'b' ) );
 				
-				title = createHudElement( 'div', 'hud_ticker_title', 'System/Sector Name', container );
-				owner = createHudElement( 'div', 'hud_ticker_owner', 'System Owner', container );
-				lcoords = createHudElement( 'div', 'hud_ticker_lcoords', 'Homeworld Relative Coordinates', container );
-				ucoords = createHudElement( 'div', 'hud_ticker_ucoords', 'Universal Coordinates', container );
-				collapseIcon = createHudElement( 'div', 'hud_ticker_collapse_icon', 'Hide / Show', container );
+				title = createHudElement( 'div', 'hud_highlightedHexInfo_title', 'System/Sector Name', container );
+				owner = createHudElement( 'div', 'hud_highlightedHexInfo_owner', 'System Owner', container );
+				lcoords = createHudElement( 'div', 'hud_highlightedHexInfo_lcoords', 'Homeworld Relative Coordinates', container );
+				ucoords = createHudElement( 'div', 'hud_highlightedHexInfo_ucoords', 'Universal Coordinates', container );
+				collapseIcon = createHudElement( 'div', 'hud_highlightedHexInfo_collapse_icon', 'Hide / Show', container );
 				collapseIcon.innerHTML = '<<';
-				collapseIcon.addEventListener('mousedown', function(e){ticker.toggle();});
+				collapseIcon.addEventListener('mousedown', function(e){highlightedHexInfo.toggle();});
 				container.style.display = 'inline-block';
 			}
 			,disableMouse: function(){
@@ -119,7 +116,7 @@ var st_hud = st_hud || function(){
 			}
 		};
 	})(); 
-	var sidebar = (function(){
+	var thingInfo = (function(){
 		var active = true
 			,container = {}
 			,logo = {}
@@ -143,23 +140,23 @@ var st_hud = st_hud || function(){
 			,collapseIcon = {};
 		return {
 			load: function(){
-				container = createHudElement( 'div', 'hud_sidebar_container', '', document.getElementById( 'b' ) );
-				collapseIcon = createHudElement( 'div', 'hud_sidebar_collapse_icon', 'Hide / Show', container );
-				logo = createHudElement( 'img', 'hud_sidebar_thing_logo', 'Your THING', container );
-				name = createHudElement( 'div', 'hud_sidebar_thing_name', 'Your THING', container );				
-				military.container = createHudElement( 'div', 'hud_sidebar_military_container', 'Current Military Score', container );
-				resources.container = createHudElement( 'div', 'hud_sidebar_resources_container', 'Current THING-wide resource level', container );
-				population.container = createHudElement( 'div', 'hud_sidebar_population_container', 'Current Galactic Population', container );
+				container = createHudElement( 'div', 'hud_thingInfo_container', '', document.getElementById( 'b' ) );
+				collapseIcon = createHudElement( 'div', 'hud_thingInfo_collapse_icon', 'Hide / Show', container );
+				logo = createHudElement( 'img', 'hud_thingInfo_thing_logo', 'Your THING', container );
+				name = createHudElement( 'div', 'hud_thingInfo_thing_name', 'Your THING', container );				
+				military.container = createHudElement( 'div', 'hud_thingInfo_military_container', 'Current Military Score', container );
+				resources.container = createHudElement( 'div', 'hud_thingInfo_resources_container', 'Current THING-wide resource level', container );
+				population.container = createHudElement( 'div', 'hud_thingInfo_population_container', 'Current Galactic Population', container );
 				orders[0] = createHudElement( 'div', '', 'Orders', container );
 				orders[1] = createHudElement( 'div', '', 'Orders', container );
 				orders[2] = createHudElement( 'div', '', 'Orders', container );
 				orders[3] = createHudElement( 'div', '', 'Orders', container );
-				military.label = createHudElement( 'span', 'hud_sidebar_military_label', 'Current Military Score', military.container );
-				resources.label = createHudElement( 'span', 'hud_sidebar_resources_label', 'Current Military Score', resources.container );
-				population.label = createHudElement( 'span', 'hud_sidebar_population_label', 'Current Military Score', population.container );
-				military.value = createHudElement( 'span', 'hud_sidebar_military_value', 'Current Military Score', military.container );
-				resources.value = createHudElement( 'span', 'hud_sidebar_resources_value', 'Current Military Score', resources.container );
-				population.value = createHudElement( 'span', 'hud_sidebar_population_value', 'Current Military Score', population.container );
+				military.label = createHudElement( 'span', 'hud_thingInfo_military_label', 'Current Military Score', military.container );
+				resources.label = createHudElement( 'span', 'hud_thingInfo_resources_label', 'Current Military Score', resources.container );
+				population.label = createHudElement( 'span', 'hud_thingInfo_population_label', 'Current Military Score', population.container );
+				military.value = createHudElement( 'span', 'hud_thingInfo_military_value', 'Current Military Score', military.container );
+				resources.value = createHudElement( 'span', 'hud_thingInfo_resources_value', 'Current Military Score', resources.container );
+				population.value = createHudElement( 'span', 'hud_thingInfo_population_value', 'Current Military Score', population.container );
 				
 				orders[0].setAttribute( 'class', 'hud_orders' );
 				orders[1].setAttribute( 'class', 'hud_orders' );
@@ -175,7 +172,7 @@ var st_hud = st_hud || function(){
 				population.label.innerHTML = "Total Population: ";
 				
 				collapseIcon.innerHTML = '>>';
-				collapseIcon.addEventListener( 'mousedown', function(e){ sidebar.toggle(); } );
+				collapseIcon.addEventListener( 'mousedown', function(e){ thingInfo.toggle(); } );
 				container.style.display = 'inline-block';
 			}
 			,toggle: function(){
