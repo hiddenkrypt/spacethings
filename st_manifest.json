@@ -4,6 +4,6 @@
 	"name": 		"SpaceTHINGS"
 	,"icons": 		[]
 	,"start_url":	"index.htm"
-	,"display": 	"standalone"
-	,"orientation": "any"
+	,"display": 	"fullscreen"
+	,"orientation": "landscape"
 }
