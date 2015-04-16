@@ -47,7 +47,6 @@ var st_engine = st_engine || function(){
 			Context.clearRect( 0, 0, Canvas.width, Canvas.height ) ;
 			
 			st_graphics.render( Context );
-			st_hud.render( Context );
 			
 			requestAnimationFrame( this.render.bind(this) );
 		}
@@ -56,7 +55,7 @@ var st_engine = st_engine || function(){
 		,ctx: function(){ return Context; }
 		,loadComplete: function(){
 			st_graphics.selectHex( st_data.getHomeworld() );
-			st_hud.selectHexAtGrid( st_data.getHomeworld() );
+			st_hud.highlightHexAtGrid( st_data.getHomeworld() );
 			st_hud.loadSidebar( st_data.getPlayerData() );
 		}
 		,showOverlay: function(){
@@ -88,7 +87,7 @@ var st_engine = st_engine || function(){
 		if( lastClickedHex.x == hexX && lastClickedHex.y == hexY && doubleclick ) {
 			if( DEBUG ){ console.log( "SELECTED: (" + hexX + "," + hexY + ")" ); }
 			st_graphics.selectHex( {x:hexX, y:hexY} );
-			st_hud.selectHexAtGrid( {x:hexX, y:hexY} );
+			st_hud.highlightHexAtGrid( {x:hexX, y:hexY} );
 		} 
 		lastClickedHex.x = hexX;
 		lastClickedHex.y = hexY;
@@ -165,7 +164,7 @@ var st_engine = st_engine || function(){
 		var y=event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
 		hexHighlight.y = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.sideLength() ) );
 		hexHighlight.x = Math.floor( ( x - ( hexHighlight.y % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect().w );
-		st_hud.selectHexAtGrid( hexHighlight );
+		st_hud.highlightHexAtGrid( hexHighlight );
 		if( st_graphics.dragging ){
 			st_graphics.camera.moveDelta( st_graphics.drag_prev_x - event.pageX, st_graphics.drag_prev_y - event.pageY );
 			st_graphics.drag_prev_x = event.pageX;

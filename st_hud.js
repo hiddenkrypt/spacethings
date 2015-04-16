@@ -20,9 +20,14 @@ var st_hud = st_hud || function(){
 				console.log( "st_hud initialized" ); 
 			}
 		}
-		,selectHexAtGrid: function( coords ){
+		,highlightHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
 				highlightedHexInfo.update( st_data.getHexDataByGrid( coords ) );
+			}
+		}
+		,selectHexAtGrid: function( coords ){
+			if( st_data.loaded() ){
+				systemPopupInfo( st_data.getSystemDataByID( coords ) );
 			}
 		}
 		,disableMouse: function(){ 
@@ -158,10 +163,10 @@ var st_hud = st_hud || function(){
 				resources.value = createHudElement( 'span', 'hud_thingInfo_resources_value', 'Current Military Score', resources.container );
 				population.value = createHudElement( 'span', 'hud_thingInfo_population_value', 'Current Military Score', population.container );
 				
-				orders[0].setAttribute( 'class', 'hud_orders' );
-				orders[1].setAttribute( 'class', 'hud_orders' );
-				orders[2].setAttribute( 'class', 'hud_orders' );
-				orders[3].setAttribute( 'class', 'hud_orders' );
+				orders[0].setAttribute( 'class', 'hud_thingInfo_orders' );
+				orders[1].setAttribute( 'class', 'hud_thingInfo_orders' );
+				orders[2].setAttribute( 'class', 'hud_thingInfo_orders' );
+				orders[3].setAttribute( 'class', 'hud_thingInfo_orders' );
 						
 				orders[0].innerHTML = "&nbsp;";
 				orders[1].innerHTML = "&nbsp;";
@@ -217,6 +222,23 @@ var st_hud = st_hud || function(){
 		};
 	})();
 
+	var systemPopupInfo = (function(){
+		var container = {};
+		
+		return {
+			load: function(){
+				container = createHudElement( 'div', 'hud_systemPopupInfo_container', '', document.getElementById( 'b' ) );
+			}
+			,update: function( systemData ){ 
+			}
+			,hide: function(){
+				container.style.display = 'none';
+			}
+			,show: function(){
+				container.style.display = 'block';
+			}
+		}
+	})();
 	return hud;
 }(); // IIFE to create st_hud
 
