@@ -10,33 +10,37 @@ var st_hud = st_hud || function(){
 	
 	var hud = {
 		initialize: function(){
-			highlightedHexInfo.load();
+			hexInfo.load();
+			hexInfo.hide();
 			thingInfo.load();
-			highlightedHexInfo.hide();
 			thingInfo.hide();
+			systemInfo.load();
+			systemInfo.hide();
 			if( DEBUG ){ 
-				highlightedHexInfo.show();
-				thingInfo.show();
+				// hexInfo.show();
+				// thingInfo.show();
+				systemInfo
+				systemInfo.show();
 				console.log( "st_hud initialized" ); 
 			}
 		}
 		,highlightHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
-				highlightedHexInfo.update( st_data.getHexDataByGrid( coords ) );
+				hexInfo.update( st_data.getHexDataByGrid( coords ) );
 			}
 		}
 		,selectHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
-				systemPopupInfo( st_data.getSystemDataByID( coords ) );
+				systemInfo( st_data.getSystemDataByID( coords ) );
 			}
 		}
 		,disableMouse: function(){ 
 		
-			highlightedHexInfo.disableMouse();
+			hexInfo.disableMouse();
 			thingInfo.disableMouse();
 		}
 		,enableMouse: function(){ 
-			highlightedHexInfo.enableMouse();
+			hexInfo.enableMouse();
 			thingInfo.enableMouse();
 		}
 		,loadSidebar: function( playerData ){
@@ -52,7 +56,7 @@ var st_hud = st_hud || function(){
 		return element;
 	};
 	
-	var highlightedHexInfo = (function(){
+	var hexInfo = (function(){
 		var active = true
 			,container = {}
 			,title = {}
@@ -96,15 +100,15 @@ var st_hud = st_hud || function(){
 			}
 			
 			,load: function(){
-				container = createHudElement( 'div', 'hud_highlightedHexInfo_container', '', document.getElementById( 'b' ) );
+				container = createHudElement( 'div', 'hud_hexInfo_container', '', document.getElementById( 'b' ) );
 				
-				title = createHudElement( 'div', 'hud_highlightedHexInfo_title', 'System/Sector Name', container );
-				owner = createHudElement( 'div', 'hud_highlightedHexInfo_owner', 'System Owner', container );
-				lcoords = createHudElement( 'div', 'hud_highlightedHexInfo_lcoords', 'Homeworld Relative Coordinates', container );
-				ucoords = createHudElement( 'div', 'hud_highlightedHexInfo_ucoords', 'Universal Coordinates', container );
-				collapseIcon = createHudElement( 'div', 'hud_highlightedHexInfo_collapse_icon', 'Hide / Show', container );
+				title = createHudElement( 'div', 'hud_hexInfo_title', 'System/Sector Name', container );
+				owner = createHudElement( 'div', 'hud_hexInfo_owner', 'System Owner', container );
+				lcoords = createHudElement( 'div', 'hud_hexInfo_lcoords', 'Homeworld Relative Coordinates', container );
+				ucoords = createHudElement( 'div', 'hud_hexInfo_ucoords', 'Universal Coordinates', container );
+				collapseIcon = createHudElement( 'div', 'hud_hexInfo_collapse_icon', 'Hide / Show', container );
 				collapseIcon.innerHTML = '<<';
-				collapseIcon.addEventListener('mousedown', function(e){highlightedHexInfo.toggle();});
+				collapseIcon.addEventListener('mousedown', function(e){hexInfo.toggle();});
 				container.style.display = 'inline-block';
 			}
 			,disableMouse: function(){
@@ -222,12 +226,23 @@ var st_hud = st_hud || function(){
 		};
 	})();
 
-	var systemPopupInfo = (function(){
-		var container = {};
+	var systemInfo = (function(){
+		var container = {}
+			,canvas = {}
+			,starInfo = {}
+			,planetInfo = {}
+			,closeButton = {}
+		;
 		
 		return {
 			load: function(){
-				container = createHudElement( 'div', 'hud_systemPopupInfo_container', '', document.getElementById( 'b' ) );
+				container = createHudElement( 'div', 'hud_systemInfo_container', '', document.getElementById( 'b' ) );
+				canvas = createHudElement( 'canvas', 'hud_systemInfo_canvas', '', container );
+				starInfo =  createHudElement( 'div', 'hud_systemInfo_starInfo', '', container );
+				planetInfo =  createHudElement( 'div', 'hud_systemInfo_planetInfo', '', container );
+				closeButton =  createHudElement( 'div', 'hud_systemInfo_closeButton', 'Close System View', container );
+				
+				closeButton.innerHTML = "X";
 			}
 			,update: function( systemData ){ 
 			}

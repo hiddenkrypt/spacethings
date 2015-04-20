@@ -38,9 +38,9 @@ body{
 * HUD MODULE *
 *************/
 
-/*  highlightedHexInfo  */
+/*  hexInfo  */
 
-#hud_highlightedHexInfo_container{
+#hud_hexInfo_container{
 	pointer-events:auto;
 	display: none;
 	position: fixed;
@@ -55,23 +55,23 @@ body{
 	margin-bottom: 1em;
 	padding: .2em;
 }
-#hud_highlightedHexInfo_title{ 
+#hud_hexInfo_title{ 
 }
-#hud_highlightedHexInfo_owner{ 
+#hud_hexInfo_owner{ 
 	font-size: .75em;
 }
-#hud_highlightedHexInfo_ucoords{ 
+#hud_hexInfo_ucoords{ 
 	font-size: .75em;
 	display: inline;
 	float:right;
 }
-#hud_highlightedHexInfo_lcoords{ 
+#hud_hexInfo_lcoords{ 
 	font-size: .75em;
 	display: inline;
 	float:left;
 }
 
-#hud_highlightedHexInfo_collapse_icon{
+#hud_hexInfo_collapse_icon{
 	pointer-events:default;
 	font-size: .5em;
 	width: 1.2em;
@@ -136,28 +136,65 @@ body{
 	border: 1px solid black;
 }
 
-/*  systemPopupInfo  */
+/*  systemInfo  */
 
-#hud_systemPopupInfo_container{
-	position:fixed;
-	left: 50%;
+#hud_systemInfo_container{
+	background-color: rgba( 239,239,239,.7 );
+	position:absolute;
+	left: 15%;
+	top: 15%;
 	overflow: hidden;
-	background-color: rgba(0,0,0,.80);
 	color:#ffffff;
 	font-weight:bold;
-	visibility:visible;
+	visibility:visible; 
 	margin-top: 1em;
-	margin-left: -10em;
-	padding:2em;
-	width:20em;
-	height: 10em;
+	padding: 0em;
+	width: 70%;
+	height: 70%;
 	font-size:1em;
 	z-index: 12;
 }
 
+#hud_systemInfo_canvas{
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+	background-color:#000000;
+}
 
-
-
+#hud_systemInfo_starInfo{
+	position: absolute;
+	width: 3em;
+	height: 2em;
+	background-color: rgba( 239,239,239,.7 );
+	left:0;
+	bottom: 2em;
+	z-index: 5;
+}
+#hud_systemInfo_planetInfo{
+	position: absolute;
+	width: 3em;
+	height: 2em;
+	background-color: rgba( 239,239,239,.7 );
+	left: 10em;
+	top:  7em;
+	z-index:5;
+}
+#hud_systemInfo_closeButton{
+	pointer-events:default;
+	font-size: .5em;
+	width: 3em;
+	height: 3em;
+	line-height: 3em; /* must be the same as height */
+	vertical-align: middle;
+	text-align: center;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	color: rgb(255,255,255);
+	background-color: rgba(130,0,0,.9);
+	z-index: 10;
+}
 
 /*************
 * UAS MODULE *
