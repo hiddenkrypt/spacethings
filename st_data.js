@@ -12,6 +12,7 @@ var st_data = st_data || (function(){
 	var playerData = {};
 	var status = "uninitialized";
 	var DEBUG = st_DEBUG.data;
+	var hashID = new Hashids("spaceTHINGS", 4, "0123456789ABCDEF");
 	
 	var data = {
 		initialize: function(){
@@ -34,11 +35,7 @@ var st_data = st_data || (function(){
 					}
 					if( DEBUG ){ console.log( "test data: " + status ); }	
 				}, 300);
-			} else{
-				//ajax request to server for absolutely everything. 
-				//get mapData, get playerThingData
-				//get CommunicationData
-			}
+			} 
 
 		}
 		,getPlayerData: function(){ return playerData; }
@@ -79,7 +76,6 @@ var st_data = st_data || (function(){
 				,name: hex.system ? mapData.systems[hex.system].name : hex.owner? mapData.owners[hex.owner].adjective+" Space" : "Unclaimed Space"
 				,ownerName: (hex.owner && hex.system) ? mapData.owners[hex.owner].name : "&nbsp;"
 			}
-			// hexData.name = hexData.system? hexData.system.name
 			
 			return hexData;
 		}
