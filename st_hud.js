@@ -14,13 +14,12 @@ var st_hud = st_hud || function(){
 			hexInfo.hide();
 			thingInfo.load();
 			thingInfo.hide();
-			systemInfo.load();
-			systemInfo.hide();
+			systemPopup.load();
+			systemPopup.hide();
 			if( DEBUG ){ 
 				// hexInfo.show();
 				// thingInfo.show();
-				systemInfo
-				systemInfo.show();
+				systemPopup.show();
 				console.log( "st_hud initialized" ); 
 			}
 		}
@@ -31,7 +30,7 @@ var st_hud = st_hud || function(){
 		}
 		,selectHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
-				systemInfo( st_data.getSystemDataByID( coords ) );
+				systemPopup( st_data.getSystemDataByGrid( coords ) );
 			}
 		}
 		,disableMouse: function(){ 
@@ -226,31 +225,65 @@ var st_hud = st_hud || function(){
 		};
 	})();
 
-	var systemInfo = (function(){
-		var container = {}
+	var systemPopup = (function(){
+		var PopupContainer = {}
 			,canvas = {}
-			,starInfo = {}
 			,planetInfo = {}
 			,closeButton = {}
 		;
+		var starInfo = (function(){
+			var container = {};
+			var ucoords = {};
+			var title = {};
+			var classification = {};
+			var population = {};
+			var resources = {};
+			return {
+				load: function(){					
+					container = createHudElement( 'div', 'hud_systemPopup_starInfo', '', PopupContainer );
+					title = createHudElement( 'div', 'hud_systemPopup_starInfo_title', '', container ); 
+					classification = createHudElement( 'div', 'hud_systemPopup_starInfo_classification', '', container ); 
+					ucoords = createHudElement( 'div', 'hud_systemPopup_starInfo_ucoords', '', container ); 
+					population = createHudElement( 'div', 'hud_systemPopup_starInfo_population', '', container ); 
+					resources = createHudElement( 'div', 'hud_systemPopup_starInfo_resources', '', container ); 
+					title.innerHTML = 'Title';
+					classification.innerHTML = 'Classification: ';
+					ucoords.innerHTML = 'Universal Coordinates: ';
+					population.innerHTML = 'System Population: ';
+					resources.innerHTML = 'System Net Resources: ';
+					
+				}
+				,update: function( system ){
+					title.innerHTML = system.name;
+					classification.innerHTML = system.star.magnitude+system.star.MKspectrum+" Class-"+system.star.MKclass;
+					ucoords.innerHTML = 'Universal Coordinates: '+system.coords.universal;
+					population.innerHTML = 'System Population: '+system.population;
+					resources.innerHTML = 'System Net Resources: '+system.resources;
+				}
+			};
+		})();
 		
 		return {
 			load: function(){
-				container = createHudElement( 'div', 'hud_systemInfo_container', '', document.getElementById( 'b' ) );
-				canvas = createHudElement( 'canvas', 'hud_systemInfo_canvas', '', container );
-				starInfo =  createHudElement( 'div', 'hud_systemInfo_starInfo', '', container );
-				planetInfo =  createHudElement( 'div', 'hud_systemInfo_planetInfo', '', container );
-				closeButton =  createHudElement( 'div', 'hud_systemInfo_closeButton', 'Close System View', container );
-				
+				PopupContainer = createHudElement( 'div', 'hud_systemPopup_container', '', document.getElementById( 'b' ) );
+				canvas = createHudElement( 'canvas', 'hud_systemPopup_canvas', '', PopupContainer );
+				planetInfo =  createHudElement( 'div', 'hud_systemPopup_planetInfo', '', PopupContainer );
+				closeButton =  createHudElement( 'div', 'hud_systemPopup_closeButton', 'Close System View', PopupContainer );
 				closeButton.innerHTML = "X";
+				starInfo.load();
 			}
 			,update: function( systemData ){ 
+				if( !systemData ){
+					systemPopup.hide();
+					return;
+				}
+				starInfo.update( systemData );
 			}
 			,hide: function(){
-				container.style.display = 'none';
+				PopupContainer.style.display = 'none';
 			}
 			,show: function(){
-				container.style.display = 'block';
+				PopupContainer.style.display = 'block';
 			}
 		}
 	})();

@@ -79,6 +79,39 @@ var st_data = st_data || (function(){
 			
 			return hexData;
 		}
+		,getSystemDataByGrid: function( coordinates ){
+			var hex = st_data.getMapHexByGrid( coordinates );
+			if( !hex ){ return false; }
+			
+			var aggregatePopulation = 0;
+			var aggregateResources = 0;
+			
+			mapData.planets.forEach(
+				function(element){
+					aggregatePopulation += element.population;
+					aggregateResources += element.resources;
+				}
+			);
+			
+			return {
+				name: mapData.systems[hex.system].name
+				,star: {
+					magnitude:mapData.systems[hex.system].magnitude
+					,MKspectrum: mapData.systems[hex.system].MKspectrum
+					,MLclass: mapData.systems[hex.system].MLclass
+				}
+				,coords: {
+					x: hex.coords.x
+					,y: hex.coords.y
+					,universal: '['+ hashID.encode( hexData.coords.x + 100 ) + ', ' + hashID.encode( hexData.coords.y + 100 ) + ']'
+					,local: '['+hex.coords.x+', '+hex.coords.y+']'
+				}
+				,population: aggregatePopulation
+				,resources: aggregateResources
+				,planets: mapData.planets
+				,owner: mapData.owners[hex.owner]
+			};
+		}
 	};
 	
 	var testUpdate = function(){
@@ -124,19 +157,19 @@ var st_data = st_data || (function(){
 				,"56": { name: "Conquered Gaul",    magnitude: 0, MKClass: "V", MKspectrum: "O", offset:Math.floor(Math.random()*7)+1, planets:0 }
 				,"10": { name: "Unidentified System", magnitude: 7, MKClass: "III", MKspectrum: "T", offset:Math.floor(Math.random()*7)+1, planets:0 }
 			}
-			,planets: {
-				"612": 	{ system: 1234, orbit: 0}
-				,"413": { system: 1234, orbit: 1}
-				,"1111":{ system: 1234, orbit: 2}
-				,"82": 	{ system: 3456, orbit: 0}
-				,"72": 	{ system: 3456, orbit: 1}
-				,"8": 	{ system: 2, orbit: 0}
-				,"9":	{ system: 2, orbit: 1}
-				,"10": 	{ system: 2, orbit: 2}
-				,"11": 	{ system: 2, orbit: 3}
-				,"12": 	{ system: 2, orbit: 4}
-				,"13": 	{ system: 5, orbit: 0}
-			}
+			,planets: [
+				{id:"612",		system: 1234, 	orbit: 0, population: 5}
+				,{id:"413", 	system: 1234, 	orbit: 1, population: 17}
+				,{id:"1111",	system: 1234, 	orbit: 2, population: 2}
+				,{id:"82", 		system: 3456, 	orbit: 0, population: 20}
+				,{id:"72", 		system: 3456, 	orbit: 1, population: 15}
+				,{id:"8", 		system: 2, 		orbit: 0, population: 1}
+				,{id:"9",		system: 2, 		orbit: 1, population: 8}
+				,{id:"10", 		system: 2, 		orbit: 2, population: 9}
+				,{id:"11",		system: 2, 		orbit: 3, population: 10}
+				,{id:"12", 		system: 2, 		orbit: 4, population: 11}
+				,{id:"13", 		system: 5, 		orbit: 0, population: 23}
+			]
 			,owners: {
 				"13": { r:153, g:23, b:77, name: "Alternian Empire", adjective: "Alternian"}
 				,"3": { r:0, g:0, b:86, name: "Sontaran Empire", adjective: "Sontaran"}
