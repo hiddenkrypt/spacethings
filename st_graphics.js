@@ -256,7 +256,7 @@ var st_graphics = st_graphics || function(){
 	
 	var drawStar = function( ctx, canv_x, canv_y, star ){
 		var color = "0,0,0";
-		switch(star.MKspectrum){
+		switch(star.mkSpectrum){
 			case "O":
 				color = "130,130,255";
 				break;
