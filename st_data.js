@@ -63,26 +63,32 @@ var st_data = st_data || (function(){
 			var hex = st_data.getMapHexByGrid( coordinates );
 			if(!hex){
 				return {
-					coords:coordinates
+					coords:{
+						x: coordinates.x
+						,y: coordinates.y
+						,universal: '[' + hashID.encode( coordinates.x + 100 ) + ', ' + hashID.encode( coordinates.y + 100 ) + ']'
+						,local: '[' + -( playerData.homeworld.x - coordinates.x ) + ', ' + ( playerData.homeworld.y - coordinates.y ) + ']'
+					}
 					,name: "Unexplored Space"
 					,ownerName: "&nbsp;"
 				};
-			}
-			var hexData = {
-				coords: {
-					x: hex.x
-					,y:hex.y
+			} else{
+				return {
+					coords: {
+						x: hex.x
+						,y: hex.y
+						,universal: '[' + hashID.encode( hex.x + 100 ) + ', ' + hashID.encode( hex.y + 100 ) + ']'
+						,local: '[' + -( playerData.homeworld.x - hex.x ) + ', ' + ( playerData.homeworld.y - hex.y ) + ']'
+					}
+					,name: hex.system ? mapData.systems[hex.system].name : hex.owner? mapData.owners[hex.owner].adjective+" Space" : "Unclaimed Space"
+					,ownerName: (hex.owner && hex.system) ? mapData.owners[hex.owner].name : "&nbsp;"
 				}
-				,name: hex.system ? mapData.systems[hex.system].name : hex.owner? mapData.owners[hex.owner].adjective+" Space" : "Unclaimed Space"
-				,ownerName: (hex.owner && hex.system) ? mapData.owners[hex.owner].name : "&nbsp;"
-			}
-			
-			return hexData;
+			}			 
 		}
 		,getSystemDataByGrid: function( coordinates ){
 			var hex = st_data.getMapHexByGrid( coordinates );
 			if( !hex ){ return false; }
-			
+			console.log( hex );
 			var aggregatePopulation = 0;
 			var aggregateResources = 0;
 			
@@ -94,17 +100,17 @@ var st_data = st_data || (function(){
 			);
 			
 			return {
-				name: mapData.systems[hex.system].name
+				name: mapData.systems[hex.system].name + " System"
 				,star: {
 					magnitude:mapData.systems[hex.system].magnitude
-					,MKspectrum: mapData.systems[hex.system].MKspectrum
-					,MLclass: mapData.systems[hex.system].MLclass
+					,mkSpectrum: mapData.systems[hex.system].mkSpectrum
+					,mkClass: mapData.systems[hex.system].mkClass
 				}
 				,coords: {
-					x: hex.coords.x
-					,y: hex.coords.y
-					,universal: '['+ hashID.encode( hexData.coords.x + 100 ) + ', ' + hashID.encode( hexData.coords.y + 100 ) + ']'
-					,local: '['+hex.coords.x+', '+hex.coords.y+']'
+					x: 			hex.x
+					,y: 		hex.y
+					,universal: '[' + hashID.encode( hex.x + 100 ) + ', ' + hashID.encode( hex.y + 100 ) + ']'
+					,local: 	'[' + -( playerData.homeworld.x - hex.x ) + ', ' + ( playerData.homeworld.y - hex.y ) + ']'
 				}
 				,population: aggregatePopulation
 				,resources: aggregateResources
@@ -123,8 +129,8 @@ var st_data = st_data || (function(){
 			,adjective: "Ork"
 			,homeworld: { x: 21, y: 15, id:66}
 			,militaryPower: 15
-			,population: 23
-			,resources: 24
+			,population: 13
+			,resources: 6
 			,color: "30, 230, 0"
 			,logo:"logo_test.png"
 		};
@@ -150,25 +156,25 @@ var st_data = st_data || (function(){
 				,{ x: 20, y: 16, owner: false, 	system: 10 } 
 			]
 			,systems: {
-				"1234": { name:"Earth",magnitude:5, MKclass: "V", MKspectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
-				,"3456": { name:"Alternia",  magnitude:-15, MKclass: "I", MKspectrum: "L", offset:Math.floor(Math.random()*7)+1, planets:2 }	
-				,"2": { name: "Sontar",  magnitude:15, MKclass: "V", MKspectrum: "B", offset:Math.floor(Math.random()*7)+1, planets:5 }
-				,"5": { name: "Orkus",   magnitude: 0, MKClass: "V", MKspectrum: "A", offset:Math.floor(Math.random()*7)+1, planets:1 }
-				,"56": { name: "Conquered Gaul",    magnitude: 0, MKClass: "V", MKspectrum: "O", offset:Math.floor(Math.random()*7)+1, planets:0 }
-				,"10": { name: "Unidentified System", magnitude: 7, MKClass: "III", MKspectrum: "T", offset:Math.floor(Math.random()*7)+1, planets:0 }
+				"1234": { name:"Earth",				magnitude:2, 	mkClass: "V", 	mkSpectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
+				,"3456":{ name:"Alternia",  		magnitude:-15,	mkClass: "I", 	mkSpectrum: "L", offset:Math.floor(Math.random()*7)+1, planets:2 }	
+				,"2": 	{ name: "Sontar",  			magnitude:15, 	mkClass: "V", 	mkSpectrum: "B", offset:Math.floor(Math.random()*7)+1, planets:5 }
+				,"5": 	{ name: "Orkus",   			magnitude: -3, 	mkClass: "V", 	mkSpectrum: "A", offset:Math.floor(Math.random()*7)+1, planets:1 }
+				,"56":	{ name: "Conquered Gaul",	magnitude: -2,	mkClass: "V", 	mkSpectrum: "O", offset:Math.floor(Math.random()*7)+1, planets:0 }
+				,"10": 	{ name: "Unidentified", 	magnitude: 7, 	mkClass: "III", mkSpectrum: "T", offset:Math.floor(Math.random()*7)+1, planets:0 }
 			}
 			,planets: [
-				{id:"612",		system: 1234, 	orbit: 0, population: 5}
-				,{id:"413", 	system: 1234, 	orbit: 1, population: 17}
-				,{id:"1111",	system: 1234, 	orbit: 2, population: 2}
-				,{id:"82", 		system: 3456, 	orbit: 0, population: 20}
-				,{id:"72", 		system: 3456, 	orbit: 1, population: 15}
-				,{id:"8", 		system: 2, 		orbit: 0, population: 1}
-				,{id:"9",		system: 2, 		orbit: 1, population: 8}
-				,{id:"10", 		system: 2, 		orbit: 2, population: 9}
-				,{id:"11",		system: 2, 		orbit: 3, population: 10}
-				,{id:"12", 		system: 2, 		orbit: 4, population: 11}
-				,{id:"13", 		system: 5, 		orbit: 0, population: 23}
+				{id:"612",		system: 1234, 	orbit: 0,	population: 5,	resources:2}
+				,{id:"413", 	system: 1234, 	orbit: 1,	population: 17,	resources:1}
+				,{id:"1111",	system: 1234, 	orbit: 2,	population: 2,	resources:5}
+				,{id:"82", 		system: 3456, 	orbit: 0,	population: 20,	resources:-4}
+				,{id:"72", 		system: 3456, 	orbit: 1,	population: 15,	resources:-1}
+				,{id:"8", 		system: 2, 		orbit: 0,	population: 1,	resources:4}
+				,{id:"9",		system: 2, 		orbit: 1,	population: 8,	resources:1}
+				,{id:"10", 		system: 2, 		orbit: 2,	population: 9,	resources:2}
+				,{id:"11",		system: 2, 		orbit: 3,	population: 10,	resources:2}
+				,{id:"12", 		system: 2, 		orbit: 4,	population: 11,	resources:1}
+				,{id:"13", 		system: 5, 		orbit: 1,	population: 13,	resources:6}
 			]
 			,owners: {
 				"13": { r:153, g:23, b:77, name: "Alternian Empire", adjective: "Alternian"}

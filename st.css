@@ -182,7 +182,7 @@ body{
 	z-index:5;
 }
 #hud_systemPopup_closeButton{
-	pointer-events:default;
+	cursor: pointer;
 	font-size: .5em;
 	width: 3em;
 	height: 3em;

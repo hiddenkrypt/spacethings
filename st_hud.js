@@ -17,9 +17,9 @@ var st_hud = st_hud || function(){
 			systemPopup.load();
 			systemPopup.hide();
 			if( DEBUG ){ 
-				// hexInfo.show();
-				// thingInfo.show();
-				systemPopup.show();
+				hexInfo.show();
+				thingInfo.show();
+				// systemPopup.show();
 				console.log( "st_hud initialized" ); 
 			}
 		}
@@ -30,11 +30,11 @@ var st_hud = st_hud || function(){
 		}
 		,selectHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
-				systemPopup( st_data.getSystemDataByGrid( coords ) );
+				systemPopup.update( st_data.getSystemDataByGrid( coords ) );
+				systemPopup.show();
 			}
 		}
 		,disableMouse: function(){ 
-		
 			hexInfo.disableMouse();
 			thingInfo.disableMouse();
 		}
@@ -92,8 +92,9 @@ var st_hud = st_hud || function(){
 			}
 			,update: function( hexData ){
 				var homeworld = st_data.getHomeworld();
-				lcoords.innerHTML = "HRC:["+ -(homeworld.x - hexData.coords.x) + ", " + (homeworld.y - hexData.coords.y) + "]";
-				ucoords.innerHTML = "UC: ["+ hashID.encode( hexData.coords.x + 100 ) + ", " + hashID.encode( hexData.coords.y + 100 ) + "]";
+				lcoords.innerHTML = "HRC: "+hexData.coords.local;
+				ucoords.innerHTML = "UC: "+hexData.coords.universal;
+		
 				title.innerHTML = hexData.name;
 				owner.innerHTML = hexData.ownerName;
 			}
@@ -228,9 +229,30 @@ var st_hud = st_hud || function(){
 	var systemPopup = (function(){
 		var PopupContainer = {}
 			,canvas = {}
-			,planetInfo = {}
 			,closeButton = {}
 		;
+		var planetInfo = (function(){
+			var container = {};
+			var name = {};
+			var classification = {};
+			var population = {};
+			var resources = {};
+			var selection = 0;
+			return {
+				load: function(){
+					container = createHudElement( 'div', 'hud_systemPopup_planetInfo', '', PopupContainer );
+				}
+				,update: function( planet ){
+					
+				}
+				,show: function(){
+					container.style.display = 'block';
+				}
+				,hide: function(){
+					container.style.display = 'none';
+				}
+			}
+		})();
 		var starInfo = (function(){
 			var container = {};
 			var ucoords = {};
@@ -255,7 +277,8 @@ var st_hud = st_hud || function(){
 				}
 				,update: function( system ){
 					title.innerHTML = system.name;
-					classification.innerHTML = system.star.magnitude+system.star.MKspectrum+" Class-"+system.star.MKclass;
+					console.log( system.star );
+					classification.innerHTML = system.star.mkSpectrum + system.star.magnitude + "-" + system.star.mkClass;
 					ucoords.innerHTML = 'Universal Coordinates: '+system.coords.universal;
 					population.innerHTML = 'System Population: '+system.population;
 					resources.innerHTML = 'System Net Resources: '+system.resources;
@@ -267,10 +290,16 @@ var st_hud = st_hud || function(){
 			load: function(){
 				PopupContainer = createHudElement( 'div', 'hud_systemPopup_container', '', document.getElementById( 'b' ) );
 				canvas = createHudElement( 'canvas', 'hud_systemPopup_canvas', '', PopupContainer );
-				planetInfo =  createHudElement( 'div', 'hud_systemPopup_planetInfo', '', PopupContainer );
 				closeButton =  createHudElement( 'div', 'hud_systemPopup_closeButton', 'Close System View', PopupContainer );
 				closeButton.innerHTML = "X";
+				closeButton.addEventListener( 'mousedown', function(e){ 
+					systemPopup.hide(); 
+					hexInfo.show();
+					thingInfo.show();
+				} );
+				
 				starInfo.load();
+				planetInfo.load();
 			}
 			,update: function( systemData ){ 
 				if( !systemData ){
@@ -284,11 +313,10 @@ var st_hud = st_hud || function(){
 			}
 			,show: function(){
 				PopupContainer.style.display = 'block';
+				hexInfo.hide();
+				thingInfo.hide();
 			}
 		}
 	})();
 	return hud;
 }(); // IIFE to create st_hud
-
-
-

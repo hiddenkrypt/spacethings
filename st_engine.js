@@ -87,7 +87,7 @@ var st_engine = st_engine || function(){
 		if( lastClickedHex.x == hexX && lastClickedHex.y == hexY && doubleclick ) {
 			if( DEBUG ){ console.log( "SELECTED: (" + hexX + "," + hexY + ")" ); }
 			st_graphics.selectHex( {x:hexX, y:hexY} );
-			st_hud.highlightHexAtGrid( {x:hexX, y:hexY} );
+			st_hud.selectHexAtGrid( {x:hexX, y:hexY} );
 		} 
 		lastClickedHex.x = hexX;
 		lastClickedHex.y = hexY;
