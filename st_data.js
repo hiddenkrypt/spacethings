@@ -44,8 +44,14 @@ var st_data = st_data || (function(){
 		,getStatus: function(){ return status; }
 		,getOwnerById: function( id ){ return mapData.owners[id]; }
 		,getSystemById: function( id ){ return mapData.systems[id]; }
-		,getSystemDataByGrid: function( coords ){  
-		
+		,getStarDataFromSystemId: function( id ){
+			if( !id ){ return false; }
+			return {
+				magnitude: mapData.systems[id].magnitude
+				,mkSpectrum: mapData.systems[id].mkSpectrum
+				,mkClass: mapData.systems[id].mkClass
+				,color: getColorFromMKSpectrum( mapData.systems[id].mkSpectrum )
+			};
 		}
 		,loaded: function(){ return status === "loaded"; }
 		,getMapHexByGrid:function( coords ){
@@ -105,6 +111,7 @@ var st_data = st_data || (function(){
 					magnitude:mapData.systems[hex.system].magnitude
 					,mkSpectrum: mapData.systems[hex.system].mkSpectrum
 					,mkClass: mapData.systems[hex.system].mkClass
+					,color: getColorFromMKSpectrum( mapData.systems[hex.system].mkSpectrum )
 				}
 				,coords: {
 					x: 			hex.x
@@ -187,6 +194,34 @@ var st_data = st_data || (function(){
 		console.log("Loaded test map and player data");
 		return true;
 	};
-	return data
+	
+	var getColorFromMKSpectrum = function( spectrum ){			
+		var color = "0,0,0";
+		switch( spectrum ){
+			case "O":
+				return "130,130,255";
+			case "B":
+				return "130,130,202";
+			case "A":
+				return "162,162,210";
+			case "F":
+				return color = "210,210,226";
+			case "G":
+				return color = "239,239,239";
+			case "K":
+				return color = "226,210,210";
+			case "M":
+				return color = "210,162,162";
+			case "L":
+				return color = "202,130,130";
+			case "T":
+				return color = "255,130,130";
+			default:
+				return color = "255,255,255";
+		}
+	};
+	
+	
+	return data;
 }());
 
