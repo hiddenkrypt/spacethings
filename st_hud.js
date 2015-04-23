@@ -15,7 +15,7 @@ var st_hud = st_hud || function(){
 			thingInfo.load();
 			thingInfo.hide();
 			systemPopup.load();
-			systemPopup.hide();
+			systemPopup.close();
 			if( DEBUG ){ 
 				hexInfo.show();
 				thingInfo.show();
@@ -30,8 +30,8 @@ var st_hud = st_hud || function(){
 		}
 		,selectHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
-				systemPopup.update( st_data.getSystemDataByGrid( coords ) );
-				systemPopup.show();
+				systemPopup.open( st_data.getSystemDataByGrid( coords ) );
+
 			}
 		}
 		,disableMouse: function(){ 
@@ -293,28 +293,31 @@ var st_hud = st_hud || function(){
 				closeButton =  createHudElement( 'div', 'hud_systemPopup_closeButton', 'Close System View', PopupContainer );
 				closeButton.innerHTML = "X";
 				closeButton.addEventListener( 'mousedown', function(e){ 
-					systemPopup.hide(); 
-					hexInfo.show();
-					thingInfo.show();
+					systemPopup.close(); 
 				} );
 				
 				starInfo.load();
 				planetInfo.load();
+				systemPopup.render( canvas.getContext( "2d" ) );
+
 			}
-			,update: function( systemData ){ 
+			,open: function( systemData ){ 
 				if( !systemData ){
 					systemPopup.hide();
 					return;
 				}
 				starInfo.update( systemData );
-			}
-			,hide: function(){
-				PopupContainer.style.display = 'none';
-			}
-			,show: function(){
 				PopupContainer.style.display = 'block';
 				hexInfo.hide();
 				thingInfo.hide();
+			}
+			,close: function(){
+				PopupContainer.style.display = 'none';
+				hexInfo.show();
+				thingInfo.show();
+			}
+			,render: function( ctx ){
+				
 			}
 		}
 	})();
