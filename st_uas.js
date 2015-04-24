@@ -78,6 +78,8 @@ var st_uas = st_uas || function(){
 		uasDom.inputLabels.username.setAttribute( "id",  "username_label" );
 		uasDom.inputLabels.username.setAttribute( "src", "images/username.png" );
 		
+		uasDom.inputFields.username.value = 'debug';
+		
 		uasDom.inputFields.password = document.createElement( 'input' );
 		uasDom.inputFields.password.setAttribute( "id", "password" );
 		uasDom.inputFields.password.setAttribute( "type", "password" );

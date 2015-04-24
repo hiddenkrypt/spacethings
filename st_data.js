@@ -8,6 +8,7 @@
 
 var st_data = st_data || (function(){
 	"use strict";
+	
 	var mapData = {};
 	var playerData = {};
 	var status = "uninitialized";

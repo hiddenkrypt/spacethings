@@ -30,7 +30,7 @@ var st_engine = st_engine || function(){
 			st_hud.initialize(); // start heads up display module
 			
 			window.addEventListener  ( "mouseup", handleMouseUp, false);
-			document.body.addEventListener( "keydown", handleKeyDown, false ); 
+			if( DEBUG ){ document.body.addEventListener( "keydown", handleKeyDown, false ); }
 			Canvas.setAttribute("tabindex", 0);
 			Canvas.addEventListener( "contextmenu", handleMouseMenu, false ); 
 			Canvas.addEventListener( "mousedown", c_handleMouseDown, false );
@@ -56,7 +56,11 @@ var st_engine = st_engine || function(){
 		,canvas: function(){ return Canvas; }
 		,ctx: function(){ return Context; }
 		,loadComplete: function(){
+			st_uas.hide();
+			st_engine.hideOverlay();
+			document.body.addEventListener( "keydown", handleKeyDown, false ); 
 			st_graphics.selectHex( st_data.getHomeworld() );
+			st_hud.show();
 			st_hud.highlightHexAtGrid( st_data.getHomeworld() );
 			st_hud.loadSidebar( st_data.getPlayerData() );
 		}
@@ -67,9 +71,6 @@ var st_engine = st_engine || function(){
 			Overlay.style.display = 'none';
 		}
 		,start: function(){
-			st_uas.hide();
-			st_engine.hideOverlay();
-			st_hud.hide();
 		}
 	};
 	
