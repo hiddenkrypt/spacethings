@@ -164,12 +164,10 @@ body{
 
 #hud_systemPopup_starInfo{
 	position: absolute;
-	width: ;
-	height: ;
 	background-color: rgba( 239,239,239,.7 );
 	color:#000000;
-	left:0;
-	bottom: 2em;
+	right:0;
+	bottom: 1em;
 	z-index: 5;
 }
 #hud_systemPopup_planetInfo{
@@ -183,7 +181,7 @@ body{
 }
 #hud_systemPopup_closeButton{
 	cursor: pointer;
-	font-size: .5em;
+	font-size: .8em;
 	width: 3em;
 	height: 3em;
 	line-height: 3em; /* must be the same as height */

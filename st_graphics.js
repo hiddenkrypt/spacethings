@@ -252,12 +252,22 @@ var st_graphics = st_graphics || function(){
 		drawStar( ctx, canvasCoords.x, canvasCoords.y, star );		
 	}; // private drawStarAtGrid()
 	
-	var drawStar = function( ctx, canv_x, canv_y, star ){		
-		canv_x += st_graphics.hex.rect().w / 2 + ((star.offset<3)?-st_graphics.hex.h()/2:(star.offset>4)?st_graphics.hex.h()/2:0);
-		canv_y += st_graphics.hex.sideLength() / 2 + st_graphics.hex.h() + ((star.offset%2==1)?-st_graphics.hex.h()/2:st_graphics.hex.h()/2);
+	var drawStar = function( ctx, canvasX, canvasY, star ){		
+		canvasX += st_graphics.hex.rect().w / 2;
+		canvasY += st_graphics.hex.sideLength() / 2 + st_graphics.hex.h();
+		if (star.offset<3){
+			canvasX -= st_graphics.hex.h()/2; 
+		} else if(star.offset>4){
+			canvasX += st_graphics.hex.h()/2;
+		} 
+		if( star.offset%2==1 ){
+			canvasY -= st_graphics.hex.h()/2;
+		} else{
+			canvasY += st_graphics.hex.h()/2;
+		}
 		ctx.save();
 			ctx.beginPath();
-			ctx.arc(canv_x, canv_y, (st_graphics.hex.h()*(( 30 - star.magnitude )/20))/4, 0, 2*Math.PI, false);
+			ctx.arc(canvasX, canvasY, (st_graphics.hex.h()*(star.magnitude+10)/40), 0, 2*Math.PI, false);
 			ctx.fillStyle = "rgba(" + star.color + ", 1)";
 			ctx.shadowColor = "rgba(" + star.color + ", 1)";
 			ctx.shadowBlur = 50;

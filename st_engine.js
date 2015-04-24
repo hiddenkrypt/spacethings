@@ -48,6 +48,8 @@ var st_engine = st_engine || function(){
 			
 			st_graphics.render( Context );
 			
+			st_hud.render( ); // the hud has it's own canvas and context
+			
 			requestAnimationFrame( this.render.bind(this) );
 		}
 		,getHighlightedHex: function(){ return hexHighlight; }
@@ -63,6 +65,11 @@ var st_engine = st_engine || function(){
 		}
 		,hideOverlay: function(){
 			Overlay.style.display = 'none';
+		}
+		,start: function(){
+			st_uas.hide();
+			st_engine.hideOverlay();
+			st_hud.hide();
 		}
 	};
 	
@@ -145,6 +152,7 @@ var st_engine = st_engine || function(){
 				
 			case key.HOME:
 			case key.ENTER:
+			case key.SPACE:
 				st_graphics.camera.returnToInitialZoom();
 				st_graphics.camera.returnToInitialPosition();
 				break;

@@ -19,39 +19,15 @@ var st_uas = st_uas || function(){
 			
 			if( DEBUG ){ console.log( "st_uas initialized" ); }
 		}
-		,login: function(){
-			uasDom.error.style.display='none';
-			var sendQuery = { 
-				username: 	uasDom.inputFields.username.value
-				,hashword:	Sha1.hash(uasDom.inputFields.password.value)
-			};
-			ajax.send( 'src/login.php', sendQuery, function( response ){
-				if( DEBUG ){ console.log( response ); }
-			});
+		,hide: function(){
+			uasDom.container.style.display = 'none';
+			st_engine.hideOverlay();
 		}
-		,create: function(){
-			uasDom.error.style.display='none';
-			if(uasDom.inputFields.password.value.length === 0
-				|| uasDom.inputFields.verifyPassword.value.length === 0
-				|| uasDom.inputFields.username.value.length === 0
-				|| uasDom.inputFields.inviteCode.value.length === 0
-				){
-				uasDom.error.innerHTML = "Empty field detected. All fields are mandatory.";
-				uasDom.error.style.display='inline';
-			} else if(uasDom.password.value != uasDom.verifyPassword.value){
-				uasDom.error.innerHTML = "Confirmation Password does not match initial password!";
-				uasDom.error.style.display='inline';
-			} else{	
-				var sendQuery = {
-					username: uasDom.inputFields.username.value
-					,hashword: Sha1.hash(uasDom.inputFields.password.value)
-					,inviteCode: Sha1.hash(uasDom.inputFields.inviteCode.value)
-				};
-				ajax.send( 'src/create_account.php', sendQuery, function( response ){
-					if( DEBUG ){ console.log( response ); }
-				});
-			}
+		,show: function(){
+			st_uas.switchToLogin();
+			st_engine.showOverlay();	
 		}
+
 	};
 	var uasDom = {
 		container: 	{}
@@ -176,6 +152,7 @@ var st_uas = st_uas || function(){
 		uasDom.container.appendChild( uasDom.modeSwitch.privacy );
 
 		uasDom.container.style.display = "block";
+		uasDom.submit.addEventListener( "click", login );
 	};
 	var switchToCreate = function(){
 		uasDom.container = scrubElement( uasDom.container );
@@ -200,6 +177,7 @@ var st_uas = st_uas || function(){
 		uasDom.container.appendChild( uasDom.modeSwitch.privacy );
 		uasDom.container.style.display = "block";
 		
+		uasDom.submit.addEventListener( "create", login );
 	}
 	
 	
@@ -211,7 +189,44 @@ var st_uas = st_uas || function(){
 		return element;
 	}
 	
-	
+	var login = function(){
+		uasDom.error.style.display='none';
+		if ( uasDom.inputFields.username.value == 'debug' ){
+			st_data.update( true );
+			st_engine.start();
+			return;
+		}
+		var sendQuery = { 
+			username: 	uasDom.inputFields.username.value
+			,hashword:	Sha1.hash(uasDom.inputFields.password.value)
+		};
+		ajax.send( 'src/login.php', sendQuery, function( response ){
+			if( DEBUG ){ console.log( response ); }
+		});
+	}
+	var create = function(){
+		uasDom.error.style.display='none';
+		if(uasDom.inputFields.password.value.length === 0
+			|| uasDom.inputFields.verifyPassword.value.length === 0
+			|| uasDom.inputFields.username.value.length === 0
+			|| uasDom.inputFields.inviteCode.value.length === 0
+			){
+			uasDom.error.innerHTML = "Empty field detected. All fields are mandatory.";
+			uasDom.error.style.display='inline';
+		} else if(uasDom.password.value != uasDom.verifyPassword.value){
+			uasDom.error.innerHTML = "Confirmation Password does not match initial password!";
+			uasDom.error.style.display='inline';
+		} else{	
+			var sendQuery = {
+				username: uasDom.inputFields.username.value
+				,hashword: Sha1.hash(uasDom.inputFields.password.value)
+				,inviteCode: Sha1.hash(uasDom.inputFields.inviteCode.value)
+			};
+			ajax.send( 'src/create_account.php', sendQuery, function( response ){
+				if( DEBUG ){ console.log( response ); }
+			});
+		}
+	}
 	return uas;
 }();
 

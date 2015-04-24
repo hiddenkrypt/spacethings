@@ -23,8 +23,8 @@ var st_data = st_data || (function(){
 			
 			if( DEBUG ){ console.log( "st_data initialized" ); }
 		}
-		,update: function(){
-			if( DEBUG ){
+		,update: function( loadTest ){
+			if( DEBUG || loadTest){
 				console.log( "loading debug map" );
 				setTimeout( function(){		
 					if( testUpdate() ){//if load success:
@@ -51,6 +51,7 @@ var st_data = st_data || (function(){
 				,mkSpectrum: mapData.systems[id].mkSpectrum
 				,mkClass: mapData.systems[id].mkClass
 				,color: getColorFromMKSpectrum( mapData.systems[id].mkSpectrum )
+				,offset: mapData.systems[id].offset
 			};
 		}
 		,loaded: function(){ return status === "loaded"; }
@@ -97,16 +98,20 @@ var st_data = st_data || (function(){
 			console.log( hex );
 			var aggregatePopulation = 0;
 			var aggregateResources = 0;
+			var aggregatePlanets = [];
 			
 			mapData.planets.forEach(
-				function(element){
-					aggregatePopulation += element.population;
-					aggregateResources += element.resources;
+				function( planet ){
+					if( planet.system == hex.system ){
+						aggregatePopulation += planet.population;
+						aggregateResources += planet.resources;
+						aggregatePlanets.push( planet );
+					}
 				}
 			);
 			
 			return {
-				name: mapData.systems[hex.system].name + " System"
+				adjective: mapData.systems[hex.system].adjective
 				,star: {
 					magnitude:mapData.systems[hex.system].magnitude
 					,mkSpectrum: mapData.systems[hex.system].mkSpectrum
@@ -121,7 +126,7 @@ var st_data = st_data || (function(){
 				}
 				,population: aggregatePopulation
 				,resources: aggregateResources
-				,planets: mapData.planets
+				,planets: aggregatePlanets
 				,owner: mapData.owners[hex.owner]
 			};
 		}
@@ -163,25 +168,30 @@ var st_data = st_data || (function(){
 				,{ x: 20, y: 16, owner: false, 	system: 10 } 
 			]
 			,systems: {
-				"1234": { name:"Earth",				magnitude:2, 	mkClass: "V", 	mkSpectrum: "G", offset:Math.floor(Math.random()*7)+1, planets:3 }
-				,"3456":{ name:"Alternia",  		magnitude:-15,	mkClass: "I", 	mkSpectrum: "L", offset:Math.floor(Math.random()*7)+1, planets:2 }	
-				,"2": 	{ name: "Sontar",  			magnitude:15, 	mkClass: "V", 	mkSpectrum: "B", offset:Math.floor(Math.random()*7)+1, planets:5 }
-				,"5": 	{ name: "Orkus",   			magnitude: -3, 	mkClass: "V", 	mkSpectrum: "A", offset:Math.floor(Math.random()*7)+1, planets:1 }
-				,"56":	{ name: "Conquered Gaul",	magnitude: -2,	mkClass: "V", 	mkSpectrum: "O", offset:Math.floor(Math.random()*7)+1, planets:0 }
-				,"10": 	{ name: "Unidentified", 	magnitude: 7, 	mkClass: "III", mkSpectrum: "T", offset:Math.floor(Math.random()*7)+1, planets:0 }
+				"1234": { name: "Sol",				adjective:"Solar",			magnitude:2, 	mkClass: "V", 	mkSpectrum: "G", offset:3, planets:3 }
+				,"3456":{ name: "Alternia",  		adjective:"Alternian",		magnitude:9,	mkClass: "I", 	mkSpectrum: "L", offset:4, planets:2 }	
+				,"2": 	{ name: "Sontar",  			adjective:"Sontaran",		magnitude:1, 	mkClass: "V", 	mkSpectrum: "B", offset:1, planets:5 }
+				,"5": 	{ name: "Orkus",   			adjective:"Orkusian",		magnitude:4, 	mkClass: "V", 	mkSpectrum: "A", offset:5, planets:1 }
+				,"56":	{ name: "Conquered Gaul",	adjective:"Gallic",			magnitude:3,	mkClass: "V", 	mkSpectrum: "O", offset:2, planets:0 }
+				,"10": 	{ name: "Unidentified", 	adjective:"Unidentified",	magnitude:7, 	mkClass: "III", mkSpectrum: "T", offset:6, planets:0 }
 			}
 			,planets: [
-				{id:"612",		system: 1234, 	orbit: 0,	population: 5,	resources:2}
-				,{id:"413", 	system: 1234, 	orbit: 1,	population: 17,	resources:1}
-				,{id:"1111",	system: 1234, 	orbit: 2,	population: 2,	resources:5}
-				,{id:"82", 		system: 3456, 	orbit: 0,	population: 20,	resources:-4}
-				,{id:"72", 		system: 3456, 	orbit: 1,	population: 15,	resources:-1}
+				{id:"612",		system: 1234, 	orbit: 0,	population: 0,	resources:2, 	name: "Mercury"}
+				,{id:"413", 	system: 1234, 	orbit: 1,	population: 0,	resources:1, 	name: "Venus"}
+				,{id:"1111",	system: 1234, 	orbit: 2,	population: 9,	resources:-4, 	name: "Earth"}
+				,{id:"1111",	system: 1234, 	orbit: 3,	population: 2,	resources:1, 	name: "Mars"}				
+				,{id:"1612",	system: 1234, 	orbit: 4,	population: 1,	resources:7, 	name: "Jupiter"}
+				,{id:"1413", 	system: 1234, 	orbit: 5,	population: 1,	resources:6, 	name: "Saturn"}
+				,{id:"11111",	system: 1234, 	orbit: 6,	population: 0,	resources:1, 	name: "Uranus"}
+				,{id:"11111",	system: 1234, 	orbit: 7,	population: 0,	resources:1, 	name: "Neptune"}
+				,{id:"82", 		system: 3456, 	orbit: 0,	population: 20,	resources:-4,	name: "Alternia"}
 				,{id:"8", 		system: 2, 		orbit: 0,	population: 1,	resources:4}
 				,{id:"9",		system: 2, 		orbit: 1,	population: 8,	resources:1}
-				,{id:"10", 		system: 2, 		orbit: 2,	population: 9,	resources:2}
+				,{id:"10", 		system: 2, 		orbit: 2,	population: 9,	resources:2,	name: "Sontar"}
 				,{id:"11",		system: 2, 		orbit: 3,	population: 10,	resources:2}
 				,{id:"12", 		system: 2, 		orbit: 4,	population: 11,	resources:1}
-				,{id:"13", 		system: 5, 		orbit: 1,	population: 13,	resources:6}
+				,{id:"13", 		system: 5, 		orbit: 1,	population: 13,	resources:6,	name: "Orkus"}
+				,{id:"14",		system: 56,		orbit: 0,   population: 2,	resources:4,	name: "New Gaul"}
 			]
 			,owners: {
 				"13": { r:153, g:23, b:77, name: "Alternian Empire", adjective: "Alternian"}

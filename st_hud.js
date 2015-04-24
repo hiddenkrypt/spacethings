@@ -5,17 +5,15 @@
 
 var st_hud = st_hud || function(){
 	var DEBUG = st_DEBUG.hud;
-
-	var hashID = new Hashids("spaceTHINGS", 4, "0123456789ABCDEF");
 	
 	var hud = {
 		initialize: function(){
 			hexInfo.load();
-			hexInfo.hide();
 			thingInfo.load();
-			thingInfo.hide();
 			systemPopup.load();
 			systemPopup.close();
+			hexInfo.hide();
+			thingInfo.hide();
 			if( DEBUG ){ 
 				hexInfo.show();
 				thingInfo.show();
@@ -31,7 +29,6 @@ var st_hud = st_hud || function(){
 		,selectHexAtGrid: function( coords ){
 			if( st_data.loaded() ){
 				systemPopup.open( st_data.getSystemDataByGrid( coords ) );
-
 			}
 		}
 		,disableMouse: function(){ 
@@ -44,6 +41,19 @@ var st_hud = st_hud || function(){
 		}
 		,loadSidebar: function( playerData ){
 			thingInfo.update( playerData );
+		}
+		,render: function(){
+			systemPopup.render();
+		}
+		,show: function(){
+			hexInfo.show();
+			thingInfo.show();
+			systemPopup.close();
+		}
+		,hide: function(){
+			hexInfo.hide();
+			thingInfo.hide();
+			systemPopup.close();
 		}
 	};
 	
@@ -109,7 +119,6 @@ var st_hud = st_hud || function(){
 				collapseIcon = createHudElement( 'div', 'hud_hexInfo_collapse_icon', 'Hide / Show', container );
 				collapseIcon.innerHTML = '<<';
 				collapseIcon.addEventListener('mousedown', function(e){hexInfo.toggle();});
-				container.style.display = 'inline-block';
 			}
 			,disableMouse: function(){
 				container.style["pointer-events"] = 'none'; 	
@@ -182,7 +191,6 @@ var st_hud = st_hud || function(){
 				
 				collapseIcon.innerHTML = '>>';
 				collapseIcon.addEventListener( 'mousedown', function(e){ thingInfo.toggle(); } );
-				container.style.display = 'inline-block';
 			}
 			,toggle: function(){
 				if( active ){
@@ -227,10 +235,18 @@ var st_hud = st_hud || function(){
 	})();
 
 	var systemPopup = (function(){
-		var PopupContainer = {}
-			,canvas = {}
-			,closeButton = {}
-		;
+		var dom = {
+			PopupContainer: {}
+			,canvas: {}
+			,closeButton: {}
+		};
+		var data = { 
+			star: {}
+			,planets: []
+		};
+		var ctx = {};
+		var active = false;
+		
 		var planetInfo = (function(){
 			var container = {};
 			var name = {};
@@ -240,7 +256,7 @@ var st_hud = st_hud || function(){
 			var selection = 0;
 			return {
 				load: function(){
-					container = createHudElement( 'div', 'hud_systemPopup_planetInfo', '', PopupContainer );
+					container = createHudElement( 'div', 'hud_systemPopup_planetInfo', '', dom.PopupContainer );
 				}
 				,update: function( planet ){
 					
@@ -262,7 +278,7 @@ var st_hud = st_hud || function(){
 			var resources = {};
 			return {
 				load: function(){					
-					container = createHudElement( 'div', 'hud_systemPopup_starInfo', '', PopupContainer );
+					container = createHudElement( 'div', 'hud_systemPopup_starInfo', '', dom.PopupContainer );
 					title = createHudElement( 'div', 'hud_systemPopup_starInfo_title', '', container ); 
 					classification = createHudElement( 'div', 'hud_systemPopup_starInfo_classification', '', container ); 
 					ucoords = createHudElement( 'div', 'hud_systemPopup_starInfo_ucoords', '', container ); 
@@ -276,7 +292,7 @@ var st_hud = st_hud || function(){
 					
 				}
 				,update: function( system ){
-					title.innerHTML = system.name;
+					title.innerHTML = system.adjective + " System";
 					console.log( system.star );
 					classification.innerHTML = system.star.mkSpectrum + system.star.magnitude + "-" + system.star.mkClass;
 					ucoords.innerHTML = 'Universal Coordinates: '+system.coords.universal;
@@ -288,17 +304,19 @@ var st_hud = st_hud || function(){
 		
 		return {
 			load: function(){
-				PopupContainer = createHudElement( 'div', 'hud_systemPopup_container', '', document.getElementById( 'b' ) );
-				canvas = createHudElement( 'canvas', 'hud_systemPopup_canvas', '', PopupContainer );
-				closeButton =  createHudElement( 'div', 'hud_systemPopup_closeButton', 'Close System View', PopupContainer );
-				closeButton.innerHTML = "X";
-				closeButton.addEventListener( 'mousedown', function(e){ 
+				dom.PopupContainer = createHudElement( 'div', 'hud_systemPopup_container', '', document.getElementById( 'b' ) );
+				dom.canvas = createHudElement( 'canvas', 'hud_systemPopup_canvas', '', dom.PopupContainer );
+				dom.closeButton =  createHudElement( 'div', 'hud_systemPopup_closeButton', 'Close System View', dom.PopupContainer );
+				ctx = dom.canvas.getContext( "2d" );
+				dom.canvas.style.width = dom.canvas.width = dom.PopupContainer.clientwidth;
+				dom.canvas.style.height = dom.canvas.height = dom.PopupContainer.clientheight;
+				dom.closeButton.innerHTML = "X";
+				dom.closeButton.addEventListener( 'mousedown', function(e){ 
 					systemPopup.close(); 
 				} );
 				
 				starInfo.load();
-				planetInfo.load();
-				systemPopup.render( canvas.getContext( "2d" ) );
+				//planetInfo.load();
 
 			}
 			,open: function( systemData ){ 
@@ -306,18 +324,82 @@ var st_hud = st_hud || function(){
 					systemPopup.hide();
 					return;
 				}
+				active = true;
 				starInfo.update( systemData );
-				PopupContainer.style.display = 'block';
+				data.star = systemData.star;
+				data.planets = systemData.planets;
+				console.log( data.planets );
+				dom.PopupContainer.style.display = 'block';
 				hexInfo.hide();
 				thingInfo.hide();
 			}
 			,close: function(){
-				PopupContainer.style.display = 'none';
+				dom.PopupContainer.style.display = 'none';
+				active = false;
 				hexInfo.show();
 				thingInfo.show();
 			}
-			,render: function( ctx ){
+			,render: function( ){
+				if( !active ){ return; }
+				dom.canvas.width  = dom.canvas.offsetWidth;
+				dom.canvas.height = dom.canvas.offsetHeight;
+				var limitingEdge = dom.canvas.width/8;
+				var starRadius = (data.star.magnitude+1)*(data.star.magnitude+1)*5;
+				var starX = limitingEdge - starRadius;
+				var starY = dom.canvas.height / 2;
+				ctx.save();
+					ctx.beginPath();
+					ctx.arc(starX, starY, starRadius, 0, Math.PI*2, 1);
+					ctx.fillStyle = "rgba(" + data.star.color + ", 1)";
+					ctx.shadowColor = "rgba(" + data.star.color + ", 1)";
+					ctx.shadowBlur = 50;
+					ctx.fill();
+					ctx.fill();
+					ctx.closePath();
+				ctx.restore();
 				
+
+				/*
+					all orbitals have x,y of the star's center. 
+					orbit radii are not to scale, and should adjust based on data.planets.length
+					orbits aren't to scale, but drawing too close or too far from the star looks bad. 
+					the goldilocks max and min aren't literally the goldilocks zone, but outside this 
+					zone the planets risk being occluded by the star corona, or being drawn off canvas. 				
+				*/				
+				/*
+					The number of planets defines how to space the orbits. Even spacing, centered in the zone
+					follows the formula:
+						planetX = KX / (N+1)
+					where K is the index of the planet, N is the number of planets, and X is the width of the virtual goldilocks zone
+					for one planet: X/2 is where the orbit should be in the middle of the screen
+					
+					The radii of the orbits is then the distance from starX to planetX
+						orbitRadius = planetX - starX
+					And we'll draw the arc from -90deg to +90deg (using radians as arguments) 
+				*/
+				var goldilocksMin = limitingEdge * 2;
+				var goldilocksMax = limitingEdge * 7;
+				var habitableZone = goldilocksMax - goldilocksMin;
+					
+				data.planets.forEach( function( planet, index ){
+					var planetY = starY;
+					var planetX = goldilocksMin + ( ( ( index + 1 ) * habitableZone ) / ( data.planets.length + 1 ) );
+					var orbitRadius = planetX - starX;
+					//draw Orbit
+					ctx.beginPath();
+						ctx.arc(starX, starY, orbitRadius, 0, Math.PI*2, false);
+						ctx.strokeStyle = "#ffffff";
+						ctx.stroke();
+					ctx.closePath();
+					//planet
+					ctx.beginPath();
+						ctx.arc(planetX, planetY, 15, 0, Math.PI*2, false);
+						ctx.strokeStyle = "#ffffff";
+						ctx.fillStyle = "#006600";
+						ctx.fill();
+						ctx.stroke();
+					ctx.closePath();
+				});
 			}
 		}
 	})();
