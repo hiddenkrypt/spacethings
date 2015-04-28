@@ -3,7 +3,7 @@
 
 // Provides a Heads Up Display of game data
 
-var st_hud = st_hud || function(){
+var st_hud = st_hud || (function(){
 	var DEBUG = st_DEBUG.hud;
 	
 	var hud = {
@@ -85,14 +85,14 @@ var st_hud = st_hud || function(){
 			,collapseIcon: {}
 			,toggle: function(){
 				if( active ){
-					for( var i = 0; i < container.childNodes.length; i++){
+					for( let i = 0; i < container.childNodes.length; i++ ){
 						container.childNodes[i].style.display = 'none';
 					}
 					container.style.width = '1em';
 					collapseIcon.innerHTML = '>>';
 					collapseIcon.style.display = 'block';
 				} else{
-					for( var i = 0; i < container.childNodes.length; i++){
+					for( let i = 0; i < container.childNodes.length; i++ ){
 						container.childNodes[i].style.display = 'block';
 					}
 					container.style.width = '13em';
@@ -118,7 +118,7 @@ var st_hud = st_hud || function(){
 				ucoords = createHudElement( 'div', 'hud_hexInfo_ucoords', 'Universal Coordinates', container );
 				collapseIcon = createHudElement( 'div', 'hud_hexInfo_collapse_icon', 'Hide / Show', container );
 				collapseIcon.innerHTML = '<<';
-				collapseIcon.addEventListener('mousedown', function(e){hexInfo.toggle();});
+				collapseIcon.addEventListener( 'mousedown', function(e){ hexInfo.toggle(); } );
 			}
 			,disableMouse: function(){
 				container.style["pointer-events"] = 'none'; 	
@@ -133,7 +133,8 @@ var st_hud = st_hud || function(){
 				container.style.display = 'block';
 			}
 		};
-	})(); 
+	})(); //hexInfo IIFE
+	
 	var thingInfo = (function(){
 		var active = true
 			,container = {}
@@ -194,7 +195,7 @@ var st_hud = st_hud || function(){
 			}
 			,toggle: function(){
 				if( active ){
-					for( var i = 0; i < container.childNodes.length; i++){
+					for( let i = 0; i < container.childNodes.length; i++){
 						container.childNodes[i].style.display = 'none';
 					}
 					container.style.width = '1em';
@@ -202,7 +203,7 @@ var st_hud = st_hud || function(){
 					collapseIcon.innerHTML = '<<';
 					collapseIcon.style.display = 'block';
 				} else{ 
-					for( var i = 0; i < container.childNodes.length; i++){
+					for( let i = 0; i < container.childNodes.length; i++){
 						container.childNodes[i].style.display = 'block';
 					}
 					container.style.width = '15em';
@@ -232,7 +233,7 @@ var st_hud = st_hud || function(){
 				container.style.display = 'block';
 			}
 		};
-	})();
+	})(); //thingInfo IIFE
 
 	var systemPopup = (function(){
 		var dom = {
@@ -268,7 +269,7 @@ var st_hud = st_hud || function(){
 					container.style.display = 'none';
 				}
 			}
-		})();
+		})(); // systemPopup::planetInfo IIFE
 		var starInfo = (function(){
 			var container = {};
 			var ucoords = {};
@@ -300,7 +301,7 @@ var st_hud = st_hud || function(){
 					resources.innerHTML = 'System Net Resources: '+system.resources;
 				}
 			};
-		})();
+		})(); // systemPopup::planetInfo IIFE
 		
 		return {
 			load: function(){
@@ -403,5 +404,6 @@ var st_hud = st_hud || function(){
 			}
 		}
 	})();
+	
 	return hud;
-}(); // IIFE to create st_hud
+})(); // IIFE to create st_hud

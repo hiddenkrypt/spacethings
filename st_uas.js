@@ -2,7 +2,7 @@
 //uas.js
 // User account service: dom elements for creating an account, logging in, etc. 
 
-var st_uas = st_uas || function(){
+var st_uas = st_uas || (function(){
 	"use strict";
 	var DEBUG = st_DEBUG.uas;
 	
@@ -200,7 +200,7 @@ var st_uas = st_uas || function(){
 		}
 		var sendQuery = { 
 			username: 	uasDom.inputFields.username.value
-			,hashword:	Sha1.hash(uasDom.inputFields.password.value)
+			,hashword:	Sha1.hash( uasDom.inputFields.password.value )
 		};
 		ajax.send( 'src/login.php', sendQuery, function( response ){
 			if( DEBUG ){ console.log( response ); }
@@ -208,18 +208,18 @@ var st_uas = st_uas || function(){
 	}
 	var create = function(){
 		uasDom.error.style.display='none';
-		if(uasDom.inputFields.password.value.length === 0
+		if( uasDom.inputFields.password.value.length === 0
 			|| uasDom.inputFields.verifyPassword.value.length === 0
 			|| uasDom.inputFields.username.value.length === 0
 			|| uasDom.inputFields.inviteCode.value.length === 0
 			){
 			uasDom.error.innerHTML = "Empty field detected. All fields are mandatory.";
 			uasDom.error.style.display='inline';
-		} else if(uasDom.password.value != uasDom.verifyPassword.value){
+		} else if( uasDom.password.value != uasDom.verifyPassword.value ){
 			uasDom.error.innerHTML = "Confirmation Password does not match initial password!";
 			uasDom.error.style.display='inline';
 		} else{	
-			var sendQuery = {
+			let sendQuery = {
 				username: uasDom.inputFields.username.value
 				,hashword: Sha1.hash(uasDom.inputFields.password.value)
 				,inviteCode: Sha1.hash(uasDom.inputFields.inviteCode.value)
@@ -230,7 +230,7 @@ var st_uas = st_uas || function(){
 		}
 	}
 	return uas;
-}();
+})();
 
 
 
