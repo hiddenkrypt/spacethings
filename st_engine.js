@@ -2,7 +2,7 @@
 //st_engine.js
 //the core UI engine, mostly calling on attached modules. 
 
-var st_engine = st_engine || function(){
+var st_engine = st_engine || (function(){
 	"use strict";
 	
 	var DEBUG = st_DEBUG.engine;
@@ -29,14 +29,14 @@ var st_engine = st_engine || function(){
 			st_data.initialize(); // start game data module
 			st_hud.initialize(); // start heads up display module
 			
-			window.addEventListener  ( "mouseup", handleMouseUp, false);
-			if( DEBUG ){ document.body.addEventListener( "keydown", handleKeyDown, false ); }
+			window.addEventListener  ( "mouseup", window_handleMouseUp, false);
+			if( DEBUG ){ window.addEventListener( "keydown", window_handleKeyDown, false ); }
 			Canvas.setAttribute("tabindex", 0);
-			Canvas.addEventListener( "contextmenu", handleMouseMenu, false ); 
-			Canvas.addEventListener( "mousedown", c_handleMouseDown, false );
-			Canvas.addEventListener( "mousemove", handleMouseMove, false );
-			Canvas.addEventListener( "mousewheel", handleScroll, false );
-			Canvas.addEventListener( "DOMMouseScroll", handleScroll, false );  //firefox
+			Canvas.addEventListener( "contextmenu", canvas_handleMouseMenu, false ); 
+			Canvas.addEventListener( "mousedown", canvas_handleMouseDown, false );
+			Canvas.addEventListener( "mousemove", canvas_handleMouseMove, false );
+			Canvas.addEventListener( "mousewheel", canvas_handleScroll, false );
+			Canvas.addEventListener( "DOMMouseScroll", canvas_handleScroll, false );  //firefox
 			
 			if( DEBUG ){ console.log( "Initialized Engine and all submodules. Kicking off renderer." ); }
 			this.render();
@@ -58,7 +58,7 @@ var st_engine = st_engine || function(){
 		,loadComplete: function(){
 			st_uas.hide();
 			st_engine.hideOverlay();
-			document.body.addEventListener( "keydown", handleKeyDown, false ); 
+			window.addEventListener( "keydown", window_handleKeyDown, false ); 
 			st_graphics.selectHex( st_data.getHomeworld() );
 			st_hud.show();
 			st_hud.highlightHexAtGrid( st_data.getHomeworld() );
@@ -75,22 +75,23 @@ var st_engine = st_engine || function(){
 	};
 	
 	
-	var handleMouseMenu = function( event ){
+	var canvas_handleMouseMenu = function( event ){
 			event.preventDefault();
 	}; //handleMouseMenu()
 	
-	var c_handleMouseDown = function( event ){  
-		st_hud.disableMouse();
-		st_graphics.dragging = true;
+	var canvas_handleMouseDown = function( event ){  
 		var rect = Canvas.getBoundingClientRect();
 		var x = event.pageX - rect.left + st_graphics.camera.x();
 		var y = event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
 		var hexY = Math.floor( y / ( st_graphics.hex.h() + st_graphics.hex.sideLength() ) );
 		var hexX = Math.floor( ( x - ( hexY % 2 ) * st_graphics.hex.rad() ) / st_graphics.hex.rect().w );
+		st_hud.disableMouse();
+		st_graphics.dragging = true;
 		st_graphics.drag_prev_x = event.pageX;
 		st_graphics.drag_prev_y = event.pageY;
 		if( DEBUG ){ 
-			console.log( "click: virtual canvas("+x+","+y+");  grid("+hexX+","+hexY+");  literal canvas("+( event.pageX - rect.left )+","+( event.pageY - rect.top )+")" );
+			console.log( "click: virtual canvas("+x+","+y+")  grid("+hexX+","+hexY+")" );
+			console.log( "literal canvas("+( event.pageX - rect.left )+","+( event.pageY - rect.top )+")" );
 		}
 		if( lastClickedHex.x == hexX && lastClickedHex.y == hexY && doubleclick ) {
 			if( DEBUG ){ console.log( "SELECTED: (" + hexX + "," + hexY + ")" ); }
@@ -104,12 +105,12 @@ var st_engine = st_engine || function(){
 		dClickTimeout = setTimeout( function(){ doubleclick = false; }, dClickWindow ); 
 	}; //handleMousedown()
 
-	var handleMouseUp = function( event ){
+	var window_handleMouseUp = function( event ){
 		st_graphics.dragging = false;
 		st_hud.enableMouse();
 	}; // private handleMouseUp()
 
-	var handleKeyDown = function( event ){
+	var window_handleKeyDown = function( event ){
 		var keyCode = event.keyCode;
 		switch (keyCode){
 			
@@ -167,7 +168,7 @@ var st_engine = st_engine || function(){
 		}
 	}; // handleKeyDown()
 
-	var handleMouseMove = function( event ){
+	var canvas_handleMouseMove = function( event ){
 		var rect = Canvas.getBoundingClientRect();
 		var x=event.pageX - rect.left + st_graphics.camera.x();
 		var y=event.pageY - rect.top - ( st_graphics.hex.h() / 2 ) + st_graphics.camera.y();
@@ -181,17 +182,14 @@ var st_engine = st_engine || function(){
 		}
 	}; // handeMouseMove()
 
-	var handleScroll = function( event ) {
+	var canvas_handleScroll = function( event ) {
 		var delta = Math.max( -1, Math.min( 1, ( event.wheelDelta || -event.detail ) ) );
 		st_graphics.camera.dzoom( delta*st_graphics.camera.z() / 8 ); 
 	}; // handleScroll()
 	
 	
-
-	
 	return engine;
-
-}();
+})();
 
 
 window.requestAnimationFrame = (function() {//animation shim
