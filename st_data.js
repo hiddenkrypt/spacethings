@@ -14,7 +14,17 @@ var st_data = st_data || (function(){
 	var status = "uninitialized";
 	var DEBUG = st_DEBUG.data;
 	var hashID = new Hashids("spaceTHINGS", 4, "0123456789ABCDEF");
-	
+	var starSpectrums = {
+		"O": "130,130,255",
+		"B": "130,130,202",
+		"A": "162,162,210",
+		"F": "210,210,226",
+		"G": "239,239,239",
+		"K": "226,210,210",
+		"M": "210,162,162",
+		"L": "202,130,130",
+		"T": "255,130,130"
+	};
 	var data = {
 		initialize: function(){
 			status = "initialized"; 
@@ -51,13 +61,13 @@ var st_data = st_data || (function(){
 				magnitude: mapData.systems[id].magnitude
 				,mkSpectrum: mapData.systems[id].mkSpectrum
 				,mkClass: mapData.systems[id].mkClass
-				,color: getColorFromMKSpectrum( mapData.systems[id].mkSpectrum )
+				,color: starSpectrums[ mapData.systems[id].mkSpectrum ] || "255,255,255" 
 				,offset: mapData.systems[id].offset
 			};
 		}
 		,loaded: function(){ return status === "loaded"; }
 		,getMapHexByGrid:function( coords ){
-			for(var i = 0; i < mapData.hexes.length; i++){
+			for( let i = 0; i < mapData.hexes.length; i++ ){
 				if( mapData.hexes[i].x === coords.x && mapData.hexes[i].y === coords.y ){
 					return mapData.hexes[i];
 				}
@@ -69,7 +79,7 @@ var st_data = st_data || (function(){
 		}
 		,getHexDataByGrid: function( coordinates ){
 			var hex = st_data.getMapHexByGrid( coordinates );
-			if(!hex){
+			if( !hex ){
 				return {
 					coords:{
 						x: coordinates.x
@@ -95,11 +105,11 @@ var st_data = st_data || (function(){
 		}
 		,getSystemDataByGrid: function( coordinates ){
 			var hex = st_data.getMapHexByGrid( coordinates );
-			if( !hex ){ return false; }
-			console.log( hex );
 			var aggregatePopulation = 0;
 			var aggregateResources = 0;
 			var aggregatePlanets = [];
+			
+			if( !hex ){ return false; }
 			
 			mapData.planets.forEach(
 				function( planet ){
@@ -117,7 +127,7 @@ var st_data = st_data || (function(){
 					magnitude:mapData.systems[hex.system].magnitude
 					,mkSpectrum: mapData.systems[hex.system].mkSpectrum
 					,mkClass: mapData.systems[hex.system].mkClass
-					,color: getColorFromMKSpectrum( mapData.systems[hex.system].mkSpectrum )
+					,color: starSpectrums[ mapData.systems[hex.system].mkSpectrum ] || "255,255,255"
 				}
 				,coords: {
 					x: 			hex.x
@@ -204,35 +214,8 @@ var st_data = st_data || (function(){
 		};
 		console.log("Loaded test map and player data");
 		return true;
-	};
-	
-	var getColorFromMKSpectrum = function( spectrum ){			
-		var color = "0,0,0";
-		switch( spectrum ){
-			case "O":
-				return "130,130,255";
-			case "B":
-				return "130,130,202";
-			case "A":
-				return "162,162,210";
-			case "F":
-				return color = "210,210,226";
-			case "G":
-				return color = "239,239,239";
-			case "K":
-				return color = "226,210,210";
-			case "M":
-				return color = "210,162,162";
-			case "L":
-				return color = "202,130,130";
-			case "T":
-				return color = "255,130,130";
-			default:
-				return color = "255,255,255";
-		}
-	};
-	
+	};	
 	
 	return data;
-}());
+})();
 

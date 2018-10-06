@@ -1,7 +1,7 @@
 
 //st_graphics.js
 
-var st_graphics = st_graphics || function(){	
+var st_graphics = st_graphics || (function(){	
 	"use strict";
 
 	var DEBUG = st_DEBUG.graphics;
@@ -185,9 +185,11 @@ var st_graphics = st_graphics || function(){
 				var normal_hex_h = hex_h;
 				
 				this.setSideLength( normal_size*scale );	
-					var adj_x =  canvasCoords.x + ( ( normal_hex_width - hex_rect_w ) / 2 * ( ( scale > 1 ) ? -1 : 1) );
-					var adj_y = canvasCoords.y + ( ( ( normal_size + ( normal_hex_h * 2 ) )  - ( hex_side_length + ( hex_h * 2 ) ) ) / 2  * ( ( scale > 1 ) ? -1 : 1) );
+				{
+					let adj_x =  canvasCoords.x + ( ( normal_hex_width - hex_rect_w ) / 2 * ( ( scale > 1 ) ? -1 : 1) );
+					let adj_y = canvasCoords.y + ( ( ( normal_size + ( normal_hex_h * 2 ) )  - ( hex_side_length + ( hex_h * 2 ) ) ) / 2  * ( ( scale > 1 ) ? -1 : 1) );
 					this.draw(ctx, adj_x, adj_y, stroke, fill, alpha, lineWidth);
+				}
 				this.setSideLength( normal_size );
 			}
 			,visible: function( x, y ){
@@ -216,8 +218,8 @@ var st_graphics = st_graphics || function(){
 	}; // private drawBackground()
 	
 	var drawDefaultHexField = function( ctx ){
-		for( var i = 0; i < 100; i++){
-			for( var j = 0; j < 100; j++){
+		for( let i = 0; i < 100; i++ ){
+			for( let j = 0; j < 100; j++ ){
 				if( st_graphics.hex.visibleAtGrid( {x:i, y:j} ) ){
 					st_graphics.hex.drawAtGrid(ctx, {x:i, y:j} );
 				}
@@ -227,11 +229,11 @@ var st_graphics = st_graphics || function(){
 	
 	var drawLoadedHexField = function( ctx ){
 		var map = st_data.getRevealedHexes();
-		for( var i = 0; i < map.length; i++ ){
+		for( let i = 0; i < map.length; i++ ){
 			if( st_graphics.hex.visibleAtGrid( map[i] ) ){
-				var owner = st_data.getOwnerById( map[i].owner );
-				var star = st_data.getStarDataFromSystemId( map[i].system );
-				var ownerColor = owner? "rgb(" + owner.r + ", " + owner.g + ", "+owner.b + ")"	: false;
+				let owner = st_data.getOwnerById( map[i].owner );
+				let star = st_data.getStarDataFromSystemId( map[i].system );
+				let ownerColor = owner? "rgb(" + owner.r + ", " + owner.g + ", "+owner.b + ")"	: false;
 				if( star ){
 					st_graphics.hex.drawAtGrid( ctx, map[i], false, false,  0.1 ); 
 					st_graphics.hex.drawScaledAtGrid(0.85, ctx, map[i], ownerColor, ownerColor, .15, 6);
@@ -284,4 +286,4 @@ var st_graphics = st_graphics || function(){
 	}
 	
 	return graphics;
-}(); // IIFE creating st_graphics
+})(); // IIFE creating st_graphics
